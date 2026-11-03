@@ -1,0 +1,17 @@
+# Changelog
+
+All notable changes are documented here. uapi-mcp mirrors uapi: version `x.y.*`
+covers the curated surface of uapi `x.y.*` (patch is uapi-mcp's own line). Format
+follows Keep a Changelog.
+
+## [Unreleased]
+
+### Added
+- Initial project: a stdio MCP server that exposes one OpenWrt router's uapi REST
+  API to an agent session. Credentials come from `UAPI_ENDPOINT`, `UAPI_TOKEN` and
+  `UAPI_INSECURE`, same names and semantics as the Terraform provider. The tool
+  catalog is generated from uapi's vendored OpenAPI spec (3.3.0) by
+  `internal/gen`: 266 tools, one per curated endpoint, /raw excluded. Input
+  schemas are the spec's request schemas softened so the client never rejects a
+  payload the server accepts: enums fold into property descriptions, patterns and
+  bounds are dropped, objects accept unknown properties. (#1)
