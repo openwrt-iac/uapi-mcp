@@ -188,9 +188,23 @@ func TestHandlerReplaceSendsWrappedBody(t *testing.T) {
 	if gotBody["target"] != "DROP" {
 		t.Errorf("body = %v", gotBody)
 	}
-	want := `{"id":"r_1","target":"DROP"}` + "\n\nX-Reload-Status: ok\nX-Reload-Services: firewall"
-	if text := resultText(t, res); text != want {
-		t.Errorf("text = %q, want %q", text, want)
+	if len(res.Content) != 2 {
+		t.Fatalf("expected payload and footer blocks, got %d", len(res.Content))
+	}
+	payload, ok := res.Content[0].(*mcp.TextContent)
+	if !ok {
+		t.Fatalf("expected TextContent payload, got %T", res.Content[0])
+	}
+	if payload.Text != `{"id":"r_1","target":"DROP"}` {
+		t.Errorf("payload = %q, want the body as received", payload.Text)
+	}
+	footer, ok := res.Content[1].(*mcp.TextContent)
+	if !ok {
+		t.Fatalf("expected TextContent footer, got %T", res.Content[1])
+	}
+	want := "X-Reload-Status: ok\nX-Reload-Services: firewall"
+	if footer.Text != want {
+		t.Errorf("footer = %q, want %q", footer.Text, want)
 	}
 }
 
@@ -213,6 +227,33 @@ func TestHandlerFlatBodyRejected(t *testing.T) {
 		t.Fatal("expected an error result: a dropped body object would be a silent no-op")
 	}
 	if text := resultText(t, res); !strings.Contains(text, "not a body object") {
+		t.Errorf("text = %q", text)
+	}
+}
+
+func TestHandlerWriteWithoutFooterIsOneBlock(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// No transaction headers: the non-uci writes never send them.
+		_, _ = io.WriteString(w, `{"id":"r_1"}`)
+	}))
+	defer srv.Close()
+
+	ep := Endpoint{
+		Tool:       "firewall_rule_replace",
+		Method:     http.MethodPut,
+		Path:       "/firewall/rules/{id}",
+		PathParams: []string{"id"},
+		BodyKind:   bodyWrapped,
+	}
+	c := client.New(srv.URL, "tok", "uapi-mcp/test", false)
+	res := call(t, c, ep, `{"id":"r_1","body":{}}`)
+	if res.IsError {
+		t.Fatal("unexpected error result")
+	}
+	if len(res.Content) != 1 {
+		t.Fatalf("expected a single payload block, got %d", len(res.Content))
+	}
+	if text := resultText(t, res); text != `{"id":"r_1"}` {
 		t.Errorf("text = %q", text)
 	}
 }

@@ -152,11 +152,17 @@ func handler(c *client.Client, ep Endpoint) mcp.ToolHandler {
 		if len(resp.Body) == 0 {
 			return textResult(fmt.Sprintf("%s %s: %d %s", ep.Method, path, resp.Status, http.StatusText(resp.Status))), nil
 		}
-		text := string(resp.Body)
+		// The payload rides as its own block so hosts parse it as JSON; the
+		// transaction headers follow in a second block and stay readable.
 		if footer := resp.Footer(); footer != "" {
-			text += "\n\n" + footer
+			return &mcp.CallToolResult{
+				Content: []mcp.Content{
+					&mcp.TextContent{Text: string(resp.Body)},
+					&mcp.TextContent{Text: footer},
+				},
+			}, nil
 		}
-		return textResult(text), nil
+		return textResult(string(resp.Body)), nil
 	}
 }
 
