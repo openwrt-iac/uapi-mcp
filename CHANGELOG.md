@@ -6,11 +6,9 @@ follows Keep a Changelog.
 
 ## [Unreleased]
 
-### Fixed
-- An empty collection answered `null` instead of `[]`: the list tools
-  marshalled a nil slice. Found on a real router, where an empty collection is
-  the normal case, such as the WireGuard kernel peers on a router without a
-  WireGuard interface. (#3)
+## [3.3.0] - 2026-11-04
+
+First release, tracking uapi 3.3.0.
 
 ### Added
 - Initial project: a stdio MCP server that exposes one OpenWrt router's uapi REST
@@ -27,3 +25,9 @@ follows Keep a Changelog.
   builds multi-platform binaries and publishes them with notes extracted from
   this changelog. The artifacts are not signed; the signed tag is the trust
   anchor. (#2)
+
+### Fixed
+- An empty collection answered `null` instead of `[]`: the list tools
+  marshalled a nil slice. Found on a real router, where an empty collection is
+  the normal case, such as the WireGuard kernel peers on a router without a
+  WireGuard interface. (#3)
