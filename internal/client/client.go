@@ -250,7 +250,9 @@ func (c *Client) Do(ctx context.Context, method, path string, query url.Values, 
 // List walks a collection GET through its cursor pagination and returns
 // every item as one JSON array.
 func (c *Client) List(ctx context.Context, path string, query url.Values) ([]byte, error) {
-	var all []json.RawMessage
+	// An empty collection must marshal to [], not null: a nil slice would
+	// render null and hand the agent a JSON null instead of an empty list.
+	all := []json.RawMessage{}
 	next := ""
 	for page := 0; page < maxPages; page++ {
 		q := query.Clone()
