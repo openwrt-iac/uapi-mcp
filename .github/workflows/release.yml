@@ -1,0 +1,74 @@
+name: Release
+
+# A release starts only from a pushed v* tag. The tag must be signed by a key
+# listed in .github/release-signers.asc, the same gate as uapi's package job:
+# an unsigned tag, or one signed by a non-listed key, fails before anything is
+# built or published.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+# Never cancel a tag run that may be mid-publish to the GitHub Release.
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      # fetch-depth 0: git verify-tag needs the tag object, which a checkout
+      # of depth 1 does not bring.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Verify tag signature
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          if ! grep -q 'BEGIN PGP PUBLIC KEY BLOCK' .github/release-signers.asc; then
+            echo "ERROR: .github/release-signers.asc has no PGP public-key block."
+            echo "Export your key with: gpg --armor --export <fingerprint> > .github/release-signers.asc"
+            exit 1
+          fi
+          export GNUPGHOME=$(mktemp -d)
+          gpg --batch --import .github/release-signers.asc
+          git verify-tag "$TAG"
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Extract release notes from CHANGELOG
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          chmod +x scripts/release-notes.sh
+          scripts/release-notes.sh "$TAG" > /tmp/release-notes.md
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v7
+        with:
+          version: "~> v2"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Apply release notes from CHANGELOG
+        # GoReleaser's --release-notes did not reliably populate the GitHub release
+        # body (v2 + changelog.disable), so set it explicitly after GoReleaser has
+        # created the release. No-op when the CHANGELOG has no matching section.
+        run: |
+          TAG="${GITHUB_REF#refs/tags/}"
+          if [ -s /tmp/release-notes.md ]; then
+            gh release edit "$TAG" --notes-file /tmp/release-notes.md
+          else
+            echo "no CHANGELOG section for $TAG; leaving GoReleaser-generated notes"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

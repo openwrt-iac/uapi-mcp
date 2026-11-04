@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Cancel superseded runs for branch and PR pushes to save runner minutes.
+# Tag pushes never reach this workflow: releases run in release.yml.
+concurrency:
+  group: ci-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' }}
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: build & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+      - run: go build ./...
+      - run: go vet ./...
+      - name: gofmt
+        run: |
+          unformatted="$(gofmt -l .)"
+          if [ -n "$unformatted" ]; then
+            echo "These files need gofmt:"
+            echo "$unformatted"
+            exit 1
+          fi
+      - run: go test -race ./...
+
+  lint:
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+      # 2.14.0 reads Go 1.27 stdlib export data; the 2.5.0 the provider pins
+      # cannot (typecheck: "export data version 5 is greater than maximum
+      # supported version 2").
+      - run: go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.14.0
+      - run: $(go env GOPATH)/bin/golangci-lint run ./...
+
+  generate:
+    name: generated catalog up to date
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+          cache: true
+      - run: go run ./internal/gen
+      - name: check the catalog is committed
+        run: |
+          if [ -n "$(git status --porcelain internal/tools/catalog.json)" ]; then
+            echo "internal/tools/catalog.json is out of date. Run 'make gen' and commit the result."
+            git status --porcelain internal/tools/catalog.json
+            git diff -- internal/tools/catalog.json
+            exit 1
+          fi

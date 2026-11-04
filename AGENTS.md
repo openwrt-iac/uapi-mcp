@@ -4,7 +4,7 @@ MCP server that exposes uapi, the native HTTP REST API of OpenWrt, to LLM agents
 
 Third member of the openwrt-iac family: uapi is the server, terraform-provider-uapi drives it from IaC, uapi-mcp drives it from an agent's session. Module path: `github.com/openwrt-iac/uapi-mcp`.
 
-This file is the founding document. There is no code yet; what follows is the starting contract for everything that lands after it.
+This file is the founding document and the every-turn meta document: project identity, non-negotiables, tool design, and pointers to the family.
 
 ## Non-negotiables
 
@@ -20,14 +20,32 @@ This file is the founding document. There is no code yet; what follows is the st
 
 ## Tool design
 
-- One tool per curated endpoint, named after it: `network_interfaces_list`, `network_rule_replace`, `firewall_rule_delete`. Action words map to verbs: list/read (GET), create (POST), replace (PUT), merge-patch (PATCH), delete (DELETE).
-- Annotations tell the truth: `readOnlyHint` on reads, `destructiveHint` on delete and replace, `idempotentHint` where the verb is. PUT with `id` is replace; the response says what uci holds now.
+- One tool per curated endpoint, named after it: `network_interfaces_list`, `network_rule_replace`, `firewall_rule_delete`. Action words map to verbs: list/read (GET), create (POST), adopt (POST on the adopt sub-resource), replace (PUT), merge (PATCH, RFC 7396 only: the tool never sends RFC 6902 JSON Patch), delete (DELETE).
+- Collection tools keep the plural resource name, item tools take the singular (`network_interfaces_list` against `network_interface_replace`). The 3.3.0 spec yields 266 tools; the count lives in the generator tests and moves only with the vendored spec.
+- Full read and write surface from the first release, same parity as the provider. `/raw` is excluded: the provider forbids it, and an agent gains nothing from uci field names that no release promises to keep. The catalog is the spec, minus `/raw`.
+- Tool inputs: path parameters and user-facing query parameters (`managed`, `validate`) are top-level arguments; a request body is the whole input when the endpoint has no path parameters, and a `body` object beside the id otherwise. ETag preconditions (`if_match`, `if_none_match`) are deliberately not exposed: reads do not surface ETags, so an agent has nothing to guard with, and an interactive agent re-reads anyway.
+- Annotations tell the truth: `readOnlyHint` on reads, `destructiveHint` on delete and replace, `idempotentHint` where the verb is. PUT with `id` is replace; the response says what uci holds now. `openWorldHint` is false: the domain of every tool is this one router.
 - Errors carry the endpoint, the HTTP status, and uapi's error envelope (`code` + `message`, `docs/errors.md`) verbatim. Retry 423 locked and 429 within a wall-clock budget as the provider does, then surface the last status. An agent that reads the error must learn what to do next, not that something failed.
-- Reads return the JSON payload as received. The host and the agent format; the server does not render markdown.
+- Reads return the JSON payload as received. The host and the agent format; the server does not render markdown. Writes append the transaction headers uapi sent (`X-Mgmt-Path-Warning`, `X-Reload-Status`, `X-Reload-Services`, `X-Kernel-Status`, `X-Kernel-Applied`) as a footer, because they say what the transaction did beyond committing uci. A DELETE that answers 404 is success: the section is already absent, and the result says so.
+
+### Generation
+
+The catalog is generated, never hand-edited: `internal/gen` reads the vendored spec (`internal/gen/openapi.json`, copied from uapi's `build/openapi.json`) and writes `internal/tools/catalog.json`, embedded with `go:embed` and wired by `internal/tools`. `make gen` regenerates; CI fails when the committed catalog is stale.
+
+Input schemas are the spec's request schemas, then softened, so the client never rejects a payload the server accepts:
+
+- enums fold into property descriptions (`One of (may grow): ...`), never into validation
+- patterns, bounds (`minimum`, `maxLength`, ...) and format keywords are dropped
+- `allOf` conditionals are dropped; the field descriptions carry what they taught
+- every object accepts unknown properties, at every depth
+- types, descriptions, `required` and `deprecated` stay
+- `<Name>Patch` bodies take their field descriptions from `<Name>Request`, which the spec leaves out to save bytes on the router
+
+A uapi minor can add enum values, fields and query parameters, and loosen bounds: all of that passes through the softened schemas without a uapi-mcp release. The generator tests hold the line: no forbidden keyword survives anywhere in any input schema.
 
 ## Version numbering
 
-Mirrors uapi the way the provider does: `x.y` tracks the uapi `x.y` wire surface, the patch line is our own. A uapi minor with new resources or fields maps to a uapi-mcp minor; a uapi major maps to a major.
+Mirrors uapi the way the provider does: `x.y` tracks the uapi `x.y` wire surface, the patch line is our own. A uapi minor with new resources or fields maps to a uapi-mcp minor (bump the vendored spec, `make gen`, update the endpoint count in the generator tests); a uapi major maps to a major.
 
 ## Family pointers
 
@@ -45,9 +63,3 @@ Mirrors uapi the way the provider does: `x.y` tracks the uapi `x.y` wire surface
 ## Testing
 
 Unit tests against `httptest` stubs for the client and the tool layer. Anything that asserts what the router actually did needs a run against a real box running a real uapi, and the PR says so plainly.
-
-## Open questions (settle before the first tool ships, then move the answer into the sections above)
-
-1. Scope of the first tool surface: which domains, and do write tools ship in the first release or does the server start read-only?
-2. Is `/raw` allowed? The provider forbids it: uncurated uci names carry no cross-release stability, which is unacceptable in managed state. A stateless agent tool may judge the tradeoff differently; decide deliberately and record the decision.
-3. Spec-driven tool schemas: vendor uapi's `openapi.json` and generate the input schemas from it, as the provider's `internal/gen` does, or hand-write them?
