@@ -121,6 +121,16 @@ make vet     # go vet
 Tests run against `httptest` stubs for the client and the tool layer. Anything that
 asserts what a router actually did needs a run against a real box running a real uapi.
 
+## Release
+
+Releases are built by GoReleaser from a signed `v*` tag, `v3.3.0` for a release
+tracking uapi 3.3.0. The tag must be signed by a key listed in
+`.github/release-signers.asc`; the release workflow verifies it before building
+anything. Binaries for linux, darwin, windows and freebsd (amd64, 386, arm,
+arm64) and SHA256SUMS land on the GitHub Release, with notes extracted from
+CHANGELOG.md. The artifacts themselves are not signed; the trust anchor is the
+signed tag.
+
 ## License
 
 MIT, see [LICENSE](LICENSE).

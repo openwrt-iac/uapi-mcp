@@ -15,3 +15,9 @@ follows Keep a Changelog.
   schemas are the spec's request schemas softened so the client never rejects a
   payload the server accepts: enums fold into property descriptions, patterns and
   bounds are dropped, objects accept unknown properties. (#1)
+- CI in the provider's shape (build, vet, gofmt, race tests, golangci-lint,
+  catalog freshness) plus uapi's changelog entry check, and a GoReleaser release
+  workflow: a signed `v*` tag, verified against `.github/release-signers.asc`,
+  builds multi-platform binaries and publishes them with notes extracted from
+  this changelog. The artifacts are not signed; the signed tag is the trust
+  anchor. (#1)
