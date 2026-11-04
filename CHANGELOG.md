@@ -6,6 +6,12 @@ follows Keep a Changelog.
 
 ## [Unreleased]
 
+### Fixed
+- Write results glued the transaction-header footer to the payload text, so
+  hosts could not parse them as JSON: writes answered a raw string while reads
+  answered an object. The payload now rides as its own content block and the
+  footer follows as a second block, byte for byte unchanged otherwise. (#4)
+
 ## [3.3.0] - 2026-11-04
 
 First release, tracking uapi 3.3.0.
