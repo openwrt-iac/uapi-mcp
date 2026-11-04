@@ -6,6 +6,12 @@ follows Keep a Changelog.
 
 ## [Unreleased]
 
+### Fixed
+- An empty collection answered `null` instead of `[]`: the list tools
+  marshalled a nil slice. Found on a real router, where an empty collection is
+  the normal case, such as the WireGuard kernel peers on a router without a
+  WireGuard interface. (#3)
+
 ### Added
 - Initial project: a stdio MCP server that exposes one OpenWrt router's uapi REST
   API to an agent session. Credentials come from `UAPI_ENDPOINT`, `UAPI_TOKEN` and

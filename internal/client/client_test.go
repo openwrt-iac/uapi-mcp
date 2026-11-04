@@ -237,6 +237,21 @@ func TestListFollowsCursor(t *testing.T) {
 	}
 }
 
+func TestListEmptyCollection(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`[]`))
+	}))
+	defer srv.Close()
+
+	raw, err := testClient(srv.URL).List(context.Background(), "/network/wireguard_kernel_peers", nil)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if string(raw) != "[]" {
+		t.Errorf("empty collection = %q, want []", raw)
+	}
+}
+
 func TestQueryParamsForwarded(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Query().Get("managed") != "true" {
