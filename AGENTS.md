@@ -62,4 +62,8 @@ Mirrors uapi the way the provider does: `x.y` tracks the uapi `x.y` wire surface
 
 ## Testing
 
-Unit tests against `httptest` stubs for the client and the tool layer. Anything that asserts what the router actually did needs a run against a real box running a real uapi, and the PR says so plainly.
+Three layers, each one watching a different thing:
+
+- Unit tests against `httptest` stubs, for the client and the tool layer: they assert handler and client behavior in isolation.
+- Host-eye tests in `internal/server`: an SDK client over the in-memory transport asserts what a host receives on the wire. Both defects of the first live run (an empty collection answering `null`, the transaction footer glued to the payload) were invisible from the inside and obvious from the host side, so result shapes live here, not in the handler tests: a result that carries a payload keeps its first content block valid JSON, a write with transaction headers carries the footer as a second block, and every list path has its empty-collection case.
+- `make smoke` (scripts/smoke.py) drives the built binary over stdio against a real box running a real uapi; it is the gate before every tag. Anything that asserts what the router actually did needs this run, and the PR says so plainly.

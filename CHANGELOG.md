@@ -6,6 +6,14 @@ follows Keep a Changelog.
 
 ## [Unreleased]
 
+### Added
+- A host-eye test layer in `internal/server`: an SDK client over the in-memory
+  transport asserts what a host receives, the layer that would have caught both
+  defects of the first live run before any release. `main.go` now only owns the
+  process; `internal/server.New` assembles the server. Added `make smoke`
+  (`scripts/smoke.py`), the one-command run against a real router that gates
+  every tag, and wrote the three testing layers down in AGENTS.md. (#5)
+
 ### Fixed
 - Write results glued the transaction-header footer to the payload text, so
   hosts could not parse them as JSON: writes answered a raw string while reads
