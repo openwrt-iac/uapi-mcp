@@ -6,6 +6,13 @@ follows Keep a Changelog.
 
 ## [Unreleased]
 
+## [3.5.0] - 2026-11-22
+
+Tracks uapi 3.5.0. There is no uapi-mcp 3.4: uapi 3.4 published only the v4
+announcements. The `X-Kernel-Unread` footer needs uapi 3.5.0 or later. Everything
+else works against uapi 3.0 to 3.4, where a tool for an endpoint that the router
+does not serve answers 404.
+
 ### Added
 - A host-eye test layer in `internal/server`: an SDK client over the in-memory
   transport asserts what a host receives, the layer that would have caught both
