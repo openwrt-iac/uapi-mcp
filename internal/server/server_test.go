@@ -52,7 +52,12 @@ func stubRouter(t *testing.T) *httptest.Server {
 
 func hostSession(t *testing.T) *mcp.ClientSession {
 	t.Helper()
-	c := client.New(stubRouter(t).URL, "tok", "uapi-mcp/test", false)
+	return hostSessionTo(t, stubRouter(t).URL)
+}
+
+func hostSessionTo(t *testing.T, routerURL string) *mcp.ClientSession {
+	t.Helper()
+	c := client.New(routerURL, "tok", "uapi-mcp/test", false)
 	s, err := New("test", c)
 	if err != nil {
 		t.Fatalf("building server: %v", err)
@@ -207,5 +212,36 @@ func TestHostSeesAnEmptyListAsAnArray(t *testing.T) {
 	}
 	if len(items) != 0 {
 		t.Errorf("empty list = %v", items)
+	}
+}
+
+// The case uapi 3.5.0 added X-Kernel-Unread for: no peer listed because the
+// kernel of wg0 could not be read. Without the footer the host sees [] and
+// reads a kernel without drift.
+func TestHostSeesUnreadKernelBesideAnEmptyList(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/network/wireguard_kernel_peers" {
+			t.Errorf("unexpected request %s %s", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("X-Kernel-Unread", "wg0")
+		_, _ = io.WriteString(w, `[]`)
+	}))
+	t.Cleanup(srv.Close)
+
+	res := call(t, hostSessionTo(t, srv.URL), "network_wireguard_kernel_peers_list", map[string]any{})
+	if res.IsError {
+		t.Fatal("unexpected error result")
+	}
+	blocks := textBlocks(t, res)
+	if len(blocks) != 2 {
+		t.Fatalf("list with X-Kernel-Unread carries %d blocks, want payload then footer", len(blocks))
+	}
+	var items []any
+	if err := json.Unmarshal([]byte(blocks[0]), &items); err != nil || len(items) != 0 {
+		t.Fatalf("payload = %q, want []", blocks[0])
+	}
+	if blocks[1] != "X-Kernel-Unread: wg0" {
+		t.Errorf("footer = %q", blocks[1])
 	}
 }

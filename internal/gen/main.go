@@ -25,12 +25,15 @@ const (
 )
 
 // hiddenQueryParams are client mechanics, not agent inputs. The client sends
-// idempotency keys itself on POST; ETag preconditions are not part of the
-// tool surface.
+// idempotency keys itself on POST and walks every page of a list itself, so
+// an agent cursor would silently answer a partial list; ETag preconditions
+// are not part of the tool surface.
 var hiddenQueryParams = map[string]bool{
 	"idempotency_key": true,
 	"if_match":        true,
 	"if_none_match":   true,
+	"limit":           true,
+	"cursor":          true,
 }
 
 type spec struct {

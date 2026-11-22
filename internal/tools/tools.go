@@ -135,14 +135,12 @@ func handler(c *client.Client, ep Endpoint) mcp.ToolHandler {
 			return errorResult(err.Error()), nil
 		}
 
+		var resp *client.Response
 		if ep.Paginated {
-			list, err := c.List(ctx, path, query)
-			if err != nil {
-				return errorResultFor(err), nil
-			}
-			return textResult(string(list)), nil
+			resp, err = c.List(ctx, path, query)
+		} else {
+			resp, err = c.Do(ctx, ep.Method, path, query, body)
 		}
-		resp, err := c.Do(ctx, ep.Method, path, query, body)
 		if err != nil {
 			if ep.Method == http.MethodDelete && client.IsNotFound(err) {
 				return textResult(fmt.Sprintf("%s %s: 404 Not Found (already absent)", ep.Method, path)), nil
@@ -153,7 +151,7 @@ func handler(c *client.Client, ep Endpoint) mcp.ToolHandler {
 			return textResult(fmt.Sprintf("%s %s: %d %s", ep.Method, path, resp.Status, http.StatusText(resp.Status))), nil
 		}
 		// The payload rides as its own block so hosts parse it as JSON; the
-		// transaction headers follow in a second block and stay readable.
+		// advisory headers follow in a second block and stay readable.
 		if footer := resp.Footer(); footer != "" {
 			return &mcp.CallToolResult{
 				Content: []mcp.Content{

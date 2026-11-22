@@ -221,16 +221,19 @@ func TestListFollowsCursor(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	raw, err := testClient(srv.URL).List(context.Background(), "/firewall/rules", url.Values{"managed": {"true"}})
+	resp, err := testClient(srv.URL).List(context.Background(), "/firewall/rules", url.Values{"managed": {"true"}})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	var items []map[string]any
-	if err := json.Unmarshal(raw, &items); err != nil {
+	if err := json.Unmarshal(resp.Body, &items); err != nil {
 		t.Fatalf("decoding merged list: %v", err)
 	}
 	if len(items) != 3 || items[0]["id"] != "r_1" || items[2]["id"] != "r_3" {
-		t.Errorf("merged list = %s", raw)
+		t.Errorf("merged list = %s", resp.Body)
+	}
+	if resp.Footer() != "" {
+		t.Errorf("Footer() = %q, want none", resp.Footer())
 	}
 	if got := atomic.LoadInt32(&calls); got != 2 {
 		t.Errorf("expected 2 pages, got %d", got)
@@ -243,12 +246,37 @@ func TestListEmptyCollection(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	raw, err := testClient(srv.URL).List(context.Background(), "/network/wireguard_kernel_peers", nil)
+	resp, err := testClient(srv.URL).List(context.Background(), "/network/wireguard_kernel_peers", nil)
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if string(raw) != "[]" {
-		t.Errorf("empty collection = %q, want []", raw)
+	if string(resp.Body) != "[]" {
+		t.Errorf("empty collection = %q, want []", resp.Body)
+	}
+}
+
+func TestListMergesKernelUnread(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Query().Get("cursor") == "" {
+			w.Header().Set("X-Kernel-Unread", "wg0")
+			w.Header().Set("X-Next-Cursor", "c_2")
+			_, _ = w.Write([]byte(`[{"id":"p_1"}]`))
+			return
+		}
+		w.Header().Set("X-Kernel-Unread", "wg0, wg1")
+		_, _ = w.Write([]byte(`[]`))
+	}))
+	defer srv.Close()
+
+	resp, err := testClient(srv.URL).List(context.Background(), "/network/wireguard_kernel_peers", nil)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if resp.KernelUnread != "wg0,wg1" {
+		t.Errorf("KernelUnread = %q, want wg0,wg1", resp.KernelUnread)
+	}
+	if resp.Footer() != "X-Kernel-Unread: wg0,wg1" {
+		t.Errorf("Footer() = %q", resp.Footer())
 	}
 }
 

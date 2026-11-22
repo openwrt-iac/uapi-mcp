@@ -89,6 +89,7 @@
             ]
           },
           "cachesize": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -150,6 +151,7 @@
             ]
           },
           "port": {
+            "description": "DNS port. 0 turns the DNS server of dnsmasq off, as next to another resolver",
             "type": [
               "integer",
               "null"
@@ -721,7 +723,7 @@
             ]
           },
           "loglevel": {
-            "description": "syslog priority (0=emerg .. 7=debug)",
+            "description": "syslog priority (0=emerg .. 7=debug). odhcpd keeps the low 3 bits of another number",
             "type": [
               "integer",
               "null"
@@ -869,6 +871,7 @@
                 ]
               },
               "leasetime": {
+                "description": "Lease time: a number of seconds, or a number with a suffix such as h or d, or `infinite`, or `deprecated`, as LuCI writes them",
                 "type": [
                   "string",
                   "null"
@@ -888,7 +891,7 @@
                 ]
               },
               "ra_default": {
-                "description": "When odhcpd announces this device as default router in its router advertisements. 0 or null, when the router has an IPv6 default route and the interface a global prefix. 1, when the interface has a prefix, a ULA one included. 2, always.",
+                "description": "When odhcpd announces this device as default router in its router advertisements. 0 or null, when the router has an IPv6 default route and the interface a global prefix. 1, when the interface has a prefix, a ULA one included. 2, always. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -982,7 +985,7 @@
                 ]
               },
               "dhcpv4": {
-                "description": "DHCPv4 service on this interface. LuCI offers `disabled` and `server`. dnsmasq serves on every value but `disabled`. odhcpd has no DHCPv4 relay and serves on every value but `disabled` too, but only when `dhcp/odhcpd` sets `maindhcp`, and it takes null as `disabled`. One of (may grow): disabled, server, relay, hybrid, null.",
+                "description": "DHCPv4 service on this interface. LuCI offers `disabled` and `server`, and its DHCP setup writes `server`. dnsmasq serves on every value but `disabled`. An unset value is served by the dnsmasq of OpenWrt 25.12, and taken as `disabled` by the dnsmasq of OpenWrt main, so a read of null serves DHCPv4 on one and not on the other. odhcpd has no DHCPv4 relay and serves on every value but `disabled` too, but only when `dhcp/odhcpd` sets `maindhcp`, and it takes null as `disabled`. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): disabled, server, relay, hybrid, null.",
                 "type": [
                   "string",
                   "null"
@@ -1022,6 +1025,7 @@
                 ]
               },
               "leasetime": {
+                "description": "Lease time: a number of seconds, or a number with a suffix such as h or d, or `infinite`, or `deprecated`, as LuCI writes them",
                 "type": [
                   "string",
                   "null"
@@ -1041,7 +1045,7 @@
                 ]
               },
               "ra_default": {
-                "description": "When odhcpd announces this device as default router in its router advertisements. 0 or null, when the router has an IPv6 default route and the interface a global prefix. 1, when the interface has a prefix, a ULA one included. 2, always.",
+                "description": "When odhcpd announces this device as default router in its router advertisements. 0 or null, when the router has an IPv6 default route and the interface a global prefix. 1, when the interface has a prefix, a ULA one included. 2, always. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -1106,7 +1110,7 @@
             ]
           },
           "dhcpv4": {
-            "description": "DHCPv4 service on this interface. LuCI offers `disabled` and `server`. dnsmasq serves on every value but `disabled`. odhcpd has no DHCPv4 relay and serves on every value but `disabled` too, but only when `dhcp/odhcpd` sets `maindhcp`, and it takes null as `disabled`. One of (may grow): disabled, server, relay, hybrid, null.",
+            "description": "DHCPv4 service on this interface. LuCI offers `disabled` and `server`, and its DHCP setup writes `server`. dnsmasq serves on every value but `disabled`. An unset value is served by the dnsmasq of OpenWrt 25.12, and taken as `disabled` by the dnsmasq of OpenWrt main, so a read of null serves DHCPv4 on one and not on the other. odhcpd has no DHCPv4 relay and serves on every value but `disabled` too, but only when `dhcp/odhcpd` sets `maindhcp`, and it takes null as `disabled`. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): disabled, server, relay, hybrid, null.",
             "type": [
               "string",
               "null"
@@ -1146,6 +1150,7 @@
             ]
           },
           "leasetime": {
+            "description": "Lease time: a number of seconds, or a number with a suffix such as h or d, or `infinite`, or `deprecated`, as LuCI writes them",
             "type": [
               "string",
               "null"
@@ -1165,7 +1170,7 @@
             ]
           },
           "ra_default": {
-            "description": "When odhcpd announces this device as default router in its router advertisements. 0 or null, when the router has an IPv6 default route and the interface a global prefix. 1, when the interface has a prefix, a ULA one included. 2, always.",
+            "description": "When odhcpd announces this device as default router in its router advertisements. 0 or null, when the router has an IPv6 default route and the interface a global prefix. 1, when the interface has a prefix, a ULA one included. 2, always. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -1335,6 +1340,7 @@
                 ]
               },
               "port": {
+                "description": "SSH port. 0 makes dropbear listen on a random port",
                 "type": [
                   "integer",
                   "null"
@@ -1433,6 +1439,7 @@
                 "type": "boolean"
               },
               "port": {
+                "description": "SSH port. 0 makes dropbear listen on a random port",
                 "type": [
                   "integer",
                   "null"
@@ -1496,6 +1503,7 @@
             "type": "boolean"
           },
           "port": {
+            "description": "SSH port. 0 makes dropbear listen on a random port",
             "type": [
               "integer",
               "null"
@@ -1596,6 +1604,7 @@
             ]
           },
           "synflood_burst": {
+            "description": "SYN flood burst, as firewall4 reads it: 0 leaves the burst out of the limit",
             "type": [
               "integer",
               "null"
@@ -1997,7 +2006,7 @@
             ]
           },
           "snat_ip": {
-            "description": "IPv4 address to rewrite the source to. Requires target SNAT",
+            "description": "IPv4 address to rewrite the source to. Requires target SNAT. On the NPT target that only a read gives, the prefix that firewall4 maps match.src_ip to",
             "type": [
               "string",
               "null"
@@ -2011,7 +2020,7 @@
             ]
           },
           "target": {
-            "description": "SNAT rewrites to snat_ip/snat_port, MASQUERADE rewrites to the outbound interface address, ACCEPT exempts matched traffic from source NAT One of (may grow): SNAT, MASQUERADE, ACCEPT.",
+            "description": "SNAT rewrites to snat_ip/snat_port, MASQUERADE rewrites to the outbound interface address, ACCEPT exempts matched traffic from source NAT. A read also gives NPT, which firewall4 of OpenWrt main takes, and a write refuses a change to it. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): SNAT, MASQUERADE, ACCEPT.",
             "type": "string"
           }
         },
@@ -2161,7 +2170,7 @@
                 ]
               },
               "snat_ip": {
-                "description": "IPv4 address to rewrite the source to. Requires target SNAT",
+                "description": "IPv4 address to rewrite the source to. Requires target SNAT. On the NPT target that only a read gives, the prefix that firewall4 maps match.src_ip to",
                 "type": [
                   "string",
                   "null"
@@ -2321,7 +2330,7 @@
                 ]
               },
               "snat_ip": {
-                "description": "IPv4 address to rewrite the source to. Requires target SNAT",
+                "description": "IPv4 address to rewrite the source to. Requires target SNAT. On the NPT target that only a read gives, the prefix that firewall4 maps match.src_ip to",
                 "type": [
                   "string",
                   "null"
@@ -2335,7 +2344,7 @@
                 ]
               },
               "target": {
-                "description": "SNAT rewrites to snat_ip/snat_port, MASQUERADE rewrites to the outbound interface address, ACCEPT exempts matched traffic from source NAT One of (may grow): SNAT, MASQUERADE, ACCEPT.",
+                "description": "SNAT rewrites to snat_ip/snat_port, MASQUERADE rewrites to the outbound interface address, ACCEPT exempts matched traffic from source NAT. A read also gives NPT, which firewall4 of OpenWrt main takes, and a write refuses a change to it. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): SNAT, MASQUERADE, ACCEPT.",
                 "type": "string"
               }
             },
@@ -3257,7 +3266,7 @@
                 ]
               },
               "target": {
-                "description": "One of (may grow): ACCEPT, REJECT, DROP, NOTRACK, MARK, DSCP, null.",
+                "description": "A read also gives HELPER, which LuCI writes for a conntrack helper rule. uapi does not model the helper, so a write refuses a change to it. A PATCH that sends a stored HELPER back passes, and a PUT answers 422 for it, because a PUT removes the set_helper option, and firewall4 skips a HELPER rule without it One of (may grow): ACCEPT, REJECT, DROP, NOTRACK, MARK, DSCP, null.",
                 "type": [
                   "string",
                   "null"
@@ -3408,7 +3417,7 @@
             ]
           },
           "target": {
-            "description": "One of (may grow): ACCEPT, REJECT, DROP, NOTRACK, MARK, DSCP, null.",
+            "description": "A read also gives HELPER, which LuCI writes for a conntrack helper rule. uapi does not model the helper, so a write refuses a change to it. A PATCH that sends a stored HELPER back passes, and a PUT answers 422 for it, because a PUT removes the set_helper option, and firewall4 skips a HELPER rule without it One of (may grow): ACCEPT, REJECT, DROP, NOTRACK, MARK, DSCP, null.",
             "type": [
               "string",
               "null"
@@ -3897,14 +3906,14 @@
             ]
           },
           "loglevel": {
-            "description": "One of (may grow): emerg, alert, crit, err, warn, notice, info, debug, null.",
+            "description": "One of (may grow): emerg, alert, crit, err, error, warn, warning, notice, info, debug, null.",
             "type": [
               "string",
               "null"
             ]
           },
           "mmx_mask": {
-            "description": "Firewall mark mask for mwan3-tagged packets (hex, default 0x3F00).",
+            "description": "Firewall mark mask for mwan3-tagged packets, in hex, decimal or octal with a leading 0, as the shell arithmetic of mwan3 reads it (default 0x3F00). A decimal or octal mask is at most 0xFFFFFFFF.",
             "type": [
               "string",
               "null"
@@ -4031,7 +4040,7 @@
                 ]
               },
               "flush_conntrack": {
-                "description": "Events that flush conntrack table.",
+                "description": "Events that flush conntrack table. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "items": {
                   "description": "One of (may grow): ifup, ifdown, connected, disconnected, never.",
                   "type": "string"
@@ -4046,6 +4055,7 @@
                 "type": "string"
               },
               "interval": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -4064,7 +4074,7 @@
                 ]
               },
               "probe_count": {
-                "description": "Probes per cycle per track_ip. Maps to the `count` uci option; renamed on the wire because Terraform reserves the top-level `count` attribute.",
+                "description": "Probes per cycle per track_ip. Maps to the `count` uci option; renamed on the wire because Terraform reserves the top-level `count` attribute. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -4096,13 +4106,14 @@
                 ]
               },
               "size": {
-                "description": "Probe payload size in bytes.",
+                "description": "Probe payload size in bytes. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
                 ]
               },
               "timeout": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -4119,7 +4130,7 @@
                 ]
               },
               "track_method": {
-                "description": "One of (may grow): ping, arping, httping, nping-tcp, nping-udp, null.",
+                "description": "One of (may grow): ping, arping, httping, nping-tcp, nping-udp, nping-icmp, nping-arp, null.",
                 "type": [
                   "string",
                   "null"
@@ -4225,7 +4236,7 @@
                 ]
               },
               "flush_conntrack": {
-                "description": "Events that flush conntrack table.",
+                "description": "Events that flush conntrack table. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "items": {
                   "description": "One of (may grow): ifup, ifdown, connected, disconnected, never.",
                   "type": "string"
@@ -4240,6 +4251,7 @@
                 "type": "string"
               },
               "interval": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -4255,7 +4267,7 @@
                 ]
               },
               "probe_count": {
-                "description": "Probes per cycle per track_ip. Maps to the `count` uci option; renamed on the wire because Terraform reserves the top-level `count` attribute.",
+                "description": "Probes per cycle per track_ip. Maps to the `count` uci option; renamed on the wire because Terraform reserves the top-level `count` attribute. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -4287,13 +4299,14 @@
                 ]
               },
               "size": {
-                "description": "Probe payload size in bytes.",
+                "description": "Probe payload size in bytes. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
                 ]
               },
               "timeout": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -4310,7 +4323,7 @@
                 ]
               },
               "track_method": {
-                "description": "One of (may grow): ping, arping, httping, nping-tcp, nping-udp, null.",
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): ping, arping, httping, nping-tcp, nping-udp, nping-icmp, nping-arp, null.",
                 "type": [
                   "string",
                   "null"
@@ -4390,7 +4403,7 @@
             ]
           },
           "flush_conntrack": {
-            "description": "Events that flush conntrack table.",
+            "description": "Events that flush conntrack table. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "items": {
               "description": "One of (may grow): ifup, ifdown, connected, disconnected, never.",
               "type": "string"
@@ -4405,6 +4418,7 @@
             "type": "string"
           },
           "interval": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -4420,7 +4434,7 @@
             ]
           },
           "probe_count": {
-            "description": "Probes per cycle per track_ip. Maps to the `count` uci option; renamed on the wire because Terraform reserves the top-level `count` attribute.",
+            "description": "Probes per cycle per track_ip. Maps to the `count` uci option; renamed on the wire because Terraform reserves the top-level `count` attribute. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -4452,13 +4466,14 @@
             ]
           },
           "size": {
-            "description": "Probe payload size in bytes.",
+            "description": "Probe payload size in bytes. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
             ]
           },
           "timeout": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -4475,7 +4490,7 @@
             ]
           },
           "track_method": {
-            "description": "One of (may grow): ping, arping, httping, nping-tcp, nping-udp, null.",
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): ping, arping, httping, nping-tcp, nping-udp, nping-icmp, nping-arp, null.",
             "type": [
               "string",
               "null"
@@ -4587,14 +4602,14 @@
                 ]
               },
               "metric": {
-                "description": "Lower wins. Members in the same policy with equal metric share load.",
+                "description": "Lower wins. Members in the same policy with equal metric share load. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
                 ]
               },
               "weight": {
-                "description": "Relative load-share weight among equal-metric members.",
+                "description": "Relative load-share weight among equal-metric members. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -4665,14 +4680,14 @@
                 ]
               },
               "metric": {
-                "description": "Lower wins. Members in the same policy with equal metric share load.",
+                "description": "Lower wins. Members in the same policy with equal metric share load. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
                 ]
               },
               "weight": {
-                "description": "Relative load-share weight among equal-metric members.",
+                "description": "Relative load-share weight among equal-metric members. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -4717,14 +4732,14 @@
             ]
           },
           "metric": {
-            "description": "Lower wins. Members in the same policy with equal metric share load.",
+            "description": "Lower wins. Members in the same policy with equal metric share load. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
             ]
           },
           "weight": {
-            "description": "Relative load-share weight among equal-metric members.",
+            "description": "Relative load-share weight among equal-metric members. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -5062,7 +5077,7 @@
                 ]
               },
               "family": {
-                "description": "One of (may grow): ipv4, ipv6, null.",
+                "description": "One of (may grow): ipv4, ipv6, any, null.",
                 "type": [
                   "string",
                   "null"
@@ -5086,7 +5101,7 @@
                 ]
               },
               "proto": {
-                "description": "One of (may grow): tcp, udp, icmp, all, null.",
+                "description": "IP protocol as iptables takes it: a number from 0 to 255, which iptables reads as octal after a leading 0 and as hex after 0x, or a name that iptables resolves, such as tcp, udp, icmp, esp or all, which LuCI suggests. A write refuses another value, because iptables refuses the rules of the whole family for it.",
                 "type": [
                   "string",
                   "null"
@@ -5114,6 +5129,7 @@
                 ]
               },
               "timeout": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -5194,7 +5210,7 @@
                 ]
               },
               "family": {
-                "description": "One of (may grow): ipv4, ipv6, null.",
+                "description": "One of (may grow): ipv4, ipv6, any, null.",
                 "type": [
                   "string",
                   "null"
@@ -5215,7 +5231,7 @@
                 "type": "boolean"
               },
               "proto": {
-                "description": "One of (may grow): tcp, udp, icmp, all, null.",
+                "description": "IP protocol as iptables takes it: a number from 0 to 255, which iptables reads as octal after a leading 0 and as hex after 0x, or a name that iptables resolves, such as tcp, udp, icmp, esp or all, which LuCI suggests. A write refuses another value, because iptables refuses the rules of the whole family for it.",
                 "type": [
                   "string",
                   "null"
@@ -5240,6 +5256,7 @@
                 "type": "boolean"
               },
               "timeout": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -5294,7 +5311,7 @@
             ]
           },
           "family": {
-            "description": "One of (may grow): ipv4, ipv6, null.",
+            "description": "One of (may grow): ipv4, ipv6, any, null.",
             "type": [
               "string",
               "null"
@@ -5315,7 +5332,7 @@
             "type": "boolean"
           },
           "proto": {
-            "description": "One of (may grow): tcp, udp, icmp, all, null.",
+            "description": "IP protocol as iptables takes it: a number from 0 to 255, which iptables reads as octal after a leading 0 and as hex after 0x, or a name that iptables resolves, such as tcp, udp, icmp, esp or all, which LuCI suggests. A write refuses another value, because iptables refuses the rules of the whole family for it.",
             "type": [
               "string",
               "null"
@@ -5340,6 +5357,7 @@
             "type": "boolean"
           },
           "timeout": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -5745,7 +5763,7 @@
                 ]
               },
               "vid": {
-                "description": "VLAN id for 8021q / 8021ad devices",
+                "description": "VLAN id for 8021q / 8021ad devices. A write takes 1 to 4094, and a read gives a stored 0, which the netifd of OpenWrt main takes. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -5850,14 +5868,14 @@
                 ]
               },
               "type": {
-                "description": "One of (may grow): bridge, 8021q, 8021ad, macvlan, veth, tun, tap, null.",
+                "description": "Device type that a write sets. A read also gives a type that uapi does not write, such as the bonding or vrf that LuCI writes, and netifd sets up a type that it does not know as a plain device. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): bridge, 8021q, 8021ad, macvlan, veth, tun, tap, null.",
                 "type": [
                   "string",
                   "null"
                 ]
               },
               "vid": {
-                "description": "VLAN id for 8021q / 8021ad devices",
+                "description": "VLAN id for 8021q / 8021ad devices. A write takes 1 to 4094, and a read gives a stored 0, which the netifd of OpenWrt main takes. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -5936,14 +5954,14 @@
             ]
           },
           "type": {
-            "description": "One of (may grow): bridge, 8021q, 8021ad, macvlan, veth, tun, tap, null.",
+            "description": "Device type that a write sets. A read also gives a type that uapi does not write, such as the bonding or vrf that LuCI writes, and netifd sets up a type that it does not know as a plain device. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): bridge, 8021q, 8021ad, macvlan, veth, tun, tap, null.",
             "type": [
               "string",
               "null"
             ]
           },
           "vid": {
-            "description": "VLAN id for 8021q / 8021ad devices",
+            "description": "VLAN id for 8021q / 8021ad devices. A write takes 1 to 4094, and a read gives a stored 0, which the netifd of OpenWrt main takes. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -6136,7 +6154,7 @@
                 ]
               },
               "ip6addrs": {
-                "description": "IPv6 address list for static proto (uci `list ip6addr`). A static interface needs either this or `ipaddrs`, not both.",
+                "description": "IPv6 address list for static proto (uci `list ip6addr`). A static interface needs either this or `ipaddrs`, not both. On a proto that uapi does not model, such as 6in4, one value is stored as an option, as LuCI writes it, and a write refuses several when the handler reads the option as one value, as netifd publishes it in `get_proto_handlers`: netifd hands such a handler no uci list.",
                 "items": {
                   "type": "string"
                 },
@@ -6184,7 +6202,7 @@
                 ]
               },
               "ip6prefix": {
-                "description": "IPv6 prefixes routed to this device for delegation to clients (static, dhcpv6, wireguard). Responses are always an array. A space-separated string is still accepted on write, and v4 removes that (see docs/deprecations.md).",
+                "description": "IPv6 prefixes routed to this device for delegation to clients (static, dhcpv6, wireguard). Responses are always an array. A space-separated string is still accepted on write, and v4 removes that (see docs/deprecations.md). On a proto that uapi does not model, such as 6in4, one value is stored as an option, as LuCI writes it, and a write refuses several when the handler reads the option as one value, as netifd publishes it in `get_proto_handlers`: netifd hands such a handler no uci list.",
                 "items": {
                   "type": "string"
                 },
@@ -6202,14 +6220,14 @@
                 ]
               },
               "ip6weight": {
-                "description": "Assignment preference: when several interfaces share a prefix, the ones with a higher weight get their subnet first.",
+                "description": "Assignment preference: when several interfaces share a prefix, the ones with a higher weight get their subnet first. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
                 ]
               },
               "ipaddrs": {
-                "description": "Full IPv4 address list for static proto (uci `list ipaddr`). The only write name for this option; `ipaddr` is the read-only first entry.",
+                "description": "Full IPv4 address list for static proto (uci `list ipaddr`). The only write name for this option; `ipaddr` is the read-only first entry. On a proto that uapi does not model, such as 6in4, one value is stored as an option, as LuCI writes it, and a write refuses several when the handler reads the option as one value, as netifd publishes it in `get_proto_handlers`: netifd hands such a handler no uci list.",
                 "items": {
                   "type": "string"
                 },
@@ -6226,7 +6244,7 @@
                 ]
               },
               "metric": {
-                "description": "Metric of the routes this interface installs without one of their own",
+                "description": "Metric of the routes this interface installs without one of their own. A write takes 0 or more, as LuCI does, and a read gives a stored negative value, which netifd takes. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -6276,7 +6294,7 @@
                 ]
               },
               "reqprefix": {
-                "description": "Prefix delegation request (dhcpv6, pppoe, ppp): auto, no, a prefix length, or a prefix such as 2001:db8::/56",
+                "description": "Prefix delegation request (dhcpv6, pppoe, ppp): auto, no, a prefix length, or a prefix such as 2001:db8::/56, each with an optional :IAID of up to 8 hex digits, as odhcp6c reads it",
                 "type": [
                   "string",
                   "null"
@@ -6436,7 +6454,7 @@
                 ]
               },
               "ip6addrs": {
-                "description": "IPv6 address list for static proto (uci `list ip6addr`). A static interface needs either this or `ipaddrs`, not both.",
+                "description": "IPv6 address list for static proto (uci `list ip6addr`). A static interface needs either this or `ipaddrs`, not both. On a proto that uapi does not model, such as 6in4, one value is stored as an option, as LuCI writes it, and a write refuses several when the handler reads the option as one value, as netifd publishes it in `get_proto_handlers`: netifd hands such a handler no uci list.",
                 "items": {
                   "type": "string"
                 },
@@ -6484,7 +6502,7 @@
                 ]
               },
               "ip6prefix": {
-                "description": "IPv6 prefixes routed to this device for delegation to clients (static, dhcpv6, wireguard). Responses are always an array. A space-separated string is still accepted on write, and v4 removes that (see docs/deprecations.md).",
+                "description": "IPv6 prefixes routed to this device for delegation to clients (static, dhcpv6, wireguard). Responses are always an array. A space-separated string is still accepted on write, and v4 removes that (see docs/deprecations.md). On a proto that uapi does not model, such as 6in4, one value is stored as an option, as LuCI writes it, and a write refuses several when the handler reads the option as one value, as netifd publishes it in `get_proto_handlers`: netifd hands such a handler no uci list.",
                 "items": {
                   "type": "string"
                 },
@@ -6502,14 +6520,14 @@
                 ]
               },
               "ip6weight": {
-                "description": "Assignment preference: when several interfaces share a prefix, the ones with a higher weight get their subnet first.",
+                "description": "Assignment preference: when several interfaces share a prefix, the ones with a higher weight get their subnet first. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
                 ]
               },
               "ipaddrs": {
-                "description": "Full IPv4 address list for static proto (uci `list ipaddr`). The only write name for this option; `ipaddr` is the read-only first entry.",
+                "description": "Full IPv4 address list for static proto (uci `list ipaddr`). The only write name for this option; `ipaddr` is the read-only first entry. On a proto that uapi does not model, such as 6in4, one value is stored as an option, as LuCI writes it, and a write refuses several when the handler reads the option as one value, as netifd publishes it in `get_proto_handlers`: netifd hands such a handler no uci list.",
                 "items": {
                   "type": "string"
                 },
@@ -6526,7 +6544,7 @@
                 ]
               },
               "metric": {
-                "description": "Metric of the routes this interface installs without one of their own",
+                "description": "Metric of the routes this interface installs without one of their own. A write takes 0 or more, as LuCI does, and a read gives a stored negative value, which netifd takes. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -6573,7 +6591,7 @@
                 ]
               },
               "reqprefix": {
-                "description": "Prefix delegation request (dhcpv6, pppoe, ppp): auto, no, a prefix length, or a prefix such as 2001:db8::/56",
+                "description": "Prefix delegation request (dhcpv6, pppoe, ppp): auto, no, a prefix length, or a prefix such as 2001:db8::/56, each with an optional :IAID of up to 8 hex digits, as odhcp6c reads it",
                 "type": [
                   "string",
                   "null"
@@ -6707,7 +6725,7 @@
             ]
           },
           "ip6addrs": {
-            "description": "IPv6 address list for static proto (uci `list ip6addr`). A static interface needs either this or `ipaddrs`, not both.",
+            "description": "IPv6 address list for static proto (uci `list ip6addr`). A static interface needs either this or `ipaddrs`, not both. On a proto that uapi does not model, such as 6in4, one value is stored as an option, as LuCI writes it, and a write refuses several when the handler reads the option as one value, as netifd publishes it in `get_proto_handlers`: netifd hands such a handler no uci list.",
             "items": {
               "type": "string"
             },
@@ -6755,7 +6773,7 @@
             ]
           },
           "ip6prefix": {
-            "description": "IPv6 prefixes routed to this device for delegation to clients (static, dhcpv6, wireguard). Responses are always an array. A space-separated string is still accepted on write, and v4 removes that (see docs/deprecations.md).",
+            "description": "IPv6 prefixes routed to this device for delegation to clients (static, dhcpv6, wireguard). Responses are always an array. A space-separated string is still accepted on write, and v4 removes that (see docs/deprecations.md). On a proto that uapi does not model, such as 6in4, one value is stored as an option, as LuCI writes it, and a write refuses several when the handler reads the option as one value, as netifd publishes it in `get_proto_handlers`: netifd hands such a handler no uci list.",
             "items": {
               "type": "string"
             },
@@ -6773,14 +6791,14 @@
             ]
           },
           "ip6weight": {
-            "description": "Assignment preference: when several interfaces share a prefix, the ones with a higher weight get their subnet first.",
+            "description": "Assignment preference: when several interfaces share a prefix, the ones with a higher weight get their subnet first. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
             ]
           },
           "ipaddrs": {
-            "description": "Full IPv4 address list for static proto (uci `list ipaddr`). The only write name for this option; `ipaddr` is the read-only first entry.",
+            "description": "Full IPv4 address list for static proto (uci `list ipaddr`). The only write name for this option; `ipaddr` is the read-only first entry. On a proto that uapi does not model, such as 6in4, one value is stored as an option, as LuCI writes it, and a write refuses several when the handler reads the option as one value, as netifd publishes it in `get_proto_handlers`: netifd hands such a handler no uci list.",
             "items": {
               "type": "string"
             },
@@ -6797,7 +6815,7 @@
             ]
           },
           "metric": {
-            "description": "Metric of the routes this interface installs without one of their own",
+            "description": "Metric of the routes this interface installs without one of their own. A write takes 0 or more, as LuCI does, and a read gives a stored negative value, which netifd takes. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -6844,7 +6862,7 @@
             ]
           },
           "reqprefix": {
-            "description": "Prefix delegation request (dhcpv6, pppoe, ppp): auto, no, a prefix length, or a prefix such as 2001:db8::/56",
+            "description": "Prefix delegation request (dhcpv6, pppoe, ppp): auto, no, a prefix length, or a prefix such as 2001:db8::/56, each with an optional :IAID of up to 8 hex digits, as odhcp6c reads it",
             "type": [
               "string",
               "null"
@@ -6970,12 +6988,14 @@
                 ]
               },
               "metric": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
                 ]
               },
               "mtu": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -7092,12 +7112,14 @@
                 ]
               },
               "metric": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
                 ]
               },
               "mtu": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -7185,12 +7207,14 @@
             ]
           },
           "metric": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
             ]
           },
           "mtu": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -7398,7 +7422,7 @@
                 ]
               },
               "priority": {
-                "description": "Position of the rule: a lower one runs first. Without one, netifd numbers the rule by its place among the rules, from 1 up, which puts it ahead of `main` at 32766. A rule without a selector matches every packet, so with a table that holds a default route it routes all traffic, the management session included. LuCI allows the same.",
+                "description": "Position of the rule: a lower one runs first. Without one, netifd numbers the rule by its place among the rules, from 1 up, which puts it ahead of `main` at 32766. A rule without a selector matches every packet, so with a table that holds a default route it routes all traffic, the management session included. LuCI allows the same. A write takes 0 or more, as LuCI does, and a read gives the number that netifd reads. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -7566,7 +7590,7 @@
                 ]
               },
               "priority": {
-                "description": "Position of the rule: a lower one runs first. Without one, netifd numbers the rule by its place among the rules, from 1 up, which puts it ahead of `main` at 32766. A rule without a selector matches every packet, so with a table that holds a default route it routes all traffic, the management session included. LuCI allows the same.",
+                "description": "Position of the rule: a lower one runs first. Without one, netifd numbers the rule by its place among the rules, from 1 up, which puts it ahead of `main` at 32766. A rule without a selector matches every packet, so with a table that holds a default route it routes all traffic, the management session included. LuCI allows the same. A write takes 0 or more, as LuCI does, and a read gives the number that netifd reads. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -7705,7 +7729,7 @@
             ]
           },
           "priority": {
-            "description": "Position of the rule: a lower one runs first. Without one, netifd numbers the rule by its place among the rules, from 1 up, which puts it ahead of `main` at 32766. A rule without a selector matches every packet, so with a table that holds a default route it routes all traffic, the management session included. LuCI allows the same.",
+            "description": "Position of the rule: a lower one runs first. Without one, netifd numbers the rule by its place among the rules, from 1 up, which puts it ahead of `main` at 32766. A rule without a selector matches every packet, so with a table that holds a default route it routes all traffic, the management session included. LuCI allows the same. A write takes 0 or more, as LuCI does, and a read gives the number that netifd reads. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -7865,7 +7889,7 @@
             "description": "Merge-patch body (RFC 7396): any subset of NetworkWireguardPeersRequest, which describes the fields.",
             "properties": {
               "allowed_ips": {
-                "description": "IPv4 or IPv6 addresses or CIDRs routed to this peer; a bare address means a single host. A read gives the entries as wg gets them: wireguard.sh joins a list with spaces, leaving out an empty entry, makes each space a comma, and expands the backslash escapes of printf %b, and wg cuts the line at a NUL byte and at `#` and splits it at commas. So `10.0.0.0/8\\054192.168.0.0/16` reads as two entries, and so does a comma, while two prefixes that a tab separates read as one entry, and a space at either end or next to another adds an empty entry, and wg refuses the config for either, so the interface does not come up. A value that the escapes would give a second line, the end of the config or a byte that is not printable ASCII, or that holds a backslash and is longer than 512 bytes, reads unexpanded. A value that wg reads as an empty line, such as one that starts with `#`, reads as one empty entry, because wireguard.sh still writes the line and wg refuses it. The routes of `route_allowed_ips` go to each word of the value as stored, before the escapes, with the address before the first `/` of the word and the length after its last, read as netifd reads it. Each entry that a write leaves on an enabled peer must be an address or CIDR, and a write that leaves the peer disabled checks only the entries that it sends. A stored entry that starts with `+` or `-` marks an incremental update to wg, which adds the prefixes of the whole list to what the peer already holds instead of replacing them, and refuses the command for one marked `-`, in `wg set` as in the `wg syncconf` of an ifup. A write refuses such an entry wherever it leaves the peer enabled, because it is not an address or CIDR, and the kernel apply and the restore refuse a peer that stores one.",
+                "description": "IPv4 or IPv6 addresses or CIDRs routed to this peer; a bare address means a single host. A read gives the entries as wg gets them: wireguard.sh joins a list with spaces, leaving out an empty entry, makes each space a comma, and expands the backslash escapes of printf %b, and wg cuts the line at a NUL byte and at `#` and splits it at commas. So `10.0.0.0/8\\054192.168.0.0/16` reads as two entries, and so does a comma, while two prefixes that a tab separates read as one entry, and a space at either end or next to another adds an empty entry, and wg refuses the config for either, so the interface does not come up. A value that the escapes would give a second line, the end of the config or a byte that is not printable ASCII, or that holds a backslash and is longer than 512 bytes, reads unexpanded. A value that wg reads as an empty line, such as one that starts with `#`, reads as one empty entry, because wireguard.sh still writes the line and wg refuses it. The routes of `route_allowed_ips` go to each word of the value as stored, before the escapes, with the address before the first `/` of the word and the length after its last, read as netifd reads it. The ucode proto handler of OpenWrt main takes a list as its entries and an option as its words, joins them with commas and expands no escape, so a list entry that holds a space or a backslash reads as one entry, which wg refuses, and it routes each entry with the length that ucode's int() reads, its leading decimal digits, so `10.0.0.0/0x10` routes 0.0.0.0/0. Each entry that a write leaves on an enabled peer must be an address or CIDR, and a write that leaves the peer disabled checks only the entries that it sends. A stored entry that starts with `+` or `-` marks an incremental update to wg, which adds the prefixes of the whole list to what the peer already holds instead of replacing them, and refuses the command for one marked `-`, in `wg set` as in the `wg syncconf` of an ifup. A write refuses such an entry wherever it leaves the peer enabled, because it is not an address or CIDR, and the kernel apply and the restore refuse a peer that stores one.",
                 "items": {
                   "type": "string"
                 },
@@ -7882,7 +7906,7 @@
                 ]
               },
               "disabled": {
-                "description": "Skip this peer when starting the tunnel",
+                "description": "Skip this peer when starting the tunnel. A stored value other than `1` reads true only where netifd runs wireguard.sh, which also takes `on`, `true`, `yes` and `enabled`.",
                 "type": [
                   "boolean",
                   "null"
@@ -7896,7 +7920,7 @@
                 ]
               },
               "endpoint_port": {
-                "description": "Endpoint UDP port. A service name that uci stores, such as `https`, reads as its port from /etc/services, as wg resolves it. 0 reads when the name does not resolve, and then wg cannot bring the interface up. A write that changes the port to 0 answers 422, and so does a write that sends back the 0 of a name that does not resolve, because it would store port 0 in its place. A write that leaves a stored port as it is passes, unless it enables the peer, or changes the host or the key of an enabled peer, while the port reads 0.",
+                "description": "Endpoint UDP port. A service name that uci stores, such as `https`, reads as its port from /etc/services, as the platform resolves it. 0 reads when the name does not resolve: wireguard.sh then cannot bring the interface up, and the ucode handler of OpenWrt main leaves the endpoint out, as it does for a peer with a host and no port. A write that changes the port to 0 answers 422, and so does a write that sends back the 0 of a name that does not resolve, because it would store port 0 in its place. A write that leaves a stored port as it is passes, unless it enables the peer, or changes the host or the key of an enabled peer, while the port reads 0.",
                 "type": [
                   "integer",
                   "null"
@@ -7911,7 +7935,7 @@
                 "type": "string"
               },
               "persistent_keepalive": {
-                "description": "Seconds between keepalive packets. 0, a stored `off` or no value turns them off. -1 reads when wg cannot read the stored value, and then wg cannot bring the interface up. A write that changes the keepalive to -1 answers 422. A write that leaves such a stored value as it is passes, unless it enables the peer, and a PUT that sends the -1 back stores -1, which wg refuses as it refuses the stored value.",
+                "description": "Seconds between keepalive packets. 0, a stored `off` or no value turns them off. -1 reads when wg cannot read the stored value: wireguard.sh then cannot bring the interface up, and the ucode handler of OpenWrt main leaves the keepalive out. A write that changes the keepalive to -1 answers 422. A write that leaves such a stored value as it is passes, unless it enables the peer, and a PUT that sends the -1 back stores -1, which wg refuses as it refuses the stored value.",
                 "type": [
                   "integer",
                   "null"
@@ -7929,7 +7953,7 @@
                 ]
               },
               "route_allowed_ips": {
-                "description": "Auto-install routes for allowed_ips",
+                "description": "Auto-install routes for allowed_ips. A stored value other than `1` reads true only where netifd runs wireguard.sh, which also takes `on`, `true`, `yes` and `enabled`.",
                 "type": [
                   "boolean",
                   "null"
@@ -7989,7 +8013,7 @@
             "description": "Request body for the uapi resource backed by uci network.wireguard_peer.",
             "properties": {
               "allowed_ips": {
-                "description": "IPv4 or IPv6 addresses or CIDRs routed to this peer; a bare address means a single host. A read gives the entries as wg gets them: wireguard.sh joins a list with spaces, leaving out an empty entry, makes each space a comma, and expands the backslash escapes of printf %b, and wg cuts the line at a NUL byte and at `#` and splits it at commas. So `10.0.0.0/8\\054192.168.0.0/16` reads as two entries, and so does a comma, while two prefixes that a tab separates read as one entry, and a space at either end or next to another adds an empty entry, and wg refuses the config for either, so the interface does not come up. A value that the escapes would give a second line, the end of the config or a byte that is not printable ASCII, or that holds a backslash and is longer than 512 bytes, reads unexpanded. A value that wg reads as an empty line, such as one that starts with `#`, reads as one empty entry, because wireguard.sh still writes the line and wg refuses it. The routes of `route_allowed_ips` go to each word of the value as stored, before the escapes, with the address before the first `/` of the word and the length after its last, read as netifd reads it. Each entry that a write leaves on an enabled peer must be an address or CIDR, and a write that leaves the peer disabled checks only the entries that it sends. A stored entry that starts with `+` or `-` marks an incremental update to wg, which adds the prefixes of the whole list to what the peer already holds instead of replacing them, and refuses the command for one marked `-`, in `wg set` as in the `wg syncconf` of an ifup. A write refuses such an entry wherever it leaves the peer enabled, because it is not an address or CIDR, and the kernel apply and the restore refuse a peer that stores one.",
+                "description": "IPv4 or IPv6 addresses or CIDRs routed to this peer; a bare address means a single host. A read gives the entries as wg gets them: wireguard.sh joins a list with spaces, leaving out an empty entry, makes each space a comma, and expands the backslash escapes of printf %b, and wg cuts the line at a NUL byte and at `#` and splits it at commas. So `10.0.0.0/8\\054192.168.0.0/16` reads as two entries, and so does a comma, while two prefixes that a tab separates read as one entry, and a space at either end or next to another adds an empty entry, and wg refuses the config for either, so the interface does not come up. A value that the escapes would give a second line, the end of the config or a byte that is not printable ASCII, or that holds a backslash and is longer than 512 bytes, reads unexpanded. A value that wg reads as an empty line, such as one that starts with `#`, reads as one empty entry, because wireguard.sh still writes the line and wg refuses it. The routes of `route_allowed_ips` go to each word of the value as stored, before the escapes, with the address before the first `/` of the word and the length after its last, read as netifd reads it. The ucode proto handler of OpenWrt main takes a list as its entries and an option as its words, joins them with commas and expands no escape, so a list entry that holds a space or a backslash reads as one entry, which wg refuses, and it routes each entry with the length that ucode's int() reads, its leading decimal digits, so `10.0.0.0/0x10` routes 0.0.0.0/0. Each entry that a write leaves on an enabled peer must be an address or CIDR, and a write that leaves the peer disabled checks only the entries that it sends. A stored entry that starts with `+` or `-` marks an incremental update to wg, which adds the prefixes of the whole list to what the peer already holds instead of replacing them, and refuses the command for one marked `-`, in `wg set` as in the `wg syncconf` of an ifup. A write refuses such an entry wherever it leaves the peer enabled, because it is not an address or CIDR, and the kernel apply and the restore refuse a peer that stores one.",
                 "items": {
                   "type": "string"
                 },
@@ -8006,7 +8030,7 @@
                 ]
               },
               "disabled": {
-                "description": "Skip this peer when starting the tunnel",
+                "description": "Skip this peer when starting the tunnel. A stored value other than `1` reads true only where netifd runs wireguard.sh, which also takes `on`, `true`, `yes` and `enabled`.",
                 "type": "boolean"
               },
               "endpoint_host": {
@@ -8017,7 +8041,7 @@
                 ]
               },
               "endpoint_port": {
-                "description": "Endpoint UDP port. A service name that uci stores, such as `https`, reads as its port from /etc/services, as wg resolves it. 0 reads when the name does not resolve, and then wg cannot bring the interface up. A write that changes the port to 0 answers 422, and so does a write that sends back the 0 of a name that does not resolve, because it would store port 0 in its place. A write that leaves a stored port as it is passes, unless it enables the peer, or changes the host or the key of an enabled peer, while the port reads 0.",
+                "description": "Endpoint UDP port. A service name that uci stores, such as `https`, reads as its port from /etc/services, as the platform resolves it. 0 reads when the name does not resolve: wireguard.sh then cannot bring the interface up, and the ucode handler of OpenWrt main leaves the endpoint out, as it does for a peer with a host and no port. A write that changes the port to 0 answers 422, and so does a write that sends back the 0 of a name that does not resolve, because it would store port 0 in its place. A write that leaves a stored port as it is passes, unless it enables the peer, or changes the host or the key of an enabled peer, while the port reads 0.",
                 "type": [
                   "integer",
                   "null"
@@ -8032,7 +8056,7 @@
                 "type": "string"
               },
               "persistent_keepalive": {
-                "description": "Seconds between keepalive packets. 0, a stored `off` or no value turns them off. -1 reads when wg cannot read the stored value, and then wg cannot bring the interface up. A write that changes the keepalive to -1 answers 422. A write that leaves such a stored value as it is passes, unless it enables the peer, and a PUT that sends the -1 back stores -1, which wg refuses as it refuses the stored value.",
+                "description": "Seconds between keepalive packets. 0, a stored `off` or no value turns them off. -1 reads when wg cannot read the stored value: wireguard.sh then cannot bring the interface up, and the ucode handler of OpenWrt main leaves the keepalive out. A write that changes the keepalive to -1 answers 422. A write that leaves such a stored value as it is passes, unless it enables the peer, and a PUT that sends the -1 back stores -1, which wg refuses as it refuses the stored value.",
                 "type": [
                   "integer",
                   "null"
@@ -8050,7 +8074,7 @@
                 ]
               },
               "route_allowed_ips": {
-                "description": "Auto-install routes for allowed_ips",
+                "description": "Auto-install routes for allowed_ips. A stored value other than `1` reads true only where netifd runs wireguard.sh, which also takes `on`, `true`, `yes` and `enabled`.",
                 "type": "boolean"
               }
             },
@@ -8082,7 +8106,7 @@
         "additionalProperties": true,
         "properties": {
           "allowed_ips": {
-            "description": "IPv4 or IPv6 addresses or CIDRs routed to this peer; a bare address means a single host. A read gives the entries as wg gets them: wireguard.sh joins a list with spaces, leaving out an empty entry, makes each space a comma, and expands the backslash escapes of printf %b, and wg cuts the line at a NUL byte and at `#` and splits it at commas. So `10.0.0.0/8\\054192.168.0.0/16` reads as two entries, and so does a comma, while two prefixes that a tab separates read as one entry, and a space at either end or next to another adds an empty entry, and wg refuses the config for either, so the interface does not come up. A value that the escapes would give a second line, the end of the config or a byte that is not printable ASCII, or that holds a backslash and is longer than 512 bytes, reads unexpanded. A value that wg reads as an empty line, such as one that starts with `#`, reads as one empty entry, because wireguard.sh still writes the line and wg refuses it. The routes of `route_allowed_ips` go to each word of the value as stored, before the escapes, with the address before the first `/` of the word and the length after its last, read as netifd reads it. Each entry that a write leaves on an enabled peer must be an address or CIDR, and a write that leaves the peer disabled checks only the entries that it sends. A stored entry that starts with `+` or `-` marks an incremental update to wg, which adds the prefixes of the whole list to what the peer already holds instead of replacing them, and refuses the command for one marked `-`, in `wg set` as in the `wg syncconf` of an ifup. A write refuses such an entry wherever it leaves the peer enabled, because it is not an address or CIDR, and the kernel apply and the restore refuse a peer that stores one.",
+            "description": "IPv4 or IPv6 addresses or CIDRs routed to this peer; a bare address means a single host. A read gives the entries as wg gets them: wireguard.sh joins a list with spaces, leaving out an empty entry, makes each space a comma, and expands the backslash escapes of printf %b, and wg cuts the line at a NUL byte and at `#` and splits it at commas. So `10.0.0.0/8\\054192.168.0.0/16` reads as two entries, and so does a comma, while two prefixes that a tab separates read as one entry, and a space at either end or next to another adds an empty entry, and wg refuses the config for either, so the interface does not come up. A value that the escapes would give a second line, the end of the config or a byte that is not printable ASCII, or that holds a backslash and is longer than 512 bytes, reads unexpanded. A value that wg reads as an empty line, such as one that starts with `#`, reads as one empty entry, because wireguard.sh still writes the line and wg refuses it. The routes of `route_allowed_ips` go to each word of the value as stored, before the escapes, with the address before the first `/` of the word and the length after its last, read as netifd reads it. The ucode proto handler of OpenWrt main takes a list as its entries and an option as its words, joins them with commas and expands no escape, so a list entry that holds a space or a backslash reads as one entry, which wg refuses, and it routes each entry with the length that ucode's int() reads, its leading decimal digits, so `10.0.0.0/0x10` routes 0.0.0.0/0. Each entry that a write leaves on an enabled peer must be an address or CIDR, and a write that leaves the peer disabled checks only the entries that it sends. A stored entry that starts with `+` or `-` marks an incremental update to wg, which adds the prefixes of the whole list to what the peer already holds instead of replacing them, and refuses the command for one marked `-`, in `wg set` as in the `wg syncconf` of an ifup. A write refuses such an entry wherever it leaves the peer enabled, because it is not an address or CIDR, and the kernel apply and the restore refuse a peer that stores one.",
             "items": {
               "type": "string"
             },
@@ -8099,7 +8123,7 @@
             ]
           },
           "disabled": {
-            "description": "Skip this peer when starting the tunnel",
+            "description": "Skip this peer when starting the tunnel. A stored value other than `1` reads true only where netifd runs wireguard.sh, which also takes `on`, `true`, `yes` and `enabled`.",
             "type": "boolean"
           },
           "endpoint_host": {
@@ -8110,7 +8134,7 @@
             ]
           },
           "endpoint_port": {
-            "description": "Endpoint UDP port. A service name that uci stores, such as `https`, reads as its port from /etc/services, as wg resolves it. 0 reads when the name does not resolve, and then wg cannot bring the interface up. A write that changes the port to 0 answers 422, and so does a write that sends back the 0 of a name that does not resolve, because it would store port 0 in its place. A write that leaves a stored port as it is passes, unless it enables the peer, or changes the host or the key of an enabled peer, while the port reads 0.",
+            "description": "Endpoint UDP port. A service name that uci stores, such as `https`, reads as its port from /etc/services, as the platform resolves it. 0 reads when the name does not resolve: wireguard.sh then cannot bring the interface up, and the ucode handler of OpenWrt main leaves the endpoint out, as it does for a peer with a host and no port. A write that changes the port to 0 answers 422, and so does a write that sends back the 0 of a name that does not resolve, because it would store port 0 in its place. A write that leaves a stored port as it is passes, unless it enables the peer, or changes the host or the key of an enabled peer, while the port reads 0.",
             "type": [
               "integer",
               "null"
@@ -8125,7 +8149,7 @@
             "type": "string"
           },
           "persistent_keepalive": {
-            "description": "Seconds between keepalive packets. 0, a stored `off` or no value turns them off. -1 reads when wg cannot read the stored value, and then wg cannot bring the interface up. A write that changes the keepalive to -1 answers 422. A write that leaves such a stored value as it is passes, unless it enables the peer, and a PUT that sends the -1 back stores -1, which wg refuses as it refuses the stored value.",
+            "description": "Seconds between keepalive packets. 0, a stored `off` or no value turns them off. -1 reads when wg cannot read the stored value: wireguard.sh then cannot bring the interface up, and the ucode handler of OpenWrt main leaves the keepalive out. A write that changes the keepalive to -1 answers 422. A write that leaves such a stored value as it is passes, unless it enables the peer, and a PUT that sends the -1 back stores -1, which wg refuses as it refuses the stored value.",
             "type": [
               "integer",
               "null"
@@ -8143,7 +8167,7 @@
             ]
           },
           "route_allowed_ips": {
-            "description": "Auto-install routes for allowed_ips",
+            "description": "Auto-install routes for allowed_ips. A stored value other than `1` reads true only where netifd runs wireguard.sh, which also takes `on`, `true`, `yes` and `enabled`.",
             "type": "boolean"
           }
         },
@@ -8294,7 +8318,7 @@
                 ]
               },
               "compress": {
-                "description": "One of (may grow): lzo, lz4, lz4-v2, stub, stub-v2, null.",
+                "description": "One of (may grow): lzo, lz4, lz4-v2, stub, stub-v2, migrate, frames_only, null.",
                 "type": [
                   "string",
                   "null"
@@ -8458,6 +8482,7 @@
                 "type": "string"
               },
               "port": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -8513,6 +8538,7 @@
                 ]
               },
               "rport": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -8576,6 +8602,7 @@
                 ]
               },
               "verb": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -8683,7 +8710,7 @@
                 ]
               },
               "compress": {
-                "description": "One of (may grow): lzo, lz4, lz4-v2, stub, stub-v2, null.",
+                "description": "Compression framing. `frames_only` is LuCI's name for a bare `compress`, which the init script writes for it. One of (may grow): lzo, lz4, lz4-v2, stub, stub-v2, migrate, frames_only, null.",
                 "type": [
                   "string",
                   "null"
@@ -8704,7 +8731,7 @@
                 ]
               },
               "dev_type": {
-                "description": "One of (may grow): tun, tap, null.",
+                "description": "tun or tap. openvpn also takes `null`, a device that carries no traffic, which a read gives, and a write refuses a change to it. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): tun, tap, null.",
                 "type": [
                   "string",
                   "null"
@@ -8826,6 +8853,7 @@
                 "type": "string"
               },
               "port": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -8881,6 +8909,7 @@
                 ]
               },
               "rport": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -8938,6 +8967,7 @@
                 ]
               },
               "verb": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -9016,7 +9046,7 @@
             ]
           },
           "compress": {
-            "description": "One of (may grow): lzo, lz4, lz4-v2, stub, stub-v2, null.",
+            "description": "Compression framing. `frames_only` is LuCI's name for a bare `compress`, which the init script writes for it. One of (may grow): lzo, lz4, lz4-v2, stub, stub-v2, migrate, frames_only, null.",
             "type": [
               "string",
               "null"
@@ -9037,7 +9067,7 @@
             ]
           },
           "dev_type": {
-            "description": "One of (may grow): tun, tap, null.",
+            "description": "tun or tap. openvpn also takes `null`, a device that carries no traffic, which a read gives, and a write refuses a change to it. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): tun, tap, null.",
             "type": [
               "string",
               "null"
@@ -9159,6 +9189,7 @@
             "type": "string"
           },
           "port": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -9214,6 +9245,7 @@
             ]
           },
           "rport": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -9271,6 +9303,7 @@
             ]
           },
           "verb": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -9486,7 +9519,7 @@
             ]
           },
           "listen_port": {
-            "description": "TCP port for the /metrics endpoint",
+            "description": "TCP port for the /metrics endpoint. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -9760,7 +9793,7 @@
                 "type": "string"
               },
               "level": {
-                "description": "One of (may grow): noauth, auth, priv, null.",
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): noauth, auth, priv, null.",
                 "type": [
                   "string",
                   "null"
@@ -9774,7 +9807,7 @@
                 ]
               },
               "prefix": {
-                "description": "One of (may grow): exact, prefix, null.",
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): exact, prefix, null.",
                 "type": [
                   "string",
                   "null"
@@ -9788,7 +9821,7 @@
                 ]
               },
               "version": {
-                "description": "One of (may grow): any, v1, v2c, usm, null.",
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): any, v1, v2c, usm, null.",
                 "type": [
                   "string",
                   "null"
@@ -9847,7 +9880,7 @@
             "type": "string"
           },
           "level": {
-            "description": "One of (may grow): noauth, auth, priv, null.",
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): noauth, auth, priv, null.",
             "type": [
               "string",
               "null"
@@ -9861,7 +9894,7 @@
             ]
           },
           "prefix": {
-            "description": "One of (may grow): exact, prefix, null.",
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): exact, prefix, null.",
             "type": [
               "string",
               "null"
@@ -9875,7 +9908,7 @@
             ]
           },
           "version": {
-            "description": "One of (may grow): any, v1, v2c, usm, null.",
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): any, v1, v2c, usm, null.",
             "type": [
               "string",
               "null"
@@ -10518,7 +10551,7 @@
                 ]
               },
               "version": {
-                "description": "One of (may grow): v1, v2c, usm, null.",
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): v1, v2c, usm, null.",
                 "type": [
                   "string",
                   "null"
@@ -10570,7 +10603,7 @@
             ]
           },
           "version": {
-            "description": "One of (may grow): v1, v2c, usm, null.",
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): v1, v2c, usm, null.",
             "type": [
               "string",
               "null"
@@ -10654,7 +10687,7 @@
             ]
           },
           "sys_services": {
-            "description": "SNMPv2-MIB::sysServices bitfield",
+            "description": "SNMPv2-MIB::sysServices bitfield. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -10774,14 +10807,14 @@
                 ]
               },
               "qdisc": {
-                "description": "One of (may grow): cake, fq_codel, pie, htb, null.",
+                "description": "One of (may grow): cake, fq_codel, pie, htb, codel, sfq, fq_pie, ns2_codel, pfifo_fast, null.",
                 "type": [
                   "string",
                   "null"
                 ]
               },
               "script": {
-                "description": "One of (may grow): piece_of_cake.qos, simple.qos, simplest.qos, layer_cake.qos, null.",
+                "description": "A file in /usr/lib/sqm, which LuCI lists and start-sqm sources, such as piece_of_cake.qos, simple.qos, simplest.qos, layer_cake.qos or simplest_tbf.qos.",
                 "type": [
                   "string",
                   "null"
@@ -10882,14 +10915,14 @@
                 ]
               },
               "qdisc": {
-                "description": "One of (may grow): cake, fq_codel, pie, htb, null.",
+                "description": "One of (may grow): cake, fq_codel, pie, htb, codel, sfq, fq_pie, ns2_codel, pfifo_fast, null.",
                 "type": [
                   "string",
                   "null"
                 ]
               },
               "script": {
-                "description": "One of (may grow): piece_of_cake.qos, simple.qos, simplest.qos, layer_cake.qos, null.",
+                "description": "A file in /usr/lib/sqm, which LuCI lists and start-sqm sources, such as piece_of_cake.qos, simple.qos, simplest.qos, layer_cake.qos or simplest_tbf.qos.",
                 "type": [
                   "string",
                   "null"
@@ -10964,14 +10997,14 @@
             ]
           },
           "qdisc": {
-            "description": "One of (may grow): cake, fq_codel, pie, htb, null.",
+            "description": "One of (may grow): cake, fq_codel, pie, htb, codel, sfq, fq_pie, ns2_codel, pfifo_fast, null.",
             "type": [
               "string",
               "null"
             ]
           },
           "script": {
-            "description": "One of (may grow): piece_of_cake.qos, simple.qos, simplest.qos, layer_cake.qos, null.",
+            "description": "A file in /usr/lib/sqm, which LuCI lists and start-sqm sources, such as piece_of_cake.qos, simple.qos, simplest.qos, layer_cake.qos or simplest_tbf.qos.",
             "type": [
               "string",
               "null"
@@ -11207,7 +11240,7 @@
             ]
           },
           "hostname": {
-            "description": "System hostname (alphanumerics, dashes, underscores, dots)",
+            "description": "System hostname (alphanumerics, dashes, underscores, dots). A write takes a trailing dot, as LuCI does",
             "type": [
               "string",
               "null"
@@ -11625,7 +11658,7 @@
     },
     {
       "tool": "tokens_create",
-      "summary": "Scope: uapi:tokens:rw (or *:rw). Requested scopes MUST be a strict subset of the caller's own; escalation returns 403 scope_escalation_blocked. The cleartext bearer is returned exactly once.\n\nHTTP POST /tokens",
+      "summary": "Scope: uapi:tokens:rw (or *:rw). Requested scopes MUST be equal to or narrower than the caller's own. A scope that the caller does not hold returns 403 scope_escalation_blocked. The cleartext bearer is returned exactly once.\n\nHTTP POST /tokens",
       "method": "POST",
       "path": "/tokens",
       "bodyKind": "flat",
@@ -11663,7 +11696,7 @@
             ]
           },
           "scopes": {
-            "description": "MUST be a strict subset of the caller's own scopes; escalation returns 403 scope_escalation_blocked",
+            "description": "MUST be equal to or narrower than the caller's own scopes. A scope that the caller does not hold returns 403 scope_escalation_blocked",
             "items": {
               "type": "string"
             },
@@ -11770,7 +11803,7 @@
                 ]
               },
               "days": {
-                "description": "Certificate validity in days",
+                "description": "Certificate validity in days. A write takes 1 to 49710: px5g makes a certificate that has already expired for 0, and wraps a larger number. A read also gives a stored 0. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -11876,7 +11909,7 @@
                 ]
               },
               "days": {
-                "description": "Certificate validity in days",
+                "description": "Certificate validity in days. A write takes 1 to 49710: px5g makes a certificate that has already expired for 0, and wraps a larger number. A read also gives a stored 0. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -11956,7 +11989,7 @@
             ]
           },
           "days": {
-            "description": "Certificate validity in days",
+            "description": "Certificate validity in days. A write takes 1 to 49710: px5g makes a certificate that has already expired for 0, and wraps a larger number. A read also gives a stored 0. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -12103,6 +12136,7 @@
                 ]
               },
               "http_keepalive": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -12201,6 +12235,7 @@
                 ]
               },
               "tcp_keepalive": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -12297,6 +12332,7 @@
                 ]
               },
               "http_keepalive": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -12386,6 +12422,7 @@
                 ]
               },
               "tcp_keepalive": {
+                "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
                 "type": [
                   "integer",
                   "null"
@@ -12453,6 +12490,7 @@
             ]
           },
           "http_keepalive": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -12542,6 +12580,7 @@
             ]
           },
           "tcp_keepalive": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -12636,14 +12675,14 @@
         "additionalProperties": true,
         "properties": {
           "add_local_fqdn": {
-            "description": "How aggressively to add local FQDNs (0..4)",
+            "description": "How aggressively to add local FQDNs (0..4). A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
             ]
           },
           "add_wan_fqdn": {
-            "description": "How aggressively to add WAN FQDNs (0..4)",
+            "description": "How aggressively to add WAN FQDNs (0..4). A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -12721,6 +12760,7 @@
             ]
           },
           "num_threads": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -12761,6 +12801,7 @@
             ]
           },
           "ttl_min": {
+            "description": "Minimum TTL of the cache in seconds. unbound.sh runs a value above 1800 as 300. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -12876,6 +12917,7 @@
             ]
           },
           "debug_level": {
+            "description": "A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read.",
             "type": [
               "integer",
               "null"
@@ -13412,7 +13454,7 @@
                 ]
               },
               "type": {
-                "description": "One of (may grow): mac80211, broadcom, null.",
+                "description": "Driver type that a write sets. A read also gives the type of a vendor driver, whose radio netifd skips unless a handler for it is installed. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): mac80211, broadcom, null.",
                 "type": [
                   "string",
                   "null"
@@ -13526,7 +13568,7 @@
             ]
           },
           "type": {
-            "description": "One of (may grow): mac80211, broadcom, null.",
+            "description": "Driver type that a write sets. A read also gives the type of a vendor driver, whose radio netifd skips unless a handler for it is installed. A write that changes this field to a value that the Request does not take answers 422, and a write that sends back the stored value passes, such as a PUT of the read. One of (may grow): mac80211, broadcom, null.",
             "type": [
               "string",
               "null"
@@ -13634,7 +13676,7 @@
                 ]
               },
               "encryption": {
-                "description": "One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip, null.",
+                "description": "One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, sae-compat, wpa3-192, wpa-mixed, psk3, psk3-mixed, wep-open, wep-shared, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip, wpa3-192+ccmp, wpa3-192+ccmp256, wpa3-192+gcmp, wpa3-192+gcmp256, wpa3-192+tkip, wpa3-192+tkip+ccmp, wpa3-192+aes, wpa3-192+tkip+aes, wpa3-192+aes+tkip, wpa3-192+ccmp+tkip, wpa-mixed+ccmp, wpa-mixed+ccmp256, wpa-mixed+gcmp, wpa-mixed+gcmp256, wpa-mixed+tkip, wpa-mixed+tkip+ccmp, wpa-mixed+aes, wpa-mixed+tkip+aes, wpa-mixed+aes+tkip, wpa-mixed+ccmp+tkip, null.",
                 "type": [
                   "string",
                   "null"
@@ -13680,7 +13722,7 @@
                 ]
               },
               "key": {
-                "description": "Encryption passphrase; accepted on write, masked on read. Required for every encryption other than none, wep and owe when no key is stored yet, which validate() enforces. It is not a schema conditional, because a read-modify-write body cannot carry a masked field. A key with a newline is refused, because wifi-scripts writes it into the daemon's config as one line. With psk, psk2, psk-mixed, sae or sae-mixed, a write also refuses a key that the daemon refuses or misreads. In mode ap, the key must be 8 to 63 bytes, or 64 hex digits other than with plain sae. In mode sta or adhoc, other than with plain sae, the key must be 8 to 63 bytes with no control character, because wifi-scripts gives wpa_supplicant every key as a passphrase, a key of 64 hex digits too. In mode sta, adhoc or mesh, the key must not hold a `#` after an odd number of double quotes. uapi counts bytes. A write that leaves the key as it is is refused for a problem that it already had only when it sets the SSID up or changes its mode or encryption",
+                "description": "Encryption passphrase; accepted on write, masked on read. Required for every encryption other than none, wep and owe when no key is stored yet, which validate() enforces. LuCI writes an EAP SSID without a key, so such an SSID needs one only in a write that changes `encryption`. It is not a schema conditional, because a read-modify-write body cannot carry a masked field. A key with a newline is refused, because wifi-scripts writes it into the daemon's config as one line. With psk, psk2, psk-mixed, sae or sae-mixed, a write also refuses a key that the daemon refuses or misreads. In mode ap, the key must be 8 to 63 bytes, or 64 hex digits other than with plain sae. In mode sta or adhoc, other than with plain sae, the key must be 8 to 63 bytes with no control character, because wifi-scripts gives wpa_supplicant every key as a passphrase, a key of 64 hex digits too. In mode sta, adhoc or mesh, the key must not hold a `#` after an odd number of double quotes. uapi counts bytes. A write that leaves the key as it is is refused for a problem that it already had only when it sets the SSID up or changes its mode or encryption",
                 "type": "string"
               },
               "mobility_domain": {
@@ -13822,7 +13864,7 @@
                 "type": "boolean"
               },
               "encryption": {
-                "description": "One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip.",
+                "description": "Encryption mode. A write refuses wep with `conflict` unless the router sets WEP up. That needs the shell wifi-scripts, which OpenWrt builds only without `CONFIG_WIFI_SCRIPTS_UCODE`, and the daemon of the mode built with WEP: hostapd in mode ap, and wpa_supplicant in mode sta or adhoc. uapi asks `hostapd -vwep` or `wpa_supplicant -vwep`, as LuCI does. It refuses wep in mode mesh, which takes none. The ucode wifi-scripts, which OpenWrt builds by default, give the daemon no WEP key, and the SSID runs without encryption. The rule covers the wep-open and wep-shared that LuCI writes, and any stored value that starts with wep. A write that leaves a stored WEP value as it is is refused for it only when it sets the SSID up or changes its mode One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, sae-compat, wpa3-192, wpa-mixed, psk3, psk3-mixed, wep-open, wep-shared, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip, wpa3-192+ccmp, wpa3-192+ccmp256, wpa3-192+gcmp, wpa3-192+gcmp256, wpa3-192+tkip, wpa3-192+tkip+ccmp, wpa3-192+aes, wpa3-192+tkip+aes, wpa3-192+aes+tkip, wpa3-192+ccmp+tkip, wpa-mixed+ccmp, wpa-mixed+ccmp256, wpa-mixed+gcmp, wpa-mixed+gcmp256, wpa-mixed+tkip, wpa-mixed+tkip+ccmp, wpa-mixed+aes, wpa-mixed+tkip+aes, wpa-mixed+aes+tkip, wpa-mixed+ccmp+tkip.",
                 "type": "string"
               },
               "ft_over_ds": {
@@ -13853,7 +13895,7 @@
                 "type": "boolean"
               },
               "key": {
-                "description": "Encryption passphrase; accepted on write, masked on read. Required for every encryption other than none, wep and owe when no key is stored yet, which validate() enforces. It is not a schema conditional, because a read-modify-write body cannot carry a masked field. A key with a newline is refused, because wifi-scripts writes it into the daemon's config as one line. With psk, psk2, psk-mixed, sae or sae-mixed, a write also refuses a key that the daemon refuses or misreads. In mode ap, the key must be 8 to 63 bytes, or 64 hex digits other than with plain sae. In mode sta or adhoc, other than with plain sae, the key must be 8 to 63 bytes with no control character, because wifi-scripts gives wpa_supplicant every key as a passphrase, a key of 64 hex digits too. In mode sta, adhoc or mesh, the key must not hold a `#` after an odd number of double quotes. uapi counts bytes. A write that leaves the key as it is is refused for a problem that it already had only when it sets the SSID up or changes its mode or encryption",
+                "description": "Encryption passphrase; accepted on write, masked on read. Required for every encryption other than none, wep and owe when no key is stored yet, which validate() enforces. LuCI writes an EAP SSID without a key, so such an SSID needs one only in a write that changes `encryption`. It is not a schema conditional, because a read-modify-write body cannot carry a masked field. A key with a newline is refused, because wifi-scripts writes it into the daemon's config as one line. With psk, psk2, psk-mixed, sae or sae-mixed, a write also refuses a key that the daemon refuses or misreads. In mode ap, the key must be 8 to 63 bytes, or 64 hex digits other than with plain sae. In mode sta or adhoc, other than with plain sae, the key must be 8 to 63 bytes with no control character, because wifi-scripts gives wpa_supplicant every key as a passphrase, a key of 64 hex digits too. In mode sta, adhoc or mesh, the key must not hold a `#` after an odd number of double quotes. uapi counts bytes. A write that leaves the key as it is is refused for a problem that it already had only when it sets the SSID up or changes its mode or encryption",
                 "type": "string"
               },
               "mobility_domain": {
@@ -13864,7 +13906,7 @@
                 ]
               },
               "mode": {
-                "description": "A write refuses mode wds, for which wifi-scripts sets up no interface. LuCI writes a WDS access point or station as mode ap or sta with option wds. A read reports a stored wds, and a write that leaves it as it is is refused for it only when it sets the SSID up. A create or a PUT that sends no mode stores ap, and a write that sends a null mode is refused. A PATCH that sends no mode leaves a section without one as it is, and the read of such a section reports ap One of (may grow): ap, sta, adhoc, monitor, mesh.",
+                "description": "A write refuses mode wds, for which wifi-scripts sets up no interface. LuCI writes a WDS access point or station as mode ap or sta with option wds. A read reports a stored wds, and a write that leaves it as it is is refused for it only when it sets the SSID up. A read also reports the ahdemo that LuCI writes, which wifi-scripts skips. A write refuses a change to it, and a write that sends a stored ahdemo back passes, such as a PUT of the read. A create or a PUT that sends no mode stores ap, and a write that sends a null mode is refused. A PATCH that sends no mode leaves a section without one as it is, and the read of such a section reports ap One of (may grow): ap, sta, adhoc, monitor, mesh.",
                 "type": "string"
               },
               "nasid": {
@@ -13966,7 +14008,7 @@
             "type": "boolean"
           },
           "encryption": {
-            "description": "One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip.",
+            "description": "Encryption mode. A write refuses wep with `conflict` unless the router sets WEP up. That needs the shell wifi-scripts, which OpenWrt builds only without `CONFIG_WIFI_SCRIPTS_UCODE`, and the daemon of the mode built with WEP: hostapd in mode ap, and wpa_supplicant in mode sta or adhoc. uapi asks `hostapd -vwep` or `wpa_supplicant -vwep`, as LuCI does. It refuses wep in mode mesh, which takes none. The ucode wifi-scripts, which OpenWrt builds by default, give the daemon no WEP key, and the SSID runs without encryption. The rule covers the wep-open and wep-shared that LuCI writes, and any stored value that starts with wep. A write that leaves a stored WEP value as it is is refused for it only when it sets the SSID up or changes its mode One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, sae-compat, wpa3-192, wpa-mixed, psk3, psk3-mixed, wep-open, wep-shared, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip, wpa3-192+ccmp, wpa3-192+ccmp256, wpa3-192+gcmp, wpa3-192+gcmp256, wpa3-192+tkip, wpa3-192+tkip+ccmp, wpa3-192+aes, wpa3-192+tkip+aes, wpa3-192+aes+tkip, wpa3-192+ccmp+tkip, wpa-mixed+ccmp, wpa-mixed+ccmp256, wpa-mixed+gcmp, wpa-mixed+gcmp256, wpa-mixed+tkip, wpa-mixed+tkip+ccmp, wpa-mixed+aes, wpa-mixed+tkip+aes, wpa-mixed+aes+tkip, wpa-mixed+ccmp+tkip.",
             "type": "string"
           },
           "ft_over_ds": {
@@ -13997,7 +14039,7 @@
             "type": "boolean"
           },
           "key": {
-            "description": "Encryption passphrase; accepted on write, masked on read. Required for every encryption other than none, wep and owe when no key is stored yet, which validate() enforces. It is not a schema conditional, because a read-modify-write body cannot carry a masked field. A key with a newline is refused, because wifi-scripts writes it into the daemon's config as one line. With psk, psk2, psk-mixed, sae or sae-mixed, a write also refuses a key that the daemon refuses or misreads. In mode ap, the key must be 8 to 63 bytes, or 64 hex digits other than with plain sae. In mode sta or adhoc, other than with plain sae, the key must be 8 to 63 bytes with no control character, because wifi-scripts gives wpa_supplicant every key as a passphrase, a key of 64 hex digits too. In mode sta, adhoc or mesh, the key must not hold a `#` after an odd number of double quotes. uapi counts bytes. A write that leaves the key as it is is refused for a problem that it already had only when it sets the SSID up or changes its mode or encryption",
+            "description": "Encryption passphrase; accepted on write, masked on read. Required for every encryption other than none, wep and owe when no key is stored yet, which validate() enforces. LuCI writes an EAP SSID without a key, so such an SSID needs one only in a write that changes `encryption`. It is not a schema conditional, because a read-modify-write body cannot carry a masked field. A key with a newline is refused, because wifi-scripts writes it into the daemon's config as one line. With psk, psk2, psk-mixed, sae or sae-mixed, a write also refuses a key that the daemon refuses or misreads. In mode ap, the key must be 8 to 63 bytes, or 64 hex digits other than with plain sae. In mode sta or adhoc, other than with plain sae, the key must be 8 to 63 bytes with no control character, because wifi-scripts gives wpa_supplicant every key as a passphrase, a key of 64 hex digits too. In mode sta, adhoc or mesh, the key must not hold a `#` after an odd number of double quotes. uapi counts bytes. A write that leaves the key as it is is refused for a problem that it already had only when it sets the SSID up or changes its mode or encryption",
             "type": "string"
           },
           "mobility_domain": {
@@ -14008,7 +14050,7 @@
             ]
           },
           "mode": {
-            "description": "A write refuses mode wds, for which wifi-scripts sets up no interface. LuCI writes a WDS access point or station as mode ap or sta with option wds. A read reports a stored wds, and a write that leaves it as it is is refused for it only when it sets the SSID up. A create or a PUT that sends no mode stores ap, and a write that sends a null mode is refused. A PATCH that sends no mode leaves a section without one as it is, and the read of such a section reports ap One of (may grow): ap, sta, adhoc, monitor, mesh.",
+            "description": "A write refuses mode wds, for which wifi-scripts sets up no interface. LuCI writes a WDS access point or station as mode ap or sta with option wds. A read reports a stored wds, and a write that leaves it as it is is refused for it only when it sets the SSID up. A read also reports the ahdemo that LuCI writes, which wifi-scripts skips. A write refuses a change to it, and a write that sends a stored ahdemo back passes, such as a PUT of the read. A create or a PUT that sends no mode stores ap, and a write that sends a null mode is refused. A PATCH that sends no mode leaves a section without one as it is, and the read of such a section reports ap One of (may grow): ap, sta, adhoc, monitor, mesh.",
             "type": "string"
           },
           "nasid": {
@@ -14099,5 +14141,5 @@
       }
     }
   ],
-  "uapi_version": "3.3.0"
+  "uapi_version": "3.5.0"
 }

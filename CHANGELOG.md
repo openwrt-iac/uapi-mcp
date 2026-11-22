@@ -13,6 +13,21 @@ follows Keep a Changelog.
   process; `internal/server.New` assembles the server. Added `make smoke`
   (`scripts/smoke.py`), the one-command run against a real router that gates
   every tag, and wrote the three testing layers down in AGENTS.md. (#5)
+- The WireGuard kernel peer tools carry the `X-Kernel-Unread` header of uapi
+  3.5.0 (uapi #380) in the footer block, merged over every page of the list.
+  The header names the up interfaces whose kernel uapi could not read. The
+  payload holds no peer for them, so an empty list beside the footer does not
+  mean that the kernel holds no drift. An older router never sends the header.
+  (#6)
+
+### Changed
+- The vendored spec is the one of the uapi v3.5.0 tag. There is no uapi-mcp
+  3.4: uapi 3.4 published only the v4 announcements. The catalog keeps its 266
+  tools, with no tool added or removed. Descriptions and folded enum values
+  follow 3.5.0, for example `sae-compat` on `wireless/interfaces.encryption`.
+  uapi 3.5.0 declares `limit` and `cursor` on every list (uapi #385). The
+  generator hides them: the client walks every page itself, and an agent cursor
+  would answer a partial list that reads as the whole collection. (#6)
 
 ### Fixed
 - Write results glued the transaction-header footer to the payload text, so
