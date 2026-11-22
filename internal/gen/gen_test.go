@@ -37,7 +37,7 @@ func TestEndpointCount(t *testing.T) {
 	if len(c.Endpoints) != 266 {
 		t.Errorf("got %d endpoints, want 266", len(c.Endpoints))
 	}
-	if c.UAPIVersion != "3.3.0" {
+	if c.UAPIVersion != "3.5.0" {
 		t.Errorf("uapi_version = %q", c.UAPIVersion)
 	}
 }
@@ -197,6 +197,29 @@ func TestPaginatedToolsAnswerArrays(t *testing.T) {
 	}
 	if !byTool["firewall_rules_list"].Paginated {
 		t.Error("firewall_rules_list must be paginated: GET /firewall/rules answers an array")
+	}
+}
+
+// Since uapi 3.5.0 every list declares limit and cursor. The client walks
+// every page itself, so neither may reach the agent: an agent cursor would
+// answer a partial list that reads as the whole collection.
+func TestClientMechanicsStayHidden(t *testing.T) {
+	c := generateCatalog(t)
+	for _, ep := range c.Endpoints {
+		for _, q := range ep.QueryParams {
+			if hiddenQueryParams[q] {
+				t.Errorf("%s: exposes the client mechanic %s", ep.Tool, q)
+			}
+		}
+		if !ep.Paginated {
+			continue
+		}
+		props := ep.Input["properties"].(map[string]any)
+		for _, name := range []string{"limit", "cursor"} {
+			if _, ok := props[name]; ok {
+				t.Errorf("%s: input carries %s", ep.Tool, name)
+			}
+		}
 	}
 }
 

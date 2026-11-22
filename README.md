@@ -12,7 +12,7 @@ member of the openwrt-iac family, beside the API itself and the Terraform provid
 ## Requirements
 
 - An OpenWrt router running uapi >= 3.0.0 (OpenWrt 25.12+), reachable over HTTP(S). The
-  tool catalog is generated from uapi's 3.3.0 spec; tools for endpoints an older router
+  tool catalog is generated from uapi's 3.5.0 spec; tools for endpoints an older router
   does not serve answer 404, and fields an older router does not know answer 422
   `unknown_field`.
 - A bearer token created on the router: `uapi-token create --name agent --scope '*:rw'`
@@ -58,7 +58,7 @@ Example for an OpenCode client configuration:
 ## The tool surface
 
 The catalog is generated from uapi's OpenAPI spec, vendored at `internal/gen/openapi.json`
-and regenerated with `make gen`. The 3.3.0 spec yields 266 tools, one per endpoint, the
+and regenerated with `make gen`. The 3.5.0 spec yields 266 tools, one per endpoint, the
 `/raw/` passthrough excluded: raw payloads follow uci's field names and carry no
 stability promise across OpenWrt releases, so they are not a fit for an agent either.
 
@@ -78,7 +78,10 @@ plural (`network_interfaces_list`, `firewall_rules_create`), item tools take the
 
 Reads return the JSON payload exactly as the router sent it. Writes return what uci holds
 now, plus a footer with uapi's transaction headers (`X-Reload-Status`,
-`X-Kernel-Status`, and the management-path warning) when the router sent them. Errors
+`X-Kernel-Status`, and the management-path warning) when the router sent them. A
+WireGuard kernel peer read carries `X-Kernel-Unread` in the same footer. It names the
+interfaces whose kernel uapi could not read, so an empty list beside it does not mean
+that the kernel holds no drift. Errors
 carry the endpoint, the HTTP status and uapi's error envelope verbatim, field by field
 for 422, so the agent can fix everything in one round trip.
 
@@ -123,8 +126,8 @@ asserts what a router actually did needs a run against a real box running a real
 
 ## Release
 
-Releases are built by GoReleaser from a signed `v*` tag, `v3.3.0` for a release
-tracking uapi 3.3.0. The tag must be signed by a key listed in
+Releases are built by GoReleaser from a signed `v*` tag, `v3.5.0` for a release
+tracking uapi 3.5.0. The tag must be signed by a key listed in
 `.github/release-signers.asc`; the release workflow verifies it before building
 anything. Binaries for linux, darwin, windows and freebsd (amd64, 386, arm,
 arm64) and SHA256SUMS land on the GitHub Release, with notes extracted from

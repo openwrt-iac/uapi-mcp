@@ -79,7 +79,8 @@ func UserAgent(version string) string {
 }
 
 // Response carries what the tool layer needs from one HTTP exchange: the raw
-// payload plus the advisory headers uapi attaches to curated writes.
+// payload plus the advisory headers uapi attaches to curated writes and to
+// the wireguard kernel peer reads.
 type Response struct {
 	Status          int
 	Body            []byte
@@ -89,6 +90,7 @@ type Response struct {
 	ReloadServices  string
 	KernelStatus    string
 	KernelApplied   string
+	KernelUnread    string
 }
 
 type FieldError struct {
@@ -100,7 +102,9 @@ type FieldError struct {
 // Footer renders the advisory headers uapi attaches to a write, which say
 // what the transaction did beyond committing uci: whether the init scripts
 // reloaded, whether the kernel applied, and whether the caller's own
-// management path moved.
+// management path moved. On a wireguard kernel peer read, X-Kernel-Unread
+// names the interfaces the payload does not cover, so an empty list next to
+// it is not a kernel without drift.
 func (r *Response) Footer() string {
 	var lines []string
 	for _, kv := range [][2]string{
@@ -109,6 +113,7 @@ func (r *Response) Footer() string {
 		{"X-Reload-Services", r.ReloadServices},
 		{"X-Kernel-Status", r.KernelStatus},
 		{"X-Kernel-Applied", r.KernelApplied},
+		{"X-Kernel-Unread", r.KernelUnread},
 	} {
 		if kv[1] != "" {
 			lines = append(lines, kv[0]+": "+kv[1])
@@ -239,6 +244,7 @@ func (c *Client) Do(ctx context.Context, method, path string, query url.Values, 
 			ReloadServices:  resp.Header.Get("X-Reload-Services"),
 			KernelStatus:    resp.Header.Get("X-Kernel-Status"),
 			KernelApplied:   resp.Header.Get("X-Kernel-Applied"),
+			KernelUnread:    resp.Header.Get("X-Kernel-Unread"),
 		}
 		if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 			return out, nil
@@ -248,11 +254,14 @@ func (c *Client) Do(ctx context.Context, method, path string, query url.Values, 
 }
 
 // List walks a collection GET through its cursor pagination and returns
-// every item as one JSON array.
-func (c *Client) List(ctx context.Context, path string, query url.Values) ([]byte, error) {
+// every item as one JSON array in Body, with X-Kernel-Unread merged over
+// every page, once per interface.
+func (c *Client) List(ctx context.Context, path string, query url.Values) (*Response, error) {
 	// An empty collection must marshal to [], not null: a nil slice would
 	// render null and hand the agent a JSON null instead of an empty list.
 	all := []json.RawMessage{}
+	var unread []string
+	seen := map[string]bool{}
 	next := ""
 	for page := 0; page < maxPages; page++ {
 		q := query.Clone()
@@ -272,8 +281,18 @@ func (c *Client) List(ctx context.Context, path string, query url.Values) ([]byt
 			return nil, fmt.Errorf("GET %s: decoding page: %w", path, err)
 		}
 		all = append(all, items...)
+		for _, name := range strings.Split(resp.KernelUnread, ",") {
+			if name = strings.TrimSpace(name); name != "" && !seen[name] {
+				seen[name] = true
+				unread = append(unread, name)
+			}
+		}
 		if resp.NextCursor == "" {
-			return json.Marshal(all)
+			body, err := json.Marshal(all)
+			if err != nil {
+				return nil, err
+			}
+			return &Response{Status: resp.Status, Body: body, KernelUnread: strings.Join(unread, ",")}, nil
 		}
 		next = resp.NextCursor
 	}
