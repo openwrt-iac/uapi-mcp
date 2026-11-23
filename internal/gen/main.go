@@ -27,13 +27,15 @@ const (
 // hiddenQueryParams are client mechanics, not agent inputs. The client sends
 // idempotency keys itself on POST and walks every page of a list itself, so
 // an agent cursor would silently answer a partial list; ETag preconditions
-// are not part of the tool surface.
+// are not part of the tool surface, and request_id only names the request in
+// uapi's logs, which uapi does by itself.
 var hiddenQueryParams = map[string]bool{
 	"idempotency_key": true,
 	"if_match":        true,
 	"if_none_match":   true,
 	"limit":           true,
 	"cursor":          true,
+	"request_id":      true,
 }
 
 type spec struct {
@@ -42,7 +44,8 @@ type spec struct {
 	} `json:"info"`
 	Paths      map[string]*pathItem `json:"paths"`
 	Components struct {
-		Schemas map[string]json.RawMessage `json:"schemas"`
+		Schemas    map[string]json.RawMessage `json:"schemas"`
+		Parameters map[string]parameter       `json:"parameters"`
 	} `json:"components"`
 }
 
@@ -56,6 +59,7 @@ type pathItem struct {
 }
 
 type parameter struct {
+	Ref         string          `json:"$ref"`
 	Name        string          `json:"name"`
 	In          string          `json:"in"`
 	Required    bool            `json:"required"`
@@ -96,6 +100,7 @@ type endpoint struct {
 
 type softener struct {
 	schemas map[string]json.RawMessage
+	params  map[string]parameter
 }
 
 // responseIsArray reports whether the 200 response is a top-level JSON array,
@@ -164,7 +169,7 @@ func generate(raw []byte) ([]byte, error) {
 		}
 	}
 
-	so := &softener{schemas: s.Components.Schemas}
+	so := &softener{schemas: s.Components.Schemas, params: s.Components.Parameters}
 	var endpoints []endpoint
 	for _, path := range sortedKeys(s.Paths) {
 		if path == "/raw" || strings.HasPrefix(path, "/raw/") {
@@ -221,6 +226,13 @@ func (so *softener) endpoint(method, path string, item *pathItem, o *operation, 
 	var pathParams []parameter
 	var queryParams []parameter
 	for _, p := range params {
+		if p.Ref != "" {
+			shared, ok := so.params[refName(p.Ref)]
+			if !ok {
+				return endpoint{}, fmt.Errorf("unknown parameter %q", p.Ref)
+			}
+			p = shared
+		}
 		switch {
 		case p.In == "path":
 			pathParams = append(pathParams, p)
@@ -308,15 +320,27 @@ func (so *softener) endpoint(method, path string, item *pathItem, o *operation, 
 	}, nil
 }
 
-// requestBody resolves and softens a request-body schema and enriches Patch
-// fields with the descriptions the spec leaves to the Request half.
+// requestBody resolves and softens a request-body schema. A Patch field takes
+// the description, the deprecation and the default that the spec leaves to
+// the Request half before softening, so that the enum of the Patch field, null
+// included, folds after the borrowed text instead of standing in for it.
 func (so *softener) requestBody(ref json.RawMessage) (map[string]any, error) {
 	var probe struct {
 		Ref string `json:"$ref"`
 	}
 	_ = json.Unmarshal(ref, &probe)
 	name := refName(probe.Ref)
-	s, err := so.soften(ref, nil)
+	node, resolving := ref, []string(nil)
+	if patchOf := strings.TrimSuffix(name, "Patch"); patchOf != name {
+		if req, ok := so.schemas[patchOf+"Request"]; ok {
+			merged, err := withRequestDocs(so.schemas[name], req)
+			if err != nil {
+				return nil, err
+			}
+			node, resolving = merged, []string{name}
+		}
+	}
+	s, err := so.soften(node, resolving)
 	if err != nil {
 		return nil, err
 	}
@@ -324,27 +348,21 @@ func (so *softener) requestBody(ref json.RawMessage) (map[string]any, error) {
 	if !ok {
 		return nil, fmt.Errorf("request body is not an object schema")
 	}
+	return body, nil
+}
 
-	patchOf := strings.TrimSuffix(name, "Patch")
-	if patchOf == name {
-		return body, nil
-	}
-	reqRaw, ok := so.schemas[patchOf+"Request"]
-	if !ok {
-		return body, nil
-	}
-	req, err := so.soften(reqRaw, nil)
-	if err != nil {
+// withRequestDocs copies description, deprecated and default from each
+// Request field to the Patch field of the same name that lacks them.
+func withRequestDocs(patchRaw, reqRaw json.RawMessage) (json.RawMessage, error) {
+	var patch, req map[string]any
+	if err := json.Unmarshal(patchRaw, &patch); err != nil {
 		return nil, err
 	}
-	reqProps, ok := req.(map[string]any)["properties"].(map[string]any)
-	if !ok {
-		return body, nil
+	if err := json.Unmarshal(reqRaw, &req); err != nil {
+		return nil, err
 	}
-	props, ok := body["properties"].(map[string]any)
-	if !ok {
-		return body, nil
-	}
+	reqProps, _ := req["properties"].(map[string]any)
+	props, _ := patch["properties"].(map[string]any)
 	for field, p := range props {
 		pm, ok := p.(map[string]any)
 		if !ok {
@@ -354,18 +372,15 @@ func (so *softener) requestBody(ref json.RawMessage) (map[string]any, error) {
 		if !ok {
 			continue
 		}
-		if _, has := pm["description"]; !has {
-			if d, ok := rm["description"]; ok {
-				pm["description"] = d
-			}
-		}
-		if _, has := pm["deprecated"]; !has {
-			if d, ok := rm["deprecated"]; ok {
-				pm["deprecated"] = d
+		for _, key := range []string{"description", "deprecated", "default"} {
+			if _, has := pm[key]; !has {
+				if v, ok := rm[key]; ok {
+					pm[key] = v
+				}
 			}
 		}
 	}
-	return body, nil
+	return json.Marshal(patch)
 }
 
 // soften rewrites one schema node into the permissive form the tool surface
@@ -438,12 +453,16 @@ func (so *softener) softenValue(v any, resolving []string) (any, error) {
 					parts[i] = fmt.Sprintf("%v", e)
 				}
 			}
-			fold := fmt.Sprintf("One of (may grow): %s.", strings.Join(parts, ", "))
-			if d, ok := out["description"].(string); ok && d != "" {
-				out["description"] = d + " " + fold
-			} else {
-				out["description"] = fold
+			appendDescription(out, fmt.Sprintf("One of (may grow): %s.", strings.Join(parts, ", ")))
+		}
+		// A default is the value that the read gives while the uci option is
+		// unset, so it tells the agent what an absent field means.
+		if d, ok := val["default"]; ok {
+			text, err := json.Marshal(d)
+			if err != nil {
+				return nil, err
 			}
+			appendDescription(out, fmt.Sprintf("Reads %s when unset.", text))
 		}
 		if isObject(val) {
 			out["additionalProperties"] = true
@@ -451,6 +470,14 @@ func (so *softener) softenValue(v any, resolving []string) (any, error) {
 		return out, nil
 	default:
 		return nil, fmt.Errorf("unsupported schema value %T", v)
+	}
+}
+
+func appendDescription(node map[string]any, text string) {
+	if d, ok := node["description"].(string); ok && d != "" {
+		node["description"] = d + " " + text
+	} else {
+		node["description"] = text
 	}
 }
 
@@ -471,8 +498,9 @@ func isObject(v map[string]any) bool {
 	return hasProps
 }
 
+// refName gives the component name of a local $ref, a schema or a parameter.
 func refName(ref string) string {
-	return strings.TrimPrefix(ref, "#/components/schemas/")
+	return ref[strings.LastIndex(ref, "/")+1:]
 }
 
 func verbFor(method string, segments []string, hasParams, isCollection bool) string {
@@ -483,8 +511,8 @@ func verbFor(method string, segments []string, hasParams, isCollection bool) str
 		}
 		return "read"
 	case "POST":
-		if len(segments) > 0 && segments[len(segments)-1] == "adopt" {
-			return "adopt"
+		if a := action(segments); a != "" {
+			return a
 		}
 		return "create"
 	case "PUT":
@@ -497,12 +525,26 @@ func verbFor(method string, segments []string, hasParams, isCollection bool) str
 	return strings.ToLower(method)
 }
 
+// action returns the literal segment that ends a path after an item
+// parameter, such as adopt in /firewall/rules/{id}/adopt or recover in
+// /uapi/services/{name}/recover: a POST on it is that action, not a create.
+func action(segments []string) string {
+	n := len(segments)
+	if n >= 2 && isParam(segments[n-2]) && !isParam(segments[n-1]) {
+		return segments[n-1]
+	}
+	return ""
+}
+
 func toolName(segments []string, pathParams []parameter, verb string) (string, error) {
-	// Param segments and the trailing adopt verb are not part of the
+	// Param segments and a trailing action verb are not part of the
 	// resource name.
+	if verb == action(segments) {
+		segments = segments[:len(segments)-1]
+	}
 	base := make([]string, 0, len(segments))
 	for _, seg := range segments {
-		if !isParam(seg) && seg != "adopt" {
+		if !isParam(seg) {
 			base = append(base, seg)
 		}
 	}

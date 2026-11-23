@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
@@ -99,7 +100,7 @@ func handler(c *client.Client, ep Endpoint) mcp.ToolHandler {
 		}
 		query := url.Values{}
 		for _, name := range ep.QueryParams {
-			if value, ok := args[name].(string); ok && value != "" {
+			if value := queryValue(args[name]); value != "" {
 				query.Set(name, value)
 			}
 		}
@@ -147,21 +148,38 @@ func handler(c *client.Client, ep Endpoint) mcp.ToolHandler {
 			}
 			return errorResultFor(err), nil
 		}
+		text := string(resp.Body)
 		if len(resp.Body) == 0 {
-			return textResult(fmt.Sprintf("%s %s: %d %s", ep.Method, path, resp.Status, http.StatusText(resp.Status))), nil
+			text = fmt.Sprintf("%s %s: %d %s", ep.Method, path, resp.Status, http.StatusText(resp.Status))
 		}
 		// The payload rides as its own block so hosts parse it as JSON; the
-		// advisory headers follow in a second block and stay readable.
+		// advisory headers follow in a second block and stay readable. A
+		// bodiless answer, such as a DELETE 204, keeps its footer too.
 		if footer := resp.Footer(); footer != "" {
 			return &mcp.CallToolResult{
 				Content: []mcp.Content{
-					&mcp.TextContent{Text: string(resp.Body)},
+					&mcp.TextContent{Text: text},
 					&mcp.TextContent{Text: footer},
 				},
 			}, nil
 		}
-		return textResult(string(resp.Body)), nil
+		return textResult(text), nil
 	}
+}
+
+// queryValue renders a query argument. The spec types every query parameter
+// as a string, but an agent can send `"managed": true` or `"validate": 1`, and
+// dropping such a value would answer as if the agent had not sent it.
+func queryValue(v any) string {
+	switch val := v.(type) {
+	case string:
+		return val
+	case bool:
+		return strconv.FormatBool(val)
+	case float64:
+		return strconv.FormatFloat(val, 'f', -1, 64)
+	}
+	return ""
 }
 
 // owns reports whether an argument name belongs to the endpoint plumbing

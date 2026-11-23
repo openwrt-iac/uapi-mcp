@@ -38,10 +38,12 @@ func TestSendsAuthHeaders(t *testing.T) {
 	}
 }
 
+// uapi 4.x reads the Idempotency-Key header, so the key no longer rides in
+// the query as well.
 func TestPostSendsIdempotencyKey(t *testing.T) {
 	var gotQuery, gotHeader string
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		gotQuery = r.URL.Query().Get("idempotency_key")
+		gotQuery = r.URL.RawQuery
 		gotHeader = r.Header.Get("Idempotency-Key")
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"id":"r_1"}`))
@@ -52,18 +54,18 @@ func TestPostSendsIdempotencyKey(t *testing.T) {
 	if _, err := testClient(srv.URL).Do(context.Background(), http.MethodPost, "/firewall/rules", nil, body); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if len(gotQuery) != 32 {
-		t.Errorf("idempotency_key query = %q, want 32 hex chars", gotQuery)
+	if len(gotHeader) != 32 {
+		t.Errorf("Idempotency-Key header = %q, want 32 hex chars", gotHeader)
 	}
-	if gotHeader != gotQuery {
-		t.Errorf("Idempotency-Key header = %q, query = %q", gotHeader, gotQuery)
+	if gotQuery != "" {
+		t.Errorf("query = %q, want none", gotQuery)
 	}
 }
 
 func TestPutSendsNoIdempotencyKey(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Query().Get("idempotency_key") != "" {
-			t.Errorf("unexpected idempotency_key on PUT")
+		if r.Header.Get("Idempotency-Key") != "" {
+			t.Errorf("unexpected Idempotency-Key on PUT")
 		}
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{"id":"r_1"}`))
@@ -188,9 +190,13 @@ func TestErrorFallbackOnNonJSONBody(t *testing.T) {
 func TestWriteHeadersCarriedOnResponse(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("X-Mgmt-Path-Warning", "interface=wan changed=proto,ipaddrs")
-		w.Header().Set("X-Reload-Status", "ok")
-		w.Header().Set("X-Reload-Services", "network,odhcpd")
-		w.Header().Set("X-Kernel-Status", "no_kernel")
+		w.Header().Set("X-Reload-Status", "stopped")
+		w.Header().Set("X-Reload-Services", "dnsmasq,odhcpd")
+		w.Header().Set("X-Reload-Stopped", "dnsmasq/cfg01411c")
+		w.Header().Set("X-Kernel-Status", "blocked")
+		w.Header().Set("X-Kernel-Blocked", "wg0/peer1")
+		w.Header().Set("X-Request-Id", "01hx0000000000000000000000")
+		w.Header().Set("ETag", `"abc"`)
 		_, _ = w.Write([]byte(`{"id":"wan"}`))
 	}))
 	defer srv.Close()
@@ -199,8 +205,29 @@ func TestWriteHeadersCarriedOnResponse(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	want := "X-Mgmt-Path-Warning: interface=wan changed=proto,ipaddrs\nX-Reload-Status: ok\nX-Reload-Services: network,odhcpd\nX-Kernel-Status: no_kernel"
+	want := "X-Kernel-Blocked: wg0/peer1\nX-Kernel-Status: blocked\nX-Mgmt-Path-Warning: interface=wan changed=proto,ipaddrs\n" +
+		"X-Reload-Services: dnsmasq,odhcpd\nX-Reload-Status: stopped\nX-Reload-Stopped: dnsmasq/cfg01411c"
 	if resp.Footer() != want {
+		t.Errorf("Footer() = %q, want %q", resp.Footer(), want)
+	}
+}
+
+// A header that a uapi 4.x minor adds under one of the advisory prefixes
+// reaches the footer with no uapi-mcp release.
+func TestFooterPassesNewAdvisoryHeaders(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("X-Reload-Future", "a")
+		w.Header().Set("X-Kernel-Future", "b")
+		w.Header().Set("X-Future", "c")
+		_, _ = w.Write([]byte(`{"id":"wan"}`))
+	}))
+	defer srv.Close()
+
+	resp, err := testClient(srv.URL).Do(context.Background(), http.MethodPut, "/network/interfaces/wan", nil, []byte(`{}`))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if want := "X-Kernel-Future: b\nX-Reload-Future: a"; resp.Footer() != want {
 		t.Errorf("Footer() = %q, want %q", resp.Footer(), want)
 	}
 }
@@ -272,11 +299,83 @@ func TestListMergesKernelUnread(t *testing.T) {
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
-	if resp.KernelUnread != "wg0,wg1" {
-		t.Errorf("KernelUnread = %q, want wg0,wg1", resp.KernelUnread)
-	}
 	if resp.Footer() != "X-Kernel-Unread: wg0,wg1" {
 		t.Errorf("Footer() = %q", resp.Footer())
+	}
+}
+
+// uapi answers 400 invalid_cursor when the list changed under a cursor. The
+// walk reads the list again from the first page and returns that reading
+// only, with no item of the stale walk.
+func TestListRestartsAfterStaleCursor(t *testing.T) {
+	var calls int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		n := atomic.AddInt32(&calls, 1)
+		switch {
+		case r.URL.Query().Get("cursor") == "" && n == 1:
+			w.Header().Set("X-Next-Cursor", "c_old")
+			_, _ = w.Write([]byte(`[{"id":"stale"}]`))
+		case r.URL.Query().Get("cursor") == "c_old":
+			w.WriteHeader(http.StatusBadRequest)
+			_, _ = w.Write([]byte(`{"code":"invalid_cursor","message":"the list changed"}`))
+		case r.URL.Query().Get("cursor") == "":
+			w.Header().Set("X-Next-Cursor", "c_new")
+			_, _ = w.Write([]byte(`[{"id":"r_1"}]`))
+		default:
+			_, _ = w.Write([]byte(`[{"id":"r_2"}]`))
+		}
+	}))
+	defer srv.Close()
+
+	resp, err := testClient(srv.URL).List(context.Background(), "/dhcp/hosts", nil)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if string(resp.Body) != `[{"id":"r_1"},{"id":"r_2"}]` {
+		t.Errorf("list = %s, want the second walk only", resp.Body)
+	}
+}
+
+func TestListStopsAfterRestarts(t *testing.T) {
+	var calls int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		atomic.AddInt32(&calls, 1)
+		if r.URL.Query().Get("cursor") == "" {
+			w.Header().Set("X-Next-Cursor", "c_1")
+			_, _ = w.Write([]byte(`[{"id":"r_1"}]`))
+			return
+		}
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"code":"invalid_cursor","message":"the list changed"}`))
+	}))
+	defer srv.Close()
+
+	_, err := testClient(srv.URL).List(context.Background(), "/dhcp/hosts", nil)
+	if !statusIs(err, http.StatusBadRequest) {
+		t.Fatalf("err = %v, want the last 400", err)
+	}
+	if got, want := atomic.LoadInt32(&calls), int32(2*(maxRestarts+1)); got != want {
+		t.Errorf("requests = %d, want %d", got, want)
+	}
+}
+
+// A 400 on the first page is the request itself, such as a managed value
+// outside its set: reading again would answer the same.
+func TestListDoesNotRestartOnFirstPage(t *testing.T) {
+	var calls int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		atomic.AddInt32(&calls, 1)
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"code":"bad_request","message":"managed"}`))
+	}))
+	defer srv.Close()
+
+	_, err := testClient(srv.URL).List(context.Background(), "/dhcp/hosts", url.Values{"managed": {"yes"}})
+	if !statusIs(err, http.StatusBadRequest) {
+		t.Fatalf("err = %v, want 400", err)
+	}
+	if got := atomic.LoadInt32(&calls); got != 1 {
+		t.Errorf("requests = %d, want 1", got)
 	}
 }
 

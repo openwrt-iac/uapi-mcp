@@ -34,10 +34,10 @@ func generateCatalog(t *testing.T) catalog {
 // tool surface.
 func TestEndpointCount(t *testing.T) {
 	c := generateCatalog(t)
-	if len(c.Endpoints) != 266 {
-		t.Errorf("got %d endpoints, want 266", len(c.Endpoints))
+	if len(c.Endpoints) != 258 {
+		t.Errorf("got %d endpoints, want 258", len(c.Endpoints))
 	}
-	if c.UAPIVersion != "3.5.0" {
+	if c.UAPIVersion != "4.0.0" {
 		t.Errorf("uapi_version = %q", c.UAPIVersion)
 	}
 }
@@ -133,18 +133,18 @@ func TestInputsArePermissiveObjects(t *testing.T) {
 func TestWriteToolsCarryBodies(t *testing.T) {
 	c := generateCatalog(t)
 	for _, ep := range c.Endpoints {
-		// Adopt takes the id and nothing else.
-		adopt := strings.HasSuffix(ep.Tool, "_adopt")
+		// An action, such as adopt or recover, takes the id and nothing else.
+		act := action(splitPath(ep.Path)) != ""
 		switch ep.Method {
 		case "GET", "DELETE":
 			if ep.BodyKind == "flat" || ep.BodyKind == "wrapped" {
 				t.Errorf("%s: %s carries a body", ep.Tool, ep.Method)
 			}
 		case "POST":
-			if adopt && ep.BodyKind != "" {
-				t.Errorf("%s: adopt carries a body", ep.Tool)
+			if act && ep.BodyKind != "" {
+				t.Errorf("%s: action carries a body", ep.Tool)
 			}
-			if !adopt && ep.BodyKind != "flat" && ep.BodyKind != "wrapped" {
+			if !act && ep.BodyKind != "flat" && ep.BodyKind != "wrapped" {
 				t.Errorf("%s: create has no body kind", ep.Tool)
 			}
 		case "PUT", "PATCH":
@@ -192,8 +192,8 @@ func TestPaginatedToolsAnswerArrays(t *testing.T) {
 	if byTool["schema_list"].Paginated {
 		t.Error("schema_list must not be paginated: GET /schema answers an object")
 	}
-	if byTool["tokens_list"].Paginated {
-		t.Error("tokens_list must not be paginated: GET /tokens answers an object")
+	if byTool["uapi_tokens_list"].Paginated {
+		t.Error("uapi_tokens_list must not be paginated: GET /uapi/tokens answers an object")
 	}
 	if !byTool["firewall_rules_list"].Paginated {
 		t.Error("firewall_rules_list must be paginated: GET /firewall/rules answers an array")
@@ -220,6 +220,144 @@ func TestClientMechanicsStayHidden(t *testing.T) {
 				t.Errorf("%s: input carries %s", ep.Tool, name)
 			}
 		}
+	}
+}
+
+// A literal segment after an item parameter is the verb of a POST, as adopt
+// always was: POST /uapi/services/{name}/recover is uapi_service_recover.
+func TestActionTools(t *testing.T) {
+	c := generateCatalog(t)
+	byTool := map[string]endpoint{}
+	for _, ep := range c.Endpoints {
+		byTool[ep.Tool] = ep
+		if ep.Method == "POST" && action(splitPath(ep.Path)) != "" && strings.HasSuffix(ep.Tool, "_create") {
+			t.Errorf("%s: an action named as a create", ep.Tool)
+		}
+	}
+	for tool, path := range map[string]string{
+		"uapi_service_recover": "/uapi/services/{name}/recover",
+		"firewall_rule_adopt":  "/firewall/rules/{id}/adopt",
+	} {
+		if byTool[tool].Path != path {
+			t.Errorf("%s: path = %q, want %q", tool, byTool[tool].Path, path)
+		}
+	}
+}
+
+// The spec leaves the description of a Patch field to its Request field. A
+// merge field must read as its replace field, and its own enum, which can
+// add null to remove the value, folds after the borrowed text.
+func TestMergeFieldsCarryReplaceDescriptions(t *testing.T) {
+	c := generateCatalog(t)
+	byTool := map[string]endpoint{}
+	for _, ep := range c.Endpoints {
+		byTool[ep.Tool] = ep
+	}
+	withoutFold := func(d string) string {
+		if i := strings.Index(d, "One of (may grow):"); i >= 0 {
+			d = d[:i]
+		}
+		return strings.TrimSpace(d)
+	}
+	bodyProps := func(ep endpoint) map[string]any {
+		props := ep.Input["properties"].(map[string]any)
+		if body, ok := props["body"].(map[string]any); ok {
+			props, _ = body["properties"].(map[string]any)
+		}
+		return props
+	}
+	checked := 0
+	for _, merge := range c.Endpoints {
+		if merge.Method != "PATCH" {
+			continue
+		}
+		replace, ok := byTool[strings.TrimSuffix(merge.Tool, "_merge")+"_replace"]
+		if !ok {
+			continue
+		}
+		rp := bodyProps(replace)
+		for field, m := range bodyProps(merge) {
+			r, ok := rp[field].(map[string]any)
+			if !ok {
+				continue
+			}
+			md, _ := m.(map[string]any)["description"].(string)
+			rd, _ := r["description"].(string)
+			if withoutFold(md) != withoutFold(rd) {
+				t.Errorf("%s.%s: description %q, replace has %q", merge.Tool, field, md, rd)
+			}
+			checked++
+		}
+	}
+	if checked == 0 {
+		t.Fatal("no merge field checked")
+	}
+	ovpn := bodyProps(byTool["network_interface_merge"])["ovpnproto"].(map[string]any)["description"].(string)
+	if !strings.HasPrefix(ovpn, "proto openvpn only.") {
+		t.Errorf("network_interface_merge.ovpnproto = %q", ovpn)
+	}
+}
+
+// A schema default is the value that a field reads while its uci option is
+// unset. The softening drops the keyword, so the value must reach the agent
+// in the description, on the merge tool too, whose Patch field has none.
+func TestDefaultsFoldIntoDescriptions(t *testing.T) {
+	c := generateCatalog(t)
+	byTool := map[string]endpoint{}
+	for _, ep := range c.Endpoints {
+		byTool[ep.Tool] = ep
+	}
+	field := func(tool string, path ...string) string {
+		node := byTool[tool].Input
+		for _, name := range path {
+			node, _ = node["properties"].(map[string]any)[name].(map[string]any)
+		}
+		d, _ := node["description"].(string)
+		return d
+	}
+	for _, tc := range []struct {
+		desc string
+		want string
+	}{
+		{field("firewall_rules_create", "enabled"), "Reads true when unset."},
+		{field("firewall_rule_merge", "body", "enabled"), "Reads true when unset."},
+		{field("firewall_rules_create", "match", "family"), `Reads "any" when unset.`},
+	} {
+		if !strings.HasSuffix(tc.desc, tc.want) {
+			t.Errorf("description %q does not end with %q", tc.desc, tc.want)
+		}
+	}
+}
+
+// A parameter that the spec shares through components/parameters reaches
+// the tool as an inline one does.
+func TestRefParametersResolve(t *testing.T) {
+	raw := []byte(`{
+		"info": {"version": "0"},
+		"paths": {"/dhcp/hosts": {"get": {
+			"summary": "List",
+			"parameters": [{"$ref": "#/components/parameters/Managed"}, {"$ref": "#/components/parameters/RequestId"}],
+			"responses": {"200": {"content": {"application/json": {"schema": {"type": "array"}}}}}
+		}}},
+		"components": {"parameters": {
+			"Managed": {"name": "managed", "in": "query", "description": "Managed only", "schema": {"type": "string", "enum": ["true", "false"]}},
+			"RequestId": {"name": "request_id", "in": "query", "schema": {"type": "string"}}
+		}}
+	}`)
+	out, err := generate(raw)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var c catalog
+	if err := json.Unmarshal(out, &c); err != nil {
+		t.Fatal(err)
+	}
+	ep := c.Endpoints[0]
+	if len(ep.QueryParams) != 1 || ep.QueryParams[0] != "managed" {
+		t.Errorf("query params = %v, want [managed]", ep.QueryParams)
+	}
+	if _, ok := ep.Input["properties"].(map[string]any)["managed"]; !ok {
+		t.Error("managed missing from the input")
 	}
 }
 
