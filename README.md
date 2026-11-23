@@ -84,9 +84,10 @@ plural (`network_interfaces_list`, `firewall_rules_create`), item tools take the
 
 Reads return the JSON payload exactly as the router sent it. Writes return what uci holds
 now, plus a footer with uapi's advisory headers when the router sent them: every
-`X-Reload-*` and `X-Kernel-*` header and `X-Mgmt-Path-Warning`, sorted by name. A header
-that a uapi 4.x minor adds under these prefixes reaches the agent with no release of
-uapi-mcp. `X-Reload-Stopped` names each daemon that a write left down, and
+`X-Reload-*` and `X-Kernel-*` header and `X-Mgmt-Path-Warning`, sorted by name. uapi
+promises that these headers only report what a request did, and that a new one is an
+additive change ([`docs/versioning.md`](https://github.com/openwrt-iac/uapi/blob/main/docs/versioning.md)).
+So a header that a uapi 4.x minor adds reaches the agent with no release of uapi-mcp. `X-Reload-Stopped` names each daemon that a write left down, and
 `X-Kernel-Blocked` each WireGuard peer that keeps its interface down. The server
 instructions tell the agent what to do for each. A delete that answers 204 keeps its
 footer. A WireGuard kernel peer read carries `X-Kernel-Unread` in the same footer. It names the

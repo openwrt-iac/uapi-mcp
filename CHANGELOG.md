@@ -20,7 +20,8 @@ follows Keep a Changelog.
 - **The footer passes every advisory header.** It holds each `X-Reload-*` and
   `X-Kernel-*` header and `X-Mgmt-Path-Warning`, sorted by name, so `X-Reload-Stopped`
   and `X-Kernel-Blocked` of uapi 4.0.0 reach the agent. A header that a uapi 4.x minor
-  adds under these prefixes needs no release of uapi-mcp. The instructions tell the
+  adds under these prefixes needs no release of uapi-mcp, as uapi `docs/versioning.md`
+  promises. The instructions tell the
   agent to call `uapi_service_recover` for each service in `X-Reload-Stopped`, and to
   ask the user before it changes a WireGuard peer that `X-Kernel-Blocked` names and the
   task does not. (#10)

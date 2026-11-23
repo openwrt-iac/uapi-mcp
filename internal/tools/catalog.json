@@ -9654,7 +9654,14 @@
               }
             },
             "required": [
-              "group"
+              "group",
+              "context",
+              "version",
+              "level",
+              "prefix",
+              "read",
+              "write",
+              "notify"
             ],
             "type": "object"
           },
@@ -9741,7 +9748,14 @@
           }
         },
         "required": [
-          "group"
+          "group",
+          "context",
+          "version",
+          "level",
+          "prefix",
+          "read",
+          "write",
+          "notify"
         ],
         "type": "object"
       }
@@ -10604,7 +10618,7 @@
                 "type": "string"
               },
               "interface": {
-                "description": "Network interface name SQM applies to",
+                "description": "Network device that sqm-scripts shapes, such as `eth1` or `pppoe-wan`: its hotplug starts the queue when this device comes up. The name of a network interface, such as `wan`, matches nothing unless a device has that name. The `runtime.l3_device` of `network/interfaces` gives the device of an interface. A write takes a kernel device name, 1 to 15 characters without `/`, `:` or whitespace, and does not check that the device exists, since a device such as `pppoe-wan` exists only while its interface is up.",
                 "type": [
                   "string",
                   "null"
@@ -10712,7 +10726,7 @@
                 "type": "string"
               },
               "interface": {
-                "description": "Network interface name SQM applies to",
+                "description": "Network device that sqm-scripts shapes, such as `eth1` or `pppoe-wan`: its hotplug starts the queue when this device comes up. The name of a network interface, such as `wan`, matches nothing unless a device has that name. The `runtime.l3_device` of `network/interfaces` gives the device of an interface. A write takes a kernel device name, 1 to 15 characters without `/`, `:` or whitespace, and does not check that the device exists, since a device such as `pppoe-wan` exists only while its interface is up.",
                 "type": [
                   "string",
                   "null"
@@ -10794,7 +10808,7 @@
             "type": "string"
           },
           "interface": {
-            "description": "Network interface name SQM applies to",
+            "description": "Network device that sqm-scripts shapes, such as `eth1` or `pppoe-wan`: its hotplug starts the queue when this device comes up. The name of a network interface, such as `wan`, matches nothing unless a device has that name. The `runtime.l3_device` of `network/interfaces` gives the device of an interface. A write takes a kernel device name, 1 to 15 characters without `/`, `:` or whitespace, and does not check that the device exists, since a device such as `pppoe-wan` exists only while its interface is up.",
             "type": [
               "string",
               "null"
@@ -14101,5 +14115,5 @@
       }
     }
   ],
-  "uapi_version": "3.4.1"
+  "uapi_version": "4.0.0"
 }

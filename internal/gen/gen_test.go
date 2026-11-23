@@ -37,8 +37,7 @@ func TestEndpointCount(t *testing.T) {
 	if len(c.Endpoints) != 258 {
 		t.Errorf("got %d endpoints, want 258", len(c.Endpoints))
 	}
-	// uapi main sets info.version only in its release commit.
-	if c.UAPIVersion != "3.4.1" {
+	if c.UAPIVersion != "4.0.0" {
 		t.Errorf("uapi_version = %q", c.UAPIVersion)
 	}
 }

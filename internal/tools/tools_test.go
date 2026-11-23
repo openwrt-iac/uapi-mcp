@@ -413,7 +413,7 @@ func TestEmbeddedCatalog(t *testing.T) {
 	if err := json.Unmarshal(catalogJSON, &catalog); err != nil {
 		t.Fatal(err)
 	}
-	if catalog.UAPIVersion != "3.4.1" {
+	if catalog.UAPIVersion != "4.0.0" {
 		t.Errorf("uapi_version = %q", catalog.UAPIVersion)
 	}
 	if len(catalog.Endpoints) != 258 {
