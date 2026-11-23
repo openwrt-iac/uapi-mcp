@@ -15,8 +15,7 @@ follows Keep a Changelog.
   `family: "v6"`. The 7 `openvpn_instance*` tools go: an openvpn tunnel is a
   `network_interface*` section with `proto: "openvpn"`. A router on OpenWrt 25.12 stays
   on uapi 3.5 and uapi-mcp 3.5. The openvpn fields add about 11 KB to each
-  `network_interface` write tool, and the inputs of all tools total 334 KB. uapi-mcp
-  takes no action for it. (#10)
+  `network_interface` write tool. uapi-mcp takes no action for it. (#10)
 - **The footer passes every advisory header.** It holds each `X-Reload-*` and
   `X-Kernel-*` header and `X-Mgmt-Path-Warning`, sorted by name, so `X-Reload-Stopped`
   and `X-Kernel-Blocked` of uapi 4.0.0 reach the agent. A header that a uapi 4.x minor
