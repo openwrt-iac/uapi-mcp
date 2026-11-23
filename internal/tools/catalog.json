@@ -20,12 +20,14 @@
             ]
           },
           "authoritative": {
+            "description": "Reads true when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "boguspriv": {
+            "description": "Reads true when unset.",
             "type": [
               "boolean",
               "null"
@@ -44,18 +46,21 @@
             ]
           },
           "domainneeded": {
+            "description": "Reads true when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "expandhosts": {
+            "description": "Reads false when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "filterwin2k": {
+            "description": "Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -81,12 +86,14 @@
             ]
           },
           "nonwildcard": {
+            "description": "Reads true when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "noresolv": {
+            "description": "Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -100,12 +107,14 @@
             ]
           },
           "readethers": {
+            "description": "Reads true when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "rebind_protection": {
+            "description": "Reads true when unset.",
             "type": [
               "boolean",
               "null"
@@ -210,7 +219,7 @@
                 ]
               },
               "dns": {
-                "description": "Answer DNS queries for this reservation's hostname",
+                "description": "Answer DNS queries for this reservation's hostname Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -353,7 +362,7 @@
                 ]
               },
               "dns": {
-                "description": "Answer DNS queries for this reservation's hostname",
+                "description": "Answer DNS queries for this reservation's hostname Reads false when unset.",
                 "type": "boolean"
               },
               "duid": {
@@ -464,7 +473,7 @@
             ]
           },
           "dns": {
-            "description": "Answer DNS queries for this reservation's hostname",
+            "description": "Answer DNS queries for this reservation's hostname Reads false when unset.",
             "type": "boolean"
           },
           "duid": {
@@ -653,7 +662,7 @@
             ]
           },
           "maindhcp": {
-            "description": "Use odhcpd as the DHCPv4 server in place of dnsmasq. A read gives true only for `1` in the section named `odhcpd`, as dnsmasq.init reads it: dnsmasq stops serving DHCPv4 for a number above 0 there, while odhcpd is installed, unless odhcpd is disabled and dnsmasq has DHCPv6 support. odhcpd takes `1` and `true` from any `config odhcpd` section, and for any other value or no option keeps the value that it has, which is false after a start, because a reload does not reset it. So a stored `true` reads false while odhcpd and dnsmasq both serve DHCPv4, and a stored `2` reads false while dnsmasq stops and odhcpd serves only if it did before. A write of true stores `1` and a write of false stores `0`, also when the read already gives that value, so a write that sends the field makes both daemons agree. null removes the option, and odhcpd then keeps its value until it restarts. In a section that is not named `odhcpd`, a read gives false, and a write of true stores `1` and still reads false. LuCI shows any value other than `1` unchecked, and removes the option when it saves the form.",
+            "description": "Use odhcpd as the DHCPv4 server in place of dnsmasq. A read gives true only for `1` in the section named `odhcpd`, as dnsmasq.init reads it: dnsmasq stops serving DHCPv4 for a number above 0 there, while odhcpd is installed, unless odhcpd is disabled and dnsmasq has DHCPv6 support. odhcpd takes `1` and `true` from any `config odhcpd` section, and for any other value or no option keeps the value that it has, which is false after a start, because a reload does not reset it. So a stored `true` reads false while odhcpd and dnsmasq both serve DHCPv4, and a stored `2` reads false while dnsmasq stops and odhcpd serves only if it did before. A write of true stores `1` and a write of false stores `0`, also when the read already gives that value, so a write that sends the field makes both daemons agree. null removes the option, and odhcpd then keeps its value until it restarts. In a section that is not named `odhcpd`, a read gives false, and a write of true stores `1` and still reads false. LuCI shows any value other than `1` unchecked, and removes the option when it saves the form. Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -766,12 +775,14 @@
                 ]
               },
               "dynamicdhcp": {
+                "description": "Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "force": {
+                "description": "Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -782,6 +793,7 @@
                 "type": "string"
               },
               "ignore": {
+                "description": "Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -832,7 +844,7 @@
                 ]
               },
               "ra_slaac": {
-                "description": "Whether odhcpd sets the autonomous flag on the prefixes of its router advertisements, so that clients configure their addresses with SLAAC. odhcpd reads only `1`, `true`, `0` and `false`, and takes true for any other value.",
+                "description": "Whether odhcpd sets the autonomous flag on the prefixes of its router advertisements, so that clients configure their addresses with SLAAC. odhcpd reads only `1`, `true`, `0` and `false`, and takes true for any other value. Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -929,9 +941,11 @@
                 ]
               },
               "dynamicdhcp": {
+                "description": "Reads true when unset.",
                 "type": "boolean"
               },
               "force": {
+                "description": "Reads false when unset.",
                 "type": "boolean"
               },
               "id": {
@@ -939,6 +953,7 @@
                 "type": "string"
               },
               "ignore": {
+                "description": "Reads false when unset.",
                 "type": "boolean"
               },
               "interface": {
@@ -986,7 +1001,7 @@
                 ]
               },
               "ra_slaac": {
-                "description": "Whether odhcpd sets the autonomous flag on the prefixes of its router advertisements, so that clients configure their addresses with SLAAC. odhcpd reads only `1`, `true`, `0` and `false`, and takes true for any other value.",
+                "description": "Whether odhcpd sets the autonomous flag on the prefixes of its router advertisements, so that clients configure their addresses with SLAAC. odhcpd reads only `1`, `true`, `0` and `false`, and takes true for any other value. Reads true when unset.",
                 "type": "boolean"
               },
               "start": {
@@ -1054,9 +1069,11 @@
             ]
           },
           "dynamicdhcp": {
+            "description": "Reads true when unset.",
             "type": "boolean"
           },
           "force": {
+            "description": "Reads false when unset.",
             "type": "boolean"
           },
           "id": {
@@ -1064,6 +1081,7 @@
             "type": "string"
           },
           "ignore": {
+            "description": "Reads false when unset.",
             "type": "boolean"
           },
           "interface": {
@@ -1111,7 +1129,7 @@
             ]
           },
           "ra_slaac": {
-            "description": "Whether odhcpd sets the autonomous flag on the prefixes of its router advertisements, so that clients configure their addresses with SLAAC. odhcpd reads only `1`, `true`, `0` and `false`, and takes true for any other value.",
+            "description": "Whether odhcpd sets the autonomous flag on the prefixes of its router advertisements, so that clients configure their addresses with SLAAC. odhcpd reads only `1`, `true`, `0` and `false`, and takes true for any other value. Reads true when unset.",
             "type": "boolean"
           },
           "start": {
@@ -1214,13 +1232,14 @@
                 ]
               },
               "enable": {
+                "description": "Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "gateway_ports": {
-                "description": "Allow remote port forwarding",
+                "description": "Allow remote port forwarding Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -1238,6 +1257,7 @@
                 ]
               },
               "password_auth": {
+                "description": "Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -1250,12 +1270,14 @@
                 ]
               },
               "root_login": {
+                "description": "Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "root_password_auth": {
+                "description": "Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -1321,10 +1343,11 @@
                 ]
               },
               "enable": {
+                "description": "Reads true when unset.",
                 "type": "boolean"
               },
               "gateway_ports": {
-                "description": "Allow remote port forwarding",
+                "description": "Allow remote port forwarding Reads false when unset.",
                 "type": "boolean"
               },
               "id": {
@@ -1339,6 +1362,7 @@
                 ]
               },
               "password_auth": {
+                "description": "Reads true when unset.",
                 "type": "boolean"
               },
               "port": {
@@ -1348,9 +1372,11 @@
                 ]
               },
               "root_login": {
+                "description": "Reads true when unset.",
                 "type": "boolean"
               },
               "root_password_auth": {
+                "description": "Reads true when unset.",
                 "type": "boolean"
               }
             },
@@ -1384,10 +1410,11 @@
             ]
           },
           "enable": {
+            "description": "Reads true when unset.",
             "type": "boolean"
           },
           "gateway_ports": {
-            "description": "Allow remote port forwarding",
+            "description": "Allow remote port forwarding Reads false when unset.",
             "type": "boolean"
           },
           "id": {
@@ -1402,6 +1429,7 @@
             ]
           },
           "password_auth": {
+            "description": "Reads true when unset.",
             "type": "boolean"
           },
           "port": {
@@ -1411,9 +1439,11 @@
             ]
           },
           "root_login": {
+            "description": "Reads true when unset.",
             "type": "boolean"
           },
           "root_password_auth": {
+            "description": "Reads true when unset.",
             "type": "boolean"
           }
         },
@@ -1450,21 +1480,21 @@
         "additionalProperties": true,
         "properties": {
           "drop_invalid": {
-            "description": "Drop packets with invalid conntrack state. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section: fw4 stops while it reads the defaults and applies no ruleset. A write of the field replaces such a value, and a null removes it.",
+            "description": "Drop packets with invalid conntrack state. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section: fw4 stops while it reads the defaults and applies no ruleset. A write of the field replaces such a value, and a null removes it. Reads false when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "flow_offloading": {
-            "description": "Enable software flow offloading. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section: fw4 stops while it reads the defaults and applies no ruleset. A write of the field replaces such a value, and a null removes it.",
+            "description": "Enable software flow offloading. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section: fw4 stops while it reads the defaults and applies no ruleset. A write of the field replaces such a value, and a null removes it. Reads false when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "flow_offloading_hw": {
-            "description": "Enable hardware flow offloading (requires NIC support). A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section: fw4 stops while it reads the defaults and applies no ruleset. A write of the field replaces such a value, and a null removes it.",
+            "description": "Enable hardware flow offloading (requires NIC support). A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section: fw4 stops while it reads the defaults and applies no ruleset. A write of the field replaces such a value, and a null removes it. Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -1498,7 +1528,7 @@
             ]
           },
           "syn_flood": {
-            "description": "Enable SYN flood protection. fw4 applies `synflood_protect`, which LuCI writes, and `syn_flood` only when uci holds no `synflood_protect`, and a read gives the value that fw4 applies. A write of true stores `synflood_protect` 1 and removes `syn_flood`, as LuCI does. A write of false removes `synflood_protect` and stores `syn_flood` 0, where LuCI removes both. A null removes both. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, in either option reads null and is an error of the section: fw4 stops while it reads the defaults and applies no ruleset. A write of the field replaces such a value.",
+            "description": "Enable SYN flood protection. fw4 applies `synflood_protect`, which LuCI writes, and `syn_flood` only when uci holds no `synflood_protect`, and a read gives the value that fw4 applies. A write of true stores `synflood_protect` 1 and removes `syn_flood`, as LuCI does. A write of false removes `synflood_protect` and stores `syn_flood` 0, where LuCI removes both. A null removes both. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, in either option reads null and is an error of the section: fw4 stops while it reads the defaults and applies no ruleset. A write of the field replaces such a value. Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -1520,7 +1550,7 @@
             ]
           },
           "tcp_syncookies": {
-            "description": "Enable kernel TCP SYN cookies. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section: fw4 stops while it reads the defaults and applies no ruleset. A write of the field replaces such a value, and a null removes it.",
+            "description": "Enable kernel TCP SYN cookies. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section: fw4 stops while it reads the defaults and applies no ruleset. A write of the field replaces such a value, and a null removes it. Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -1609,14 +1639,14 @@
                 ]
               },
               "enabled": {
-                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "family": {
-                "description": "One of (may grow): any, ipv4, ipv6, null.",
+                "description": "One of (may grow): any, ipv4, ipv6, null. Reads \"any\" when unset.",
                 "type": [
                   "string",
                   "null"
@@ -1694,14 +1724,14 @@
                 ]
               },
               "enabled": {
-                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "family": {
-                "description": "One of (may grow): any, ipv4, ipv6.",
+                "description": "One of (may grow): any, ipv4, ipv6. Reads \"any\" when unset.",
                 "type": "string"
               },
               "id": {
@@ -1751,14 +1781,14 @@
             ]
           },
           "enabled": {
-            "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+            "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "family": {
-            "description": "One of (may grow): any, ipv4, ipv6.",
+            "description": "One of (may grow): any, ipv4, ipv6. Reads \"any\" when unset.",
             "type": "string"
           },
           "id": {
@@ -1832,7 +1862,7 @@
         "additionalProperties": true,
         "properties": {
           "enabled": {
-            "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+            "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
             "type": [
               "boolean",
               "null"
@@ -1936,7 +1966,7 @@
             ]
           },
           "target": {
-            "description": "SNAT rewrites to snat_ip/snat_port, MASQUERADE rewrites to the outbound interface address, ACCEPT exempts matched traffic from source NAT One of (may grow): SNAT, MASQUERADE, ACCEPT.",
+            "description": "SNAT rewrites to snat_ip/snat_port, MASQUERADE rewrites to the outbound interface address, ACCEPT exempts matched traffic from source NAT One of (may grow): SNAT, MASQUERADE, ACCEPT. Reads \"MASQUERADE\" when unset.",
             "type": "string"
           }
         },
@@ -2002,7 +2032,7 @@
             "description": "Merge-patch body (RFC 7396): any subset of FirewallNatRequest, which describes the fields.",
             "properties": {
               "enabled": {
-                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -2101,7 +2131,7 @@
                 ]
               },
               "target": {
-                "description": "SNAT rewrites to snat_ip/snat_port, MASQUERADE rewrites to the outbound interface address, ACCEPT exempts matched traffic from source NAT One of (may grow): SNAT, MASQUERADE, ACCEPT, null.",
+                "description": "SNAT rewrites to snat_ip/snat_port, MASQUERADE rewrites to the outbound interface address, ACCEPT exempts matched traffic from source NAT One of (may grow): SNAT, MASQUERADE, ACCEPT, null. Reads \"MASQUERADE\" when unset.",
                 "type": [
                   "string",
                   "null"
@@ -2161,7 +2191,7 @@
             "description": "Request body for the uapi resource backed by uci firewall.nat.",
             "properties": {
               "enabled": {
-                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -2265,7 +2295,7 @@
                 ]
               },
               "target": {
-                "description": "SNAT rewrites to snat_ip/snat_port, MASQUERADE rewrites to the outbound interface address, ACCEPT exempts matched traffic from source NAT One of (may grow): SNAT, MASQUERADE, ACCEPT.",
+                "description": "SNAT rewrites to snat_ip/snat_port, MASQUERADE rewrites to the outbound interface address, ACCEPT exempts matched traffic from source NAT One of (may grow): SNAT, MASQUERADE, ACCEPT. Reads \"MASQUERADE\" when unset.",
                 "type": "string"
               }
             },
@@ -2344,7 +2374,7 @@
             "description": "Merge-patch body (RFC 7396): any subset of FirewallRedirectsRequest, which describes the fields.",
             "properties": {
               "enabled": {
-                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -2462,7 +2492,7 @@
                 ]
               },
               "target": {
-                "description": "DNAT forwards an incoming connection onward. SNAT rewrites the source of forwarded traffic and additionally needs match.dest_zone and match.src_dip; it is the legacy spelling, and LuCI migrates such sections to firewall/nat, so prefer that resource for new source NAT One of (may grow): DNAT, SNAT, null.",
+                "description": "DNAT forwards an incoming connection onward. SNAT rewrites the source of forwarded traffic and additionally needs match.dest_zone and match.src_dip; it is the legacy spelling, and LuCI migrates such sections to firewall/nat, so prefer that resource for new source NAT One of (may grow): DNAT, SNAT, null. Reads \"DNAT\" when unset.",
                 "type": [
                   "string",
                   "null"
@@ -2522,7 +2552,7 @@
             "description": "Request body for the uapi resource backed by uci firewall.redirect.",
             "properties": {
               "enabled": {
-                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -2556,7 +2586,7 @@
                     ]
                   },
                   "family": {
-                    "description": "One of (may grow): any, ipv4, ipv6.",
+                    "description": "One of (may grow): any, ipv4, ipv6. Reads \"any\" when unset.",
                     "type": "string"
                   },
                   "mark": {
@@ -2648,7 +2678,7 @@
                 ]
               },
               "target": {
-                "description": "DNAT forwards an incoming connection onward. SNAT rewrites the source of forwarded traffic and additionally needs match.dest_zone and match.src_dip; it is the legacy spelling, and LuCI migrates such sections to firewall/nat, so prefer that resource for new source NAT One of (may grow): DNAT, SNAT.",
+                "description": "DNAT forwards an incoming connection onward. SNAT rewrites the source of forwarded traffic and additionally needs match.dest_zone and match.src_dip; it is the legacy spelling, and LuCI migrates such sections to firewall/nat, so prefer that resource for new source NAT One of (may grow): DNAT, SNAT. Reads \"DNAT\" when unset.",
                 "type": "string"
               }
             },
@@ -2679,7 +2709,7 @@
         "additionalProperties": true,
         "properties": {
           "enabled": {
-            "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+            "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
             "type": [
               "boolean",
               "null"
@@ -2713,7 +2743,7 @@
                 ]
               },
               "family": {
-                "description": "One of (may grow): any, ipv4, ipv6.",
+                "description": "One of (may grow): any, ipv4, ipv6. Reads \"any\" when unset.",
                 "type": "string"
               },
               "mark": {
@@ -2805,7 +2835,7 @@
             ]
           },
           "target": {
-            "description": "DNAT forwards an incoming connection onward. SNAT rewrites the source of forwarded traffic and additionally needs match.dest_zone and match.src_dip; it is the legacy spelling, and LuCI migrates such sections to firewall/nat, so prefer that resource for new source NAT One of (may grow): DNAT, SNAT.",
+            "description": "DNAT forwards an incoming connection onward. SNAT rewrites the source of forwarded traffic and additionally needs match.dest_zone and match.src_dip; it is the legacy spelling, and LuCI migrates such sections to firewall/nat, so prefer that resource for new source NAT One of (may grow): DNAT, SNAT. Reads \"DNAT\" when unset.",
             "type": "string"
           }
         },
@@ -2896,7 +2926,7 @@
             "description": "Merge-patch body (RFC 7396): any subset of FirewallRulesRequest, which describes the fields.",
             "properties": {
               "enabled": {
-                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -3081,7 +3111,7 @@
             "description": "Request body for the uapi resource backed by uci firewall.rule.",
             "properties": {
               "enabled": {
-                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -3127,7 +3157,7 @@
                     ]
                   },
                   "family": {
-                    "description": "One of (may grow): any, ipv4, ipv6.",
+                    "description": "One of (may grow): any, ipv4, ipv6. Reads \"any\" when unset.",
                     "type": "string"
                   },
                   "mark": {
@@ -3237,7 +3267,7 @@
         "additionalProperties": true,
         "properties": {
           "enabled": {
-            "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+            "description": "A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads true when unset.",
             "type": [
               "boolean",
               "null"
@@ -3283,7 +3313,7 @@
                 ]
               },
               "family": {
-                "description": "One of (may grow): any, ipv4, ipv6.",
+                "description": "One of (may grow): any, ipv4, ipv6. Reads \"any\" when unset.",
                 "type": "string"
               },
               "mark": {
@@ -3453,7 +3483,7 @@
             "description": "Merge-patch body (RFC 7396): any subset of FirewallZonesRequest, which describes the fields.",
             "properties": {
               "family": {
-                "description": "One of (may grow): any, ipv4, ipv6, null.",
+                "description": "One of (may grow): any, ipv4, ipv6, null. Reads \"any\" when unset.",
                 "type": [
                   "string",
                   "null"
@@ -3478,14 +3508,14 @@
                 ]
               },
               "masq": {
-                "description": "Enable IPv4 masquerading on this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "Enable IPv4 masquerading on this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "mtu_fix": {
-                "description": "Clamp MSS to PMTU for traffic in this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "Clamp MSS to PMTU for traffic in this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -3568,7 +3598,7 @@
             "description": "Request body for the uapi resource backed by uci firewall.zone.",
             "properties": {
               "family": {
-                "description": "One of (may grow): any, ipv4, ipv6.",
+                "description": "One of (may grow): any, ipv4, ipv6. Reads \"any\" when unset.",
                 "type": "string"
               },
               "forward": {
@@ -3590,14 +3620,14 @@
                 ]
               },
               "masq": {
-                "description": "Enable IPv4 masquerading on this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "Enable IPv4 masquerading on this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "mtu_fix": {
-                "description": "Clamp MSS to PMTU for traffic in this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+                "description": "Clamp MSS to PMTU for traffic in this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -3654,7 +3684,7 @@
         "additionalProperties": true,
         "properties": {
           "family": {
-            "description": "One of (may grow): any, ipv4, ipv6.",
+            "description": "One of (may grow): any, ipv4, ipv6. Reads \"any\" when unset.",
             "type": "string"
           },
           "forward": {
@@ -3676,14 +3706,14 @@
             ]
           },
           "masq": {
-            "description": "Enable IPv4 masquerading on this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+            "description": "Enable IPv4 masquerading on this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads false when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "mtu_fix": {
-            "description": "Clamp MSS to PMTU for traffic in this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it.",
+            "description": "Clamp MSS to PMTU for traffic in this zone. A stored list, or a value other than 1, on, true, yes, 0, off, false or no, reads null and is an error of the section, because fw4 then skips the section. A write of the field replaces such a value, and a null removes it. Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -3760,28 +3790,28 @@
         "additionalProperties": true,
         "properties": {
           "enable_cdp": {
-            "description": "Emit Cisco Discovery Protocol frames",
+            "description": "Emit Cisco Discovery Protocol frames Reads false when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "enable_edp": {
-            "description": "Emit Extreme Discovery Protocol frames",
+            "description": "Emit Extreme Discovery Protocol frames Reads false when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "enable_fdp": {
-            "description": "Emit Foundry Discovery Protocol frames",
+            "description": "Emit Foundry Discovery Protocol frames Reads false when unset.",
             "type": [
               "boolean",
               "null"
             ]
           },
           "enable_sonmp": {
-            "description": "Emit Nortel SONMP frames",
+            "description": "Emit Nortel SONMP frames Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -3803,7 +3833,7 @@
             ]
           },
           "lldp_capabilities": {
-            "description": "Advertise the system capabilities TLV",
+            "description": "Advertise the system capabilities TLV Reads true when unset.",
             "type": [
               "boolean",
               "null"
@@ -3860,7 +3890,7 @@
             ]
           },
           "logging": {
-            "description": "Enable mwan3 daemon logging via logread.",
+            "description": "Enable mwan3 daemon logging via logread. Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -3956,7 +3986,7 @@
             "description": "Merge-patch body (RFC 7396): any subset of Mwan3InterfacesRequest, which describes the fields.",
             "properties": {
               "check_quality": {
-                "description": "Enable failure_latency/failure_loss thresholds.",
+                "description": "Enable failure_latency/failure_loss thresholds. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -3970,6 +4000,7 @@
                 ]
               },
               "enabled": {
+                "description": "Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -3994,7 +4025,7 @@
                 ]
               },
               "family": {
-                "description": "Address family this interface tracks. Reads ipv4 when the option is unset or empty, as mwan3 does. A null in a merge patch removes the option. One of (may grow): ipv4, ipv6, null.",
+                "description": "Address family this interface tracks. Reads ipv4 when the option is unset or empty, as mwan3 does. A null in a merge patch removes the option. One of (may grow): ipv4, ipv6, null. Reads \"ipv4\" when unset.",
                 "type": [
                   "string",
                   "null"
@@ -4022,6 +4053,7 @@
                 ]
               },
               "keep_failure_interval": {
+                "description": "Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -4156,7 +4188,7 @@
             "description": "Request body for the uapi resource backed by uci mwan3.interface.",
             "properties": {
               "check_quality": {
-                "description": "Enable failure_latency/failure_loss thresholds.",
+                "description": "Enable failure_latency/failure_loss thresholds. Reads false when unset.",
                 "type": "boolean"
               },
               "down": {
@@ -4167,6 +4199,7 @@
                 ]
               },
               "enabled": {
+                "description": "Reads false when unset.",
                 "type": "boolean"
               },
               "failure_interval": {
@@ -4188,7 +4221,7 @@
                 ]
               },
               "family": {
-                "description": "Address family this interface tracks. Reads ipv4 when the option is unset or empty, as mwan3 does. A null in a merge patch removes the option. One of (may grow): ipv4, ipv6.",
+                "description": "Address family this interface tracks. Reads ipv4 when the option is unset or empty, as mwan3 does. A null in a merge patch removes the option. One of (may grow): ipv4, ipv6. Reads \"ipv4\" when unset.",
                 "type": "string"
               },
               "flush_conntrack": {
@@ -4213,6 +4246,7 @@
                 ]
               },
               "keep_failure_interval": {
+                "description": "Reads false when unset.",
                 "type": "boolean"
               },
               "max_ttl": {
@@ -4315,7 +4349,7 @@
         "additionalProperties": true,
         "properties": {
           "check_quality": {
-            "description": "Enable failure_latency/failure_loss thresholds.",
+            "description": "Enable failure_latency/failure_loss thresholds. Reads false when unset.",
             "type": "boolean"
           },
           "down": {
@@ -4326,6 +4360,7 @@
             ]
           },
           "enabled": {
+            "description": "Reads false when unset.",
             "type": "boolean"
           },
           "failure_interval": {
@@ -4347,7 +4382,7 @@
             ]
           },
           "family": {
-            "description": "Address family this interface tracks. Reads ipv4 when the option is unset or empty, as mwan3 does. A null in a merge patch removes the option. One of (may grow): ipv4, ipv6.",
+            "description": "Address family this interface tracks. Reads ipv4 when the option is unset or empty, as mwan3 does. A null in a merge patch removes the option. One of (may grow): ipv4, ipv6. Reads \"ipv4\" when unset.",
             "type": "string"
           },
           "flush_conntrack": {
@@ -4372,6 +4407,7 @@
             ]
           },
           "keep_failure_interval": {
+            "description": "Reads false when unset.",
             "type": "boolean"
           },
           "max_ttl": {
@@ -5038,6 +5074,7 @@
                 ]
               },
               "logging": {
+                "description": "Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -5065,7 +5102,7 @@
                 ]
               },
               "sticky": {
-                "description": "Pin matching connections to the same member for `timeout` seconds.",
+                "description": "Pin matching connections to the same member for `timeout` seconds. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -5170,6 +5207,7 @@
                 ]
               },
               "logging": {
+                "description": "Reads false when unset.",
                 "type": "boolean"
               },
               "proto": {
@@ -5194,7 +5232,7 @@
                 ]
               },
               "sticky": {
-                "description": "Pin matching connections to the same member for `timeout` seconds.",
+                "description": "Pin matching connections to the same member for `timeout` seconds. Reads false when unset.",
                 "type": "boolean"
               },
               "timeout": {
@@ -5270,6 +5308,7 @@
             ]
           },
           "logging": {
+            "description": "Reads false when unset.",
             "type": "boolean"
           },
           "proto": {
@@ -5294,7 +5333,7 @@
             ]
           },
           "sticky": {
-            "description": "Pin matching connections to the same member for `timeout` seconds.",
+            "description": "Pin matching connections to the same member for `timeout` seconds. Reads false when unset.",
             "type": "boolean"
           },
           "timeout": {
@@ -5659,7 +5698,7 @@
                 ]
               },
               "ipv6": {
-                "description": "Enable IPv6 on this device",
+                "description": "Enable IPv6 on this device Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -5774,7 +5813,7 @@
                 ]
               },
               "ipv6": {
-                "description": "Enable IPv6 on this device",
+                "description": "Enable IPv6 on this device Reads true when unset.",
                 "type": "boolean"
               },
               "macaddr": {
@@ -5860,7 +5899,7 @@
             ]
           },
           "ipv6": {
-            "description": "Enable IPv6 on this device",
+            "description": "Enable IPv6 on this device Reads true when unset.",
             "type": "boolean"
           },
           "macaddr": {
@@ -6012,7 +6051,7 @@
                 ]
               },
               "auto": {
-                "description": "Bring this interface up at boot",
+                "description": "Bring this interface up at boot Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -6145,7 +6184,7 @@
                 ]
               },
               "disabled": {
-                "description": "Whether netifd ignores this interface entirely. A disabled interface is not registered at all, so it has no ubus object and its addresses and routes are not installed. A stored `1` or `true` reads true, as netifd reads it, and any other value reads false. A write stores `1` or `0`. A write that enables a wireguard interface while one of its enabled peers holds a value that makes wg refuse the whole interface keeps its commit, and answers `X-Kernel-Status: blocked`.",
+                "description": "Whether netifd ignores this interface entirely. A disabled interface is not registered at all, so it has no ubus object and its addresses and routes are not installed. A stored `1` or `true` reads true, as netifd reads it, and any other value reads false. A write stores `1` or `0`. A write that enables a wireguard interface while one of its enabled peers holds a value that makes wg refuse the whole interface keeps its commit, and answers `X-Kernel-Status: blocked`. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -6453,7 +6492,7 @@
                 "type": "string"
               },
               "proto": {
-                "description": "Interface protocol. Several values need a handler package on the device: wwan needs `wwan`, wireguard needs `wireguard-tools`, dhcpv6 needs `odhcp6c`, ppp/pppoe need `ppp`, and openvpn needs `openvpn-openssl`, or its `openvpn-mbedtls` or `openvpn-wolfssl` variant. When the handler is missing, the write still succeeds, the interface is inert, and `runtime.effective_proto` reads `none`. netifd loads its handlers when it starts, so a handler package installed later takes effect after a reboot or `/etc/init.d/network restart`. A read answers any proto that uci stores, such as the `6in4` that LuCI writes or the `qmi` that an LTE router ships, while a write takes only the protos that the request schema lists. Another proto is no error of the section: a PATCH that leaves `proto` out passes and keeps the options that its handler reads, and the validation sweep does not list it. A write that leaves a wireguard interface enabled keeps its commit while an enabled `network/wireguard_peers` of the interface holds a value that makes wg refuse the whole interface, and answers `X-Kernel-Status: blocked` with `X-Kernel-Blocked`, which names each such peer. One of (may grow): static, dhcp, dhcpv6, pppoe, none, ppp, wwan, wireguard, openvpn.",
+                "description": "Interface protocol. Several values need a handler package on the device: wwan needs `wwan`, wireguard needs `wireguard-tools`, dhcpv6 needs `odhcp6c`, ppp/pppoe need `ppp`, and openvpn needs `openvpn-openssl`, or its `openvpn-mbedtls` or `openvpn-wolfssl` variant. When the handler is missing, the write still succeeds, the interface is inert, and `runtime.effective_proto` reads `none`. netifd loads its handlers when it starts, so a handler package installed later takes effect after a reboot or `/etc/init.d/network restart`. A read answers any proto that uci stores, such as the `6in4` that LuCI writes or the `qmi` that an LTE router ships, while a write takes only the protos that the request schema lists. Another proto is no error of the section: a PATCH that leaves `proto` out passes and keeps the options that its handler reads, and the validation sweep does not list it. A write that leaves a wireguard interface enabled keeps its commit while an enabled `network/wireguard_peers` of the interface holds a value that makes wg refuse the whole interface, and answers `X-Kernel-Status: blocked` with `X-Kernel-Blocked`, which names each such peer. One of (may grow): static, dhcp, dhcpv6, pppoe, none, ppp, wwan, wireguard, openvpn. Reads \"none\" when unset.",
                 "type": "string"
               },
               "push": {
@@ -6673,7 +6712,7 @@
                 ]
               },
               "auto": {
-                "description": "Bring this interface up at boot",
+                "description": "Bring this interface up at boot Reads true when unset.",
                 "type": "boolean"
               },
               "broadcast": {
@@ -6797,7 +6836,7 @@
                 ]
               },
               "disabled": {
-                "description": "Whether netifd ignores this interface entirely. A disabled interface is not registered at all, so it has no ubus object and its addresses and routes are not installed. A stored `1` or `true` reads true, as netifd reads it, and any other value reads false. A write stores `1` or `0`. A write that enables a wireguard interface while one of its enabled peers holds a value that makes wg refuse the whole interface keeps its commit, and answers `X-Kernel-Status: blocked`.",
+                "description": "Whether netifd ignores this interface entirely. A disabled interface is not registered at all, so it has no ubus object and its addresses and routes are not installed. A stored `1` or `true` reads true, as netifd reads it, and any other value reads false. A write stores `1` or `0`. A write that enables a wireguard interface while one of its enabled peers holds a value that makes wg refuse the whole interface keeps its commit, and answers `X-Kernel-Status: blocked`. Reads false when unset.",
                 "type": "boolean"
               },
               "dns": {
@@ -7084,7 +7123,7 @@
                 "type": "string"
               },
               "proto": {
-                "description": "Interface protocol. Several values need a handler package on the device: wwan needs `wwan`, wireguard needs `wireguard-tools`, dhcpv6 needs `odhcp6c`, ppp/pppoe need `ppp`, and openvpn needs `openvpn-openssl`, or its `openvpn-mbedtls` or `openvpn-wolfssl` variant. When the handler is missing, the write still succeeds, the interface is inert, and `runtime.effective_proto` reads `none`. netifd loads its handlers when it starts, so a handler package installed later takes effect after a reboot or `/etc/init.d/network restart`. A read answers any proto that uci stores, such as the `6in4` that LuCI writes or the `qmi` that an LTE router ships, while a write takes only the protos that the request schema lists. Another proto is no error of the section: a PATCH that leaves `proto` out passes and keeps the options that its handler reads, and the validation sweep does not list it. A write that leaves a wireguard interface enabled keeps its commit while an enabled `network/wireguard_peers` of the interface holds a value that makes wg refuse the whole interface, and answers `X-Kernel-Status: blocked` with `X-Kernel-Blocked`, which names each such peer. One of (may grow): static, dhcp, dhcpv6, pppoe, none, ppp, wwan, wireguard, openvpn.",
+                "description": "Interface protocol. Several values need a handler package on the device: wwan needs `wwan`, wireguard needs `wireguard-tools`, dhcpv6 needs `odhcp6c`, ppp/pppoe need `ppp`, and openvpn needs `openvpn-openssl`, or its `openvpn-mbedtls` or `openvpn-wolfssl` variant. When the handler is missing, the write still succeeds, the interface is inert, and `runtime.effective_proto` reads `none`. netifd loads its handlers when it starts, so a handler package installed later takes effect after a reboot or `/etc/init.d/network restart`. A read answers any proto that uci stores, such as the `6in4` that LuCI writes or the `qmi` that an LTE router ships, while a write takes only the protos that the request schema lists. Another proto is no error of the section: a PATCH that leaves `proto` out passes and keeps the options that its handler reads, and the validation sweep does not list it. A write that leaves a wireguard interface enabled keeps its commit while an enabled `network/wireguard_peers` of the interface holds a value that makes wg refuse the whole interface, and answers `X-Kernel-Status: blocked` with `X-Kernel-Blocked`, which names each such peer. One of (may grow): static, dhcp, dhcpv6, pppoe, none, ppp, wwan, wireguard, openvpn. Reads \"none\" when unset.",
                 "type": "string"
               },
               "push": {
@@ -7272,7 +7311,7 @@
             ]
           },
           "auto": {
-            "description": "Bring this interface up at boot",
+            "description": "Bring this interface up at boot Reads true when unset.",
             "type": "boolean"
           },
           "broadcast": {
@@ -7396,7 +7435,7 @@
             ]
           },
           "disabled": {
-            "description": "Whether netifd ignores this interface entirely. A disabled interface is not registered at all, so it has no ubus object and its addresses and routes are not installed. A stored `1` or `true` reads true, as netifd reads it, and any other value reads false. A write stores `1` or `0`. A write that enables a wireguard interface while one of its enabled peers holds a value that makes wg refuse the whole interface keeps its commit, and answers `X-Kernel-Status: blocked`.",
+            "description": "Whether netifd ignores this interface entirely. A disabled interface is not registered at all, so it has no ubus object and its addresses and routes are not installed. A stored `1` or `true` reads true, as netifd reads it, and any other value reads false. A write stores `1` or `0`. A write that enables a wireguard interface while one of its enabled peers holds a value that makes wg refuse the whole interface keeps its commit, and answers `X-Kernel-Status: blocked`. Reads false when unset.",
             "type": "boolean"
           },
           "dns": {
@@ -7683,7 +7722,7 @@
             "type": "string"
           },
           "proto": {
-            "description": "Interface protocol. Several values need a handler package on the device: wwan needs `wwan`, wireguard needs `wireguard-tools`, dhcpv6 needs `odhcp6c`, ppp/pppoe need `ppp`, and openvpn needs `openvpn-openssl`, or its `openvpn-mbedtls` or `openvpn-wolfssl` variant. When the handler is missing, the write still succeeds, the interface is inert, and `runtime.effective_proto` reads `none`. netifd loads its handlers when it starts, so a handler package installed later takes effect after a reboot or `/etc/init.d/network restart`. A read answers any proto that uci stores, such as the `6in4` that LuCI writes or the `qmi` that an LTE router ships, while a write takes only the protos that the request schema lists. Another proto is no error of the section: a PATCH that leaves `proto` out passes and keeps the options that its handler reads, and the validation sweep does not list it. A write that leaves a wireguard interface enabled keeps its commit while an enabled `network/wireguard_peers` of the interface holds a value that makes wg refuse the whole interface, and answers `X-Kernel-Status: blocked` with `X-Kernel-Blocked`, which names each such peer. One of (may grow): static, dhcp, dhcpv6, pppoe, none, ppp, wwan, wireguard, openvpn.",
+            "description": "Interface protocol. Several values need a handler package on the device: wwan needs `wwan`, wireguard needs `wireguard-tools`, dhcpv6 needs `odhcp6c`, ppp/pppoe need `ppp`, and openvpn needs `openvpn-openssl`, or its `openvpn-mbedtls` or `openvpn-wolfssl` variant. When the handler is missing, the write still succeeds, the interface is inert, and `runtime.effective_proto` reads `none`. netifd loads its handlers when it starts, so a handler package installed later takes effect after a reboot or `/etc/init.d/network restart`. A read answers any proto that uci stores, such as the `6in4` that LuCI writes or the `qmi` that an LTE router ships, while a write takes only the protos that the request schema lists. Another proto is no error of the section: a PATCH that leaves `proto` out passes and keeps the options that its handler reads, and the validation sweep does not list it. A write that leaves a wireguard interface enabled keeps its commit while an enabled `network/wireguard_peers` of the interface holds a value that makes wg refuse the whole interface, and answers `X-Kernel-Status: blocked` with `X-Kernel-Blocked`, which names each such peer. One of (may grow): static, dhcp, dhcpv6, pppoe, none, ppp, wwan, wireguard, openvpn. Reads \"none\" when unset.",
             "type": "string"
           },
           "push": {
@@ -7914,7 +7953,7 @@
             "description": "Merge-patch body (RFC 7396): any subset of NetworkRoutesRequest, which describes the fields.",
             "properties": {
               "disabled": {
-                "description": "Whether netifd skips this route. A disabled route is not installed at all, so it is absent from `ip route`.",
+                "description": "Whether netifd skips this route. A disabled route is not installed at all, so it is absent from `ip route`. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -7980,7 +8019,7 @@
                 ]
               },
               "type": {
-                "description": "One of (may grow): unicast, blackhole, unreachable, prohibit, throw, anycast, multicast, local, broadcast, null.",
+                "description": "One of (may grow): unicast, blackhole, unreachable, prohibit, throw, anycast, multicast, local, broadcast, null. Reads \"unicast\" when unset.",
                 "type": [
                   "string",
                   "null"
@@ -8040,7 +8079,7 @@
             "description": "Request body for the uapi resource backed by uci network.route.",
             "properties": {
               "disabled": {
-                "description": "Whether netifd skips this route. A disabled route is not installed at all, so it is absent from `ip route`.",
+                "description": "Whether netifd skips this route. A disabled route is not installed at all, so it is absent from `ip route`. Reads false when unset.",
                 "type": "boolean"
               },
               "gateway": {
@@ -8103,7 +8142,7 @@
                 ]
               },
               "type": {
-                "description": "One of (may grow): unicast, blackhole, unreachable, prohibit, throw, anycast, multicast, local, broadcast.",
+                "description": "One of (may grow): unicast, blackhole, unreachable, prohibit, throw, anycast, multicast, local, broadcast. Reads \"unicast\" when unset.",
                 "type": "string"
               }
             },
@@ -8134,7 +8173,7 @@
         "additionalProperties": true,
         "properties": {
           "disabled": {
-            "description": "Whether netifd skips this route. A disabled route is not installed at all, so it is absent from `ip route`.",
+            "description": "Whether netifd skips this route. A disabled route is not installed at all, so it is absent from `ip route`. Reads false when unset.",
             "type": "boolean"
           },
           "gateway": {
@@ -8197,7 +8236,7 @@
             ]
           },
           "type": {
-            "description": "One of (may grow): unicast, blackhole, unreachable, prohibit, throw, anycast, multicast, local, broadcast.",
+            "description": "One of (may grow): unicast, blackhole, unreachable, prohibit, throw, anycast, multicast, local, broadcast. Reads \"unicast\" when unset.",
             "type": "string"
           }
         },
@@ -8302,7 +8341,7 @@
                 ]
               },
               "disabled": {
-                "description": "Whether netifd skips this rule. A disabled rule is not installed at all, so it is absent from `ip rule`.",
+                "description": "Whether netifd skips this rule. A disabled rule is not installed at all, so it is absent from `ip rule`. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -8334,7 +8373,7 @@
                 ]
               },
               "invert": {
-                "description": "Invert the match selectors",
+                "description": "Invert the match selectors Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -8476,7 +8515,7 @@
                 ]
               },
               "disabled": {
-                "description": "Whether netifd skips this rule. A disabled rule is not installed at all, so it is absent from `ip rule`.",
+                "description": "Whether netifd skips this rule. A disabled rule is not installed at all, so it is absent from `ip rule`. Reads false when unset.",
                 "type": "boolean"
               },
               "dport": {
@@ -8505,7 +8544,7 @@
                 ]
               },
               "invert": {
-                "description": "Invert the match selectors",
+                "description": "Invert the match selectors Reads false when unset.",
                 "type": "boolean"
               },
               "ipproto": {
@@ -8615,7 +8654,7 @@
             ]
           },
           "disabled": {
-            "description": "Whether netifd skips this rule. A disabled rule is not installed at all, so it is absent from `ip rule`.",
+            "description": "Whether netifd skips this rule. A disabled rule is not installed at all, so it is absent from `ip rule`. Reads false when unset.",
             "type": "boolean"
           },
           "dport": {
@@ -8644,7 +8683,7 @@
             ]
           },
           "invert": {
-            "description": "Invert the match selectors",
+            "description": "Invert the match selectors Reads false when unset.",
             "type": "boolean"
           },
           "ipproto": {
@@ -8854,7 +8893,7 @@
                 ]
               },
               "disabled": {
-                "description": "Skip this peer when starting the tunnel. A stored value other than `1` reads false, as the proto handler reads it.",
+                "description": "Skip this peer when starting the tunnel. A stored value other than `1` reads false, as the proto handler reads it. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -8901,7 +8940,7 @@
                 ]
               },
               "route_allowed_ips": {
-                "description": "Auto-install routes for allowed_ips. A stored value other than `1` reads false, as the proto handler reads it.",
+                "description": "Auto-install routes for allowed_ips. A stored value other than `1` reads false, as the proto handler reads it. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -8978,7 +9017,7 @@
                 ]
               },
               "disabled": {
-                "description": "Skip this peer when starting the tunnel. A stored value other than `1` reads false, as the proto handler reads it.",
+                "description": "Skip this peer when starting the tunnel. A stored value other than `1` reads false, as the proto handler reads it. Reads false when unset.",
                 "type": "boolean"
               },
               "endpoint_host": {
@@ -9022,7 +9061,7 @@
                 ]
               },
               "route_allowed_ips": {
-                "description": "Auto-install routes for allowed_ips. A stored value other than `1` reads false, as the proto handler reads it.",
+                "description": "Auto-install routes for allowed_ips. A stored value other than `1` reads false, as the proto handler reads it. Reads false when unset.",
                 "type": "boolean"
               }
             },
@@ -9071,7 +9110,7 @@
             ]
           },
           "disabled": {
-            "description": "Skip this peer when starting the tunnel. A stored value other than `1` reads false, as the proto handler reads it.",
+            "description": "Skip this peer when starting the tunnel. A stored value other than `1` reads false, as the proto handler reads it. Reads false when unset.",
             "type": "boolean"
           },
           "endpoint_host": {
@@ -9115,7 +9154,7 @@
             ]
           },
           "route_allowed_ips": {
-            "description": "Auto-install routes for allowed_ips. A stored value other than `1` reads false, as the proto handler reads it.",
+            "description": "Auto-install routes for allowed_ips. A stored value other than `1` reads false, as the proto handler reads it. Reads false when unset.",
             "type": "boolean"
           }
         },
@@ -10607,7 +10646,7 @@
                 ]
               },
               "enabled": {
-                "description": "Whether sqm-scripts starts SQM on this interface. It starts a queue only when `enabled` is 1, so an absent value, or a word such as `yes`, `on` or `true`, reads false.",
+                "description": "Whether sqm-scripts starts SQM on this interface. It starts a queue only when `enabled` is 1, so an absent value, or a word such as `yes`, `on` or `true`, reads false. Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -10718,7 +10757,7 @@
                 ]
               },
               "enabled": {
-                "description": "Whether sqm-scripts starts SQM on this interface. It starts a queue only when `enabled` is 1, so an absent value, or a word such as `yes`, `on` or `true`, reads false.",
+                "description": "Whether sqm-scripts starts SQM on this interface. It starts a queue only when `enabled` is 1, so an absent value, or a word such as `yes`, `on` or `true`, reads false. Reads false when unset.",
                 "type": "boolean"
               },
               "id": {
@@ -10800,7 +10839,7 @@
             ]
           },
           "enabled": {
-            "description": "Whether sqm-scripts starts SQM on this interface. It starts a queue only when `enabled` is 1, so an absent value, or a word such as `yes`, `on` or `true`, reads false.",
+            "description": "Whether sqm-scripts starts SQM on this interface. It starts a queue only when `enabled` is 1, so an absent value, or a word such as `yes`, `on` or `true`, reads false. Reads false when unset.",
             "type": "boolean"
           },
           "id": {
@@ -11099,6 +11138,7 @@
             ]
           },
           "log_remote": {
+            "description": "Reads true when unset.",
             "type": [
               "boolean",
               "null"
@@ -11239,14 +11279,14 @@
             "description": "Merge-patch body (RFC 7396): any subset of SystemTimeserversRequest, which describes the fields.",
             "properties": {
               "enable_server": {
-                "description": "Also serve time to LAN clients",
+                "description": "Also serve time to LAN clients Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "enabled": {
-                "description": "Whether sysntpd runs at all",
+                "description": "Whether sysntpd runs at all Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -11274,7 +11314,7 @@
                 ]
               },
               "use_dhcp": {
-                "description": "Accept NTP servers learned via DHCP option 42",
+                "description": "Accept NTP servers learned via DHCP option 42 Reads true when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -11334,11 +11374,11 @@
             "description": "Request body for the uapi resource backed by uci system.timeserver.",
             "properties": {
               "enable_server": {
-                "description": "Also serve time to LAN clients",
+                "description": "Also serve time to LAN clients Reads false when unset.",
                 "type": "boolean"
               },
               "enabled": {
-                "description": "Whether sysntpd runs at all",
+                "description": "Whether sysntpd runs at all Reads true when unset.",
                 "type": "boolean"
               },
               "id": {
@@ -11363,7 +11403,7 @@
                 ]
               },
               "use_dhcp": {
-                "description": "Accept NTP servers learned via DHCP option 42",
+                "description": "Accept NTP servers learned via DHCP option 42 Reads true when unset.",
                 "type": "boolean"
               }
             },
@@ -11391,11 +11431,11 @@
         "additionalProperties": true,
         "properties": {
           "enable_server": {
-            "description": "Also serve time to LAN clients",
+            "description": "Also serve time to LAN clients Reads false when unset.",
             "type": "boolean"
           },
           "enabled": {
-            "description": "Whether sysntpd runs at all",
+            "description": "Whether sysntpd runs at all Reads true when unset.",
             "type": "boolean"
           },
           "id": {
@@ -11420,7 +11460,7 @@
             ]
           },
           "use_dhcp": {
-            "description": "Accept NTP servers learned via DHCP option 42",
+            "description": "Accept NTP servers learned via DHCP option 42 Reads true when unset.",
             "type": "boolean"
           }
         },
@@ -12152,21 +12192,21 @@
                 ]
               },
               "no_dirlists": {
-                "description": "Disable directory listings",
+                "description": "Disable directory listings Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "no_symlinks": {
-                "description": "Refuse to follow symlinks under home",
+                "description": "Refuse to follow symlinks under home Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "rfc1918_filter": {
-                "description": "Reject requests from RFC1918 ranges with non-RFC1918 host header",
+                "description": "Reject requests from RFC1918 ranges with non-RFC1918 host header Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -12348,15 +12388,15 @@
                 ]
               },
               "no_dirlists": {
-                "description": "Disable directory listings",
+                "description": "Disable directory listings Reads false when unset.",
                 "type": "boolean"
               },
               "no_symlinks": {
-                "description": "Refuse to follow symlinks under home",
+                "description": "Refuse to follow symlinks under home Reads false when unset.",
                 "type": "boolean"
               },
               "rfc1918_filter": {
-                "description": "Reject requests from RFC1918 ranges with non-RFC1918 host header",
+                "description": "Reject requests from RFC1918 ranges with non-RFC1918 host header Reads false when unset.",
                 "type": "boolean"
               },
               "script_timeout": {
@@ -12506,15 +12546,15 @@
             ]
           },
           "no_dirlists": {
-            "description": "Disable directory listings",
+            "description": "Disable directory listings Reads false when unset.",
             "type": "boolean"
           },
           "no_symlinks": {
-            "description": "Refuse to follow symlinks under home",
+            "description": "Refuse to follow symlinks under home Reads false when unset.",
             "type": "boolean"
           },
           "rfc1918_filter": {
-            "description": "Reject requests from RFC1918 ranges with non-RFC1918 host header",
+            "description": "Reject requests from RFC1918 ranges with non-RFC1918 host header Reads false when unset.",
             "type": "boolean"
           },
           "script_timeout": {
@@ -12573,6 +12613,7 @@
         "additionalProperties": true,
         "properties": {
           "enabled": {
+            "description": "Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -12640,6 +12681,7 @@
             ]
           },
           "dnssec_enabled": {
+            "description": "Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -12717,6 +12759,7 @@
             ]
           },
           "query_minimize": {
+            "description": "Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -12774,6 +12817,7 @@
         "additionalProperties": true,
         "properties": {
           "enabled": {
+            "description": "Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -12847,6 +12891,7 @@
         "additionalProperties": true,
         "properties": {
           "assoc_steering": {
+            "description": "Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -12865,6 +12910,7 @@
             ]
           },
           "enabled": {
+            "description": "Reads true when unset.",
             "type": [
               "boolean",
               "null"
@@ -12887,6 +12933,7 @@
             ]
           },
           "ipv6": {
+            "description": "Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -13045,6 +13092,7 @@
             ]
           },
           "syslog": {
+            "description": "Reads false when unset.",
             "type": [
               "boolean",
               "null"
@@ -13173,7 +13221,7 @@
                 ]
               },
               "cell_density": {
-                "description": "Basic rates by coverage cell density: 0 disabled, 1 normal, 2 high, 3 very high",
+                "description": "Basic rates by coverage cell density: 0 disabled, 1 normal, 2 high, 3 very high Reads 0 when unset.",
                 "type": [
                   "integer",
                   "null"
@@ -13195,7 +13243,7 @@
                 ]
               },
               "disabled": {
-                "description": "Disable this radio at boot. wifi-scripts sets up no SSID of a disabled radio, or of one without a `type`, and no SSID without a `mode`. A write that turns the radio on, such as a create without `disabled: true` or a write that gives the radio its type, is refused with `conflict` while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the fields of wireless/interfaces describe. The error names each such SSID and its fields, and `GET /uapi/diagnostics?validate=1` lists them. Such a write is also refused for a stored `cell_density` outside 0 to 3, for which wifi-scripts stops the radio",
+                "description": "Disable this radio at boot. wifi-scripts sets up no SSID of a disabled radio, or of one without a `type`, and no SSID without a `mode`. A write that turns the radio on, such as a create without `disabled: true` or a write that gives the radio its type, is refused with `conflict` while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the fields of wireless/interfaces describe. The error names each such SSID and its fields, and `GET /uapi/diagnostics?validate=1` lists them. Such a write is also refused for a stored `cell_density` outside 0 to 3, for which wifi-scripts stops the radio Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -13213,7 +13261,7 @@
                 "type": "string"
               },
               "legacy_rates": {
-                "description": "Allow the legacy 802.11b rates",
+                "description": "Allow the legacy 802.11b rates Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -13322,7 +13370,7 @@
                 ]
               },
               "cell_density": {
-                "description": "Basic rates by coverage cell density: 0 disabled, 1 normal, 2 high, 3 very high",
+                "description": "Basic rates by coverage cell density: 0 disabled, 1 normal, 2 high, 3 very high Reads 0 when unset.",
                 "type": "integer"
               },
               "channel": {
@@ -13341,7 +13389,7 @@
                 ]
               },
               "disabled": {
-                "description": "Disable this radio at boot. wifi-scripts sets up no SSID of a disabled radio, or of one without a `type`, and no SSID without a `mode`. A write that turns the radio on, such as a create without `disabled: true` or a write that gives the radio its type, is refused with `conflict` while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the fields of wireless/interfaces describe. The error names each such SSID and its fields, and `GET /uapi/diagnostics?validate=1` lists them. Such a write is also refused for a stored `cell_density` outside 0 to 3, for which wifi-scripts stops the radio",
+                "description": "Disable this radio at boot. wifi-scripts sets up no SSID of a disabled radio, or of one without a `type`, and no SSID without a `mode`. A write that turns the radio on, such as a create without `disabled: true` or a write that gives the radio its type, is refused with `conflict` while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the fields of wireless/interfaces describe. The error names each such SSID and its fields, and `GET /uapi/diagnostics?validate=1` lists them. Such a write is also refused for a stored `cell_density` outside 0 to 3, for which wifi-scripts stops the radio Reads false when unset.",
                 "type": "boolean"
               },
               "htmode": {
@@ -13356,7 +13404,7 @@
                 "type": "string"
               },
               "legacy_rates": {
-                "description": "Allow the legacy 802.11b rates",
+                "description": "Allow the legacy 802.11b rates Reads false when unset.",
                 "type": "boolean"
               },
               "macaddr": {
@@ -13436,7 +13484,7 @@
             ]
           },
           "cell_density": {
-            "description": "Basic rates by coverage cell density: 0 disabled, 1 normal, 2 high, 3 very high",
+            "description": "Basic rates by coverage cell density: 0 disabled, 1 normal, 2 high, 3 very high Reads 0 when unset.",
             "type": "integer"
           },
           "channel": {
@@ -13455,7 +13503,7 @@
             ]
           },
           "disabled": {
-            "description": "Disable this radio at boot. wifi-scripts sets up no SSID of a disabled radio, or of one without a `type`, and no SSID without a `mode`. A write that turns the radio on, such as a create without `disabled: true` or a write that gives the radio its type, is refused with `conflict` while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the fields of wireless/interfaces describe. The error names each such SSID and its fields, and `GET /uapi/diagnostics?validate=1` lists them. Such a write is also refused for a stored `cell_density` outside 0 to 3, for which wifi-scripts stops the radio",
+            "description": "Disable this radio at boot. wifi-scripts sets up no SSID of a disabled radio, or of one without a `type`, and no SSID without a `mode`. A write that turns the radio on, such as a create without `disabled: true` or a write that gives the radio its type, is refused with `conflict` while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the fields of wireless/interfaces describe. The error names each such SSID and its fields, and `GET /uapi/diagnostics?validate=1` lists them. Such a write is also refused for a stored `cell_density` outside 0 to 3, for which wifi-scripts stops the radio Reads false when unset.",
             "type": "boolean"
           },
           "htmode": {
@@ -13470,7 +13518,7 @@
             "type": "string"
           },
           "legacy_rates": {
-            "description": "Allow the legacy 802.11b rates",
+            "description": "Allow the legacy 802.11b rates Reads false when unset.",
             "type": "boolean"
           },
           "macaddr": {
@@ -13614,21 +13662,21 @@
                 ]
               },
               "disabled": {
-                "description": "Disable this iface at boot. wifi-scripts sets an SSID up only while it has a `mode`, the SSID and a radio that `device` names are enabled, and that radio has a `type`, and the daemons read its values only then. A write sets the SSID up when it enables the SSID on an enabled radio, or moves an enabled SSID from a radio that is off or missing to an enabled one. A move between two enabled radios is not checked. wireless/devices refuses a write that turns a radio on while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the other fields describe",
+                "description": "Disable this iface at boot. wifi-scripts sets an SSID up only while it has a `mode`, the SSID and a radio that `device` names are enabled, and that radio has a `type`, and the daemons read its values only then. A write sets the SSID up when it enables the SSID on an enabled radio, or moves an enabled SSID from a radio that is off or missing to an enabled one. A move between two enabled radios is not checked. wireless/devices refuses a write that turns a radio on while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the other fields describe Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "encryption": {
-                "description": "Security of the SSID. wifi-scripts sets up psk3 and psk3-mixed as sae and sae-mixed, and wpa-mixed as WPA and WPA2 with EAP. A forced cipher follows a `+`, as LuCI writes it. A write refuses wep with `conflict` unless the router sets WEP up. That needs the shell wifi-scripts, which OpenWrt builds only without `CONFIG_WIFI_SCRIPTS_UCODE`, and the daemon of the mode built with WEP: hostapd in mode ap, and wpa_supplicant in mode sta or adhoc. uapi asks `hostapd -vwep` or `wpa_supplicant -vwep`, as LuCI does. It refuses wep in mode mesh, which takes none. The ucode wifi-scripts, which OpenWrt builds by default, give the daemon no WEP key, and the SSID runs without encryption. The rule covers the wep-open and wep-shared that LuCI writes, and any stored value that starts with wep. A stored WEP value blocks every write of the SSID One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, sae-compat, wpa3-192, psk3, psk3-mixed, wpa-mixed, wep-open, wep-shared, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa-mixed+ccmp, wpa-mixed+ccmp256, wpa-mixed+gcmp, wpa-mixed+gcmp256, wpa-mixed+tkip, wpa-mixed+tkip+ccmp, wpa-mixed+aes, wpa-mixed+tkip+aes, wpa-mixed+aes+tkip, wpa-mixed+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip, wpa3-192+ccmp, wpa3-192+ccmp256, wpa3-192+gcmp, wpa3-192+gcmp256, wpa3-192+tkip, wpa3-192+tkip+ccmp, wpa3-192+aes, wpa3-192+tkip+aes, wpa3-192+aes+tkip, wpa3-192+ccmp+tkip, null.",
+                "description": "Security of the SSID. wifi-scripts sets up psk3 and psk3-mixed as sae and sae-mixed, and wpa-mixed as WPA and WPA2 with EAP. A forced cipher follows a `+`, as LuCI writes it. A write refuses wep with `conflict` unless the router sets WEP up. That needs the shell wifi-scripts, which OpenWrt builds only without `CONFIG_WIFI_SCRIPTS_UCODE`, and the daemon of the mode built with WEP: hostapd in mode ap, and wpa_supplicant in mode sta or adhoc. uapi asks `hostapd -vwep` or `wpa_supplicant -vwep`, as LuCI does. It refuses wep in mode mesh, which takes none. The ucode wifi-scripts, which OpenWrt builds by default, give the daemon no WEP key, and the SSID runs without encryption. The rule covers the wep-open and wep-shared that LuCI writes, and any stored value that starts with wep. A stored WEP value blocks every write of the SSID One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, sae-compat, wpa3-192, psk3, psk3-mixed, wpa-mixed, wep-open, wep-shared, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa-mixed+ccmp, wpa-mixed+ccmp256, wpa-mixed+gcmp, wpa-mixed+gcmp256, wpa-mixed+tkip, wpa-mixed+tkip+ccmp, wpa-mixed+aes, wpa-mixed+tkip+aes, wpa-mixed+aes+tkip, wpa-mixed+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip, wpa3-192+ccmp, wpa3-192+ccmp256, wpa3-192+gcmp, wpa3-192+gcmp256, wpa3-192+tkip, wpa3-192+tkip+ccmp, wpa3-192+aes, wpa3-192+tkip+aes, wpa3-192+aes+tkip, wpa3-192+ccmp+tkip, null. Reads \"none\" when unset.",
                 "type": [
                   "string",
                   "null"
                 ]
               },
               "ft_over_ds": {
-                "description": "802.11r over the distribution system instead of over the air",
+                "description": "802.11r over the distribution system instead of over the air Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -13642,7 +13690,7 @@
                 ]
               },
               "hidden": {
-                "description": "Suppress SSID in beacon frames",
+                "description": "Suppress SSID in beacon frames Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -13653,14 +13701,14 @@
                 "type": "string"
               },
               "ieee80211r": {
-                "description": "802.11r fast BSS transition between the access points of one mobility domain",
+                "description": "802.11r fast BSS transition between the access points of one mobility domain Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
                 ]
               },
               "isolate": {
-                "description": "Block station-to-station traffic on this AP",
+                "description": "Block station-to-station traffic on this AP Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -13703,7 +13751,7 @@
                 ]
               },
               "pmk_r1_push": {
-                "description": "Push the PMK-R1 to the other key holders instead of waiting for them to pull it",
+                "description": "Push the PMK-R1 to the other key holders instead of waiting for them to pull it Reads false when unset.",
                 "type": [
                   "boolean",
                   "null"
@@ -13816,15 +13864,15 @@
                 ]
               },
               "disabled": {
-                "description": "Disable this iface at boot. wifi-scripts sets an SSID up only while it has a `mode`, the SSID and a radio that `device` names are enabled, and that radio has a `type`, and the daemons read its values only then. A write sets the SSID up when it enables the SSID on an enabled radio, or moves an enabled SSID from a radio that is off or missing to an enabled one. A move between two enabled radios is not checked. wireless/devices refuses a write that turns a radio on while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the other fields describe",
+                "description": "Disable this iface at boot. wifi-scripts sets an SSID up only while it has a `mode`, the SSID and a radio that `device` names are enabled, and that radio has a `type`, and the daemons read its values only then. A write sets the SSID up when it enables the SSID on an enabled radio, or moves an enabled SSID from a radio that is off or missing to an enabled one. A move between two enabled radios is not checked. wireless/devices refuses a write that turns a radio on while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the other fields describe Reads false when unset.",
                 "type": "boolean"
               },
               "encryption": {
-                "description": "Security of the SSID. wifi-scripts sets up psk3 and psk3-mixed as sae and sae-mixed, and wpa-mixed as WPA and WPA2 with EAP. A forced cipher follows a `+`, as LuCI writes it. A write refuses wep with `conflict` unless the router sets WEP up. That needs the shell wifi-scripts, which OpenWrt builds only without `CONFIG_WIFI_SCRIPTS_UCODE`, and the daemon of the mode built with WEP: hostapd in mode ap, and wpa_supplicant in mode sta or adhoc. uapi asks `hostapd -vwep` or `wpa_supplicant -vwep`, as LuCI does. It refuses wep in mode mesh, which takes none. The ucode wifi-scripts, which OpenWrt builds by default, give the daemon no WEP key, and the SSID runs without encryption. The rule covers the wep-open and wep-shared that LuCI writes, and any stored value that starts with wep. A stored WEP value blocks every write of the SSID One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, sae-compat, wpa3-192, psk3, psk3-mixed, wpa-mixed, wep-open, wep-shared, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa-mixed+ccmp, wpa-mixed+ccmp256, wpa-mixed+gcmp, wpa-mixed+gcmp256, wpa-mixed+tkip, wpa-mixed+tkip+ccmp, wpa-mixed+aes, wpa-mixed+tkip+aes, wpa-mixed+aes+tkip, wpa-mixed+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip, wpa3-192+ccmp, wpa3-192+ccmp256, wpa3-192+gcmp, wpa3-192+gcmp256, wpa3-192+tkip, wpa3-192+tkip+ccmp, wpa3-192+aes, wpa3-192+tkip+aes, wpa3-192+aes+tkip, wpa3-192+ccmp+tkip.",
+                "description": "Security of the SSID. wifi-scripts sets up psk3 and psk3-mixed as sae and sae-mixed, and wpa-mixed as WPA and WPA2 with EAP. A forced cipher follows a `+`, as LuCI writes it. A write refuses wep with `conflict` unless the router sets WEP up. That needs the shell wifi-scripts, which OpenWrt builds only without `CONFIG_WIFI_SCRIPTS_UCODE`, and the daemon of the mode built with WEP: hostapd in mode ap, and wpa_supplicant in mode sta or adhoc. uapi asks `hostapd -vwep` or `wpa_supplicant -vwep`, as LuCI does. It refuses wep in mode mesh, which takes none. The ucode wifi-scripts, which OpenWrt builds by default, give the daemon no WEP key, and the SSID runs without encryption. The rule covers the wep-open and wep-shared that LuCI writes, and any stored value that starts with wep. A stored WEP value blocks every write of the SSID One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, sae-compat, wpa3-192, psk3, psk3-mixed, wpa-mixed, wep-open, wep-shared, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa-mixed+ccmp, wpa-mixed+ccmp256, wpa-mixed+gcmp, wpa-mixed+gcmp256, wpa-mixed+tkip, wpa-mixed+tkip+ccmp, wpa-mixed+aes, wpa-mixed+tkip+aes, wpa-mixed+aes+tkip, wpa-mixed+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip, wpa3-192+ccmp, wpa3-192+ccmp256, wpa3-192+gcmp, wpa3-192+gcmp256, wpa3-192+tkip, wpa3-192+tkip+ccmp, wpa3-192+aes, wpa3-192+tkip+aes, wpa3-192+aes+tkip, wpa3-192+ccmp+tkip. Reads \"none\" when unset.",
                 "type": "string"
               },
               "ft_over_ds": {
-                "description": "802.11r over the distribution system instead of over the air",
+                "description": "802.11r over the distribution system instead of over the air Reads false when unset.",
                 "type": "boolean"
               },
               "ft_psk_generate_local": {
@@ -13835,7 +13883,7 @@
                 ]
               },
               "hidden": {
-                "description": "Suppress SSID in beacon frames",
+                "description": "Suppress SSID in beacon frames Reads false when unset.",
                 "type": "boolean"
               },
               "id": {
@@ -13843,11 +13891,11 @@
                 "type": "string"
               },
               "ieee80211r": {
-                "description": "802.11r fast BSS transition between the access points of one mobility domain",
+                "description": "802.11r fast BSS transition between the access points of one mobility domain Reads false when unset.",
                 "type": "boolean"
               },
               "isolate": {
-                "description": "Block station-to-station traffic on this AP",
+                "description": "Block station-to-station traffic on this AP Reads false when unset.",
                 "type": "boolean"
               },
               "key": {
@@ -13887,7 +13935,7 @@
                 ]
               },
               "pmk_r1_push": {
-                "description": "Push the PMK-R1 to the other key holders instead of waiting for them to pull it",
+                "description": "Push the PMK-R1 to the other key holders instead of waiting for them to pull it Reads false when unset.",
                 "type": "boolean"
               },
               "r0_key_lifetime": {
@@ -13971,15 +14019,15 @@
             ]
           },
           "disabled": {
-            "description": "Disable this iface at boot. wifi-scripts sets an SSID up only while it has a `mode`, the SSID and a radio that `device` names are enabled, and that radio has a `type`, and the daemons read its values only then. A write sets the SSID up when it enables the SSID on an enabled radio, or moves an enabled SSID from a radio that is off or missing to an enabled one. A move between two enabled radios is not checked. wireless/devices refuses a write that turns a radio on while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the other fields describe",
+            "description": "Disable this iface at boot. wifi-scripts sets an SSID up only while it has a `mode`, the SSID and a radio that `device` names are enabled, and that radio has a `type`, and the daemons read its values only then. A write sets the SSID up when it enables the SSID on an enabled radio, or moves an enabled SSID from a radio that is off or missing to an enabled one. A move between two enabled radios is not checked. wireless/devices refuses a write that turns a radio on while an enabled SSID of the radio with a `mode` holds a value that wifi-scripts or a daemon refuses, as the other fields describe Reads false when unset.",
             "type": "boolean"
           },
           "encryption": {
-            "description": "Security of the SSID. wifi-scripts sets up psk3 and psk3-mixed as sae and sae-mixed, and wpa-mixed as WPA and WPA2 with EAP. A forced cipher follows a `+`, as LuCI writes it. A write refuses wep with `conflict` unless the router sets WEP up. That needs the shell wifi-scripts, which OpenWrt builds only without `CONFIG_WIFI_SCRIPTS_UCODE`, and the daemon of the mode built with WEP: hostapd in mode ap, and wpa_supplicant in mode sta or adhoc. uapi asks `hostapd -vwep` or `wpa_supplicant -vwep`, as LuCI does. It refuses wep in mode mesh, which takes none. The ucode wifi-scripts, which OpenWrt builds by default, give the daemon no WEP key, and the SSID runs without encryption. The rule covers the wep-open and wep-shared that LuCI writes, and any stored value that starts with wep. A stored WEP value blocks every write of the SSID One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, sae-compat, wpa3-192, psk3, psk3-mixed, wpa-mixed, wep-open, wep-shared, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa-mixed+ccmp, wpa-mixed+ccmp256, wpa-mixed+gcmp, wpa-mixed+gcmp256, wpa-mixed+tkip, wpa-mixed+tkip+ccmp, wpa-mixed+aes, wpa-mixed+tkip+aes, wpa-mixed+aes+tkip, wpa-mixed+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip, wpa3-192+ccmp, wpa3-192+ccmp256, wpa3-192+gcmp, wpa3-192+gcmp256, wpa3-192+tkip, wpa3-192+tkip+ccmp, wpa3-192+aes, wpa3-192+tkip+aes, wpa3-192+aes+tkip, wpa3-192+ccmp+tkip.",
+            "description": "Security of the SSID. wifi-scripts sets up psk3 and psk3-mixed as sae and sae-mixed, and wpa-mixed as WPA and WPA2 with EAP. A forced cipher follows a `+`, as LuCI writes it. A write refuses wep with `conflict` unless the router sets WEP up. That needs the shell wifi-scripts, which OpenWrt builds only without `CONFIG_WIFI_SCRIPTS_UCODE`, and the daemon of the mode built with WEP: hostapd in mode ap, and wpa_supplicant in mode sta or adhoc. uapi asks `hostapd -vwep` or `wpa_supplicant -vwep`, as LuCI does. It refuses wep in mode mesh, which takes none. The ucode wifi-scripts, which OpenWrt builds by default, give the daemon no WEP key, and the SSID runs without encryption. The rule covers the wep-open and wep-shared that LuCI writes, and any stored value that starts with wep. A stored WEP value blocks every write of the SSID One of (may grow): none, wep, owe, psk, psk2, psk-mixed, sae, sae-mixed, wpa, wpa2, wpa3, wpa3-mixed, sae-compat, wpa3-192, psk3, psk3-mixed, wpa-mixed, wep-open, wep-shared, psk+ccmp, psk+ccmp256, psk+gcmp, psk+gcmp256, psk+tkip, psk+tkip+ccmp, psk+aes, psk+tkip+aes, psk+aes+tkip, psk+ccmp+tkip, psk2+ccmp, psk2+ccmp256, psk2+gcmp, psk2+gcmp256, psk2+tkip, psk2+tkip+ccmp, psk2+aes, psk2+tkip+aes, psk2+aes+tkip, psk2+ccmp+tkip, psk-mixed+ccmp, psk-mixed+ccmp256, psk-mixed+gcmp, psk-mixed+gcmp256, psk-mixed+tkip, psk-mixed+tkip+ccmp, psk-mixed+aes, psk-mixed+tkip+aes, psk-mixed+aes+tkip, psk-mixed+ccmp+tkip, sae+ccmp, sae+ccmp256, sae+gcmp, sae+gcmp256, sae+tkip, sae+tkip+ccmp, sae+aes, sae+tkip+aes, sae+aes+tkip, sae+ccmp+tkip, wpa+ccmp, wpa+ccmp256, wpa+gcmp, wpa+gcmp256, wpa+tkip, wpa+tkip+ccmp, wpa+aes, wpa+tkip+aes, wpa+aes+tkip, wpa+ccmp+tkip, wpa2+ccmp, wpa2+ccmp256, wpa2+gcmp, wpa2+gcmp256, wpa2+tkip, wpa2+tkip+ccmp, wpa2+aes, wpa2+tkip+aes, wpa2+aes+tkip, wpa2+ccmp+tkip, wpa-mixed+ccmp, wpa-mixed+ccmp256, wpa-mixed+gcmp, wpa-mixed+gcmp256, wpa-mixed+tkip, wpa-mixed+tkip+ccmp, wpa-mixed+aes, wpa-mixed+tkip+aes, wpa-mixed+aes+tkip, wpa-mixed+ccmp+tkip, wpa3+ccmp, wpa3+ccmp256, wpa3+gcmp, wpa3+gcmp256, wpa3+tkip, wpa3+tkip+ccmp, wpa3+aes, wpa3+tkip+aes, wpa3+aes+tkip, wpa3+ccmp+tkip, wpa3-mixed+ccmp, wpa3-mixed+ccmp256, wpa3-mixed+gcmp, wpa3-mixed+gcmp256, wpa3-mixed+tkip, wpa3-mixed+tkip+ccmp, wpa3-mixed+aes, wpa3-mixed+tkip+aes, wpa3-mixed+aes+tkip, wpa3-mixed+ccmp+tkip, wpa3-192+ccmp, wpa3-192+ccmp256, wpa3-192+gcmp, wpa3-192+gcmp256, wpa3-192+tkip, wpa3-192+tkip+ccmp, wpa3-192+aes, wpa3-192+tkip+aes, wpa3-192+aes+tkip, wpa3-192+ccmp+tkip. Reads \"none\" when unset.",
             "type": "string"
           },
           "ft_over_ds": {
-            "description": "802.11r over the distribution system instead of over the air",
+            "description": "802.11r over the distribution system instead of over the air Reads false when unset.",
             "type": "boolean"
           },
           "ft_psk_generate_local": {
@@ -13990,7 +14038,7 @@
             ]
           },
           "hidden": {
-            "description": "Suppress SSID in beacon frames",
+            "description": "Suppress SSID in beacon frames Reads false when unset.",
             "type": "boolean"
           },
           "id": {
@@ -13998,11 +14046,11 @@
             "type": "string"
           },
           "ieee80211r": {
-            "description": "802.11r fast BSS transition between the access points of one mobility domain",
+            "description": "802.11r fast BSS transition between the access points of one mobility domain Reads false when unset.",
             "type": "boolean"
           },
           "isolate": {
-            "description": "Block station-to-station traffic on this AP",
+            "description": "Block station-to-station traffic on this AP Reads false when unset.",
             "type": "boolean"
           },
           "key": {
@@ -14042,7 +14090,7 @@
             ]
           },
           "pmk_r1_push": {
-            "description": "Push the PMK-R1 to the other key holders instead of waiting for them to pull it",
+            "description": "Push the PMK-R1 to the other key holders instead of waiting for them to pull it Reads false when unset.",
             "type": "boolean"
           },
           "r0_key_lifetime": {

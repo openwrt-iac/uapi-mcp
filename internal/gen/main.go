@@ -321,9 +321,9 @@ func (so *softener) endpoint(method, path string, item *pathItem, o *operation, 
 }
 
 // requestBody resolves and softens a request-body schema. A Patch field takes
-// the description and the deprecation that the spec leaves to the Request
-// half before softening, so that the enum of the Patch field, null included,
-// folds after the borrowed text instead of standing in for it.
+// the description, the deprecation and the default that the spec leaves to
+// the Request half before softening, so that the enum of the Patch field, null
+// included, folds after the borrowed text instead of standing in for it.
 func (so *softener) requestBody(ref json.RawMessage) (map[string]any, error) {
 	var probe struct {
 		Ref string `json:"$ref"`
@@ -351,8 +351,8 @@ func (so *softener) requestBody(ref json.RawMessage) (map[string]any, error) {
 	return body, nil
 }
 
-// withRequestDocs copies description and deprecated from each Request field
-// to the Patch field of the same name that lacks them.
+// withRequestDocs copies description, deprecated and default from each
+// Request field to the Patch field of the same name that lacks them.
 func withRequestDocs(patchRaw, reqRaw json.RawMessage) (json.RawMessage, error) {
 	var patch, req map[string]any
 	if err := json.Unmarshal(patchRaw, &patch); err != nil {
@@ -372,7 +372,7 @@ func withRequestDocs(patchRaw, reqRaw json.RawMessage) (json.RawMessage, error) 
 		if !ok {
 			continue
 		}
-		for _, key := range []string{"description", "deprecated"} {
+		for _, key := range []string{"description", "deprecated", "default"} {
 			if _, has := pm[key]; !has {
 				if v, ok := rm[key]; ok {
 					pm[key] = v
@@ -453,12 +453,16 @@ func (so *softener) softenValue(v any, resolving []string) (any, error) {
 					parts[i] = fmt.Sprintf("%v", e)
 				}
 			}
-			fold := fmt.Sprintf("One of (may grow): %s.", strings.Join(parts, ", "))
-			if d, ok := out["description"].(string); ok && d != "" {
-				out["description"] = d + " " + fold
-			} else {
-				out["description"] = fold
+			appendDescription(out, fmt.Sprintf("One of (may grow): %s.", strings.Join(parts, ", ")))
+		}
+		// A default is the value that the read gives while the uci option is
+		// unset, so it tells the agent what an absent field means.
+		if d, ok := val["default"]; ok {
+			text, err := json.Marshal(d)
+			if err != nil {
+				return nil, err
 			}
+			appendDescription(out, fmt.Sprintf("Reads %s when unset.", text))
 		}
 		if isObject(val) {
 			out["additionalProperties"] = true
@@ -466,6 +470,14 @@ func (so *softener) softenValue(v any, resolving []string) (any, error) {
 		return out, nil
 	default:
 		return nil, fmt.Errorf("unsupported schema value %T", v)
+	}
+}
+
+func appendDescription(node map[string]any, text string) {
+	if d, ok := node["description"].(string); ok && d != "" {
+		node["description"] = d + " " + text
+	} else {
+		node["description"] = text
 	}
 }
 

@@ -39,6 +39,11 @@ follows Keep a Changelog.
   cursor after the first page, because the list changed under it. It does this at most
   3 times, then returns the 400. (#10)
 
+- Schema defaults fold into the field descriptions, as `Reads <value> when unset.`,
+  on the create, replace and merge tools. The softening drops the `default` keyword, so
+  the agent did not see what an absent field means. uapi defines a default as the value
+  that a field reads while its uci option is unset. (#10)
+
 ### Fixed
 - A DELETE that answers 204 lost its footer, so the reload headers of a delete did not
   reach the agent. (#10)

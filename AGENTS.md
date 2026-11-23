@@ -35,6 +35,7 @@ The catalog is generated, never hand-edited: `internal/gen` reads the vendored s
 Input schemas are the spec's request schemas, then softened, so the client never rejects a payload the server accepts:
 
 - enums fold into property descriptions (`One of (may grow): ...`), never into validation
+- defaults fold into property descriptions (`Reads <value> when unset.`): a default is the value that a field reads while its uci option is unset
 - patterns, bounds (`minimum`, `maxLength`, ...) and format keywords are dropped
 - `allOf` conditionals are dropped; the field descriptions carry what they taught
 - every object accepts unknown properties, at every depth

@@ -104,6 +104,8 @@ follows:
 
 - Enums fold into property descriptions (`One of (may grow): …`), never into validation:
   uapi may add values within a major.
+- Defaults fold into property descriptions (`Reads <value> when unset.`): a default is
+  the value that a field reads while its uci option is unset.
 - Patterns and bounds are dropped: uapi may loosen them within a minor.
 - Every object accepts unknown properties: uapi may add fields within a minor.
 - Type corrections under uapi's documented carve-outs stay possible.

@@ -298,6 +298,37 @@ func TestMergeFieldsCarryReplaceDescriptions(t *testing.T) {
 	}
 }
 
+// A schema default is the value that a field reads while its uci option is
+// unset. The softening drops the keyword, so the value must reach the agent
+// in the description, on the merge tool too, whose Patch field has none.
+func TestDefaultsFoldIntoDescriptions(t *testing.T) {
+	c := generateCatalog(t)
+	byTool := map[string]endpoint{}
+	for _, ep := range c.Endpoints {
+		byTool[ep.Tool] = ep
+	}
+	field := func(tool string, path ...string) string {
+		node := byTool[tool].Input
+		for _, name := range path {
+			node, _ = node["properties"].(map[string]any)[name].(map[string]any)
+		}
+		d, _ := node["description"].(string)
+		return d
+	}
+	for _, tc := range []struct {
+		desc string
+		want string
+	}{
+		{field("firewall_rules_create", "enabled"), "Reads true when unset."},
+		{field("firewall_rule_merge", "body", "enabled"), "Reads true when unset."},
+		{field("firewall_rules_create", "match", "family"), `Reads "any" when unset.`},
+	} {
+		if !strings.HasSuffix(tc.desc, tc.want) {
+			t.Errorf("description %q does not end with %q", tc.desc, tc.want)
+		}
+	}
+}
+
 // A parameter that the spec shares through components/parameters reaches
 // the tool as an inline one does.
 func TestRefParametersResolve(t *testing.T) {
