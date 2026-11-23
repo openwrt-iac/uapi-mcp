@@ -78,8 +78,8 @@ plural (`network_interfaces_list`, `firewall_rules_create`), item tools take the
 | `create`  | POST   | The tool arguments are the request body.     |
 | `adopt`   | POST   | Takes a section id, for anonymous sections.  |
 | `recover` | POST   | Takes a service name, and starts again a daemon that procd gave up on. |
-| `replace` | PUT    | Arguments: the id and a `body` object.      |
-| `merge`   | PATCH  | RFC 7396 merge-patch; a `null` removes a field. |
+| `replace` | PUT    | Arguments: the id and a `body` object. Sets the whole section, and removes the options that uapi does not model. |
+| `merge`   | PATCH  | RFC 7396 merge-patch; a `null` removes a field. Keeps the options that uapi does not model. |
 | `delete`  | DELETE | A 404 is success: the section is already absent. |
 
 Reads return the JSON payload exactly as the router sent it. Writes return what uci holds

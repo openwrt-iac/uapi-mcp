@@ -26,6 +26,10 @@ follows Keep a Changelog.
   ask the user before it changes a WireGuard peer that `X-Kernel-Blocked` names and the
   task does not. (#10)
 - The `Idempotency-Key` of a POST goes only in the header, which uapi 4.x reads. (#10)
+- The instructions send the agent to the merge tool to change some fields of a section.
+  Before, they told it to read, edit and send the object back with the replace tool. A
+  replace removes each option that uapi does not model, so a replace of the stock sqm
+  queue removed the 7 advanced options that LuCI writes on it. (#10)
 
 ### Added
 - `uapi_service_recover`, for `POST /uapi/services/{name}/recover`. In the generator, a
