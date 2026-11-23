@@ -41,6 +41,11 @@ func stubRouter(t *testing.T) *httptest.Server {
 			_, _ = io.WriteString(w, `{"code":"validation_failed","message":"bad","request_id":"01HXT","errors":[{"field":"target","code":"required","message":"is required"}]}`)
 		case r.Method == http.MethodGet && r.URL.Path == "/network/wireguard_kernel_peers":
 			_, _ = io.WriteString(w, `[]`)
+		case r.Method == http.MethodDelete && r.URL.Path == "/dhcp/hosts/h_1":
+			w.Header().Set("X-Reload-Status", "stopped")
+			w.Header().Set("X-Reload-Services", "dnsmasq")
+			w.Header().Set("X-Reload-Stopped", "dnsmasq/cfg01411c")
+			w.WriteHeader(http.StatusNoContent)
 		default:
 			t.Errorf("unexpected request %s %s", r.Method, r.URL.Path)
 			w.WriteHeader(http.StatusNotFound)
@@ -103,8 +108,8 @@ func TestHostSeesTheWholeCatalog(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListTools: %v", err)
 	}
-	if len(listed.Tools) != 266 {
-		t.Errorf("host sees %d tools, want 266", len(listed.Tools))
+	if len(listed.Tools) != 258 {
+		t.Errorf("host sees %d tools, want 258", len(listed.Tools))
 	}
 	byName := map[string]*mcp.Tool{}
 	for _, tool := range listed.Tools {
@@ -243,5 +248,47 @@ func TestHostSeesUnreadKernelBesideAnEmptyList(t *testing.T) {
 	}
 	if blocks[1] != "X-Kernel-Unread: wg0" {
 		t.Errorf("footer = %q", blocks[1])
+	}
+}
+
+// A DELETE answers 204 with no body, and its reload headers say whether the
+// daemon still runs. The host must get them as the footer block.
+func TestHostSeesTheFooterOfADelete(t *testing.T) {
+	res := call(t, hostSession(t), "dhcp_host_delete", map[string]any{"id": "h_1"})
+	if res.IsError {
+		t.Fatal("unexpected error result")
+	}
+	blocks := textBlocks(t, res)
+	if len(blocks) != 2 {
+		t.Fatalf("delete with reload headers carries %d blocks, want status then footer", len(blocks))
+	}
+	if blocks[0] != "DELETE /dhcp/hosts/h_1: 204 No Content" {
+		t.Errorf("status block = %q", blocks[0])
+	}
+	if !strings.Contains(blocks[1], "X-Reload-Stopped: dnsmasq/cfg01411c") {
+		t.Errorf("footer = %q", blocks[1])
+	}
+}
+
+// The instructions send the agent to tools by name. Each name must exist.
+func TestInstructionsNameRealTools(t *testing.T) {
+	session := hostSession(t)
+	listed, err := session.ListTools(context.Background(), &mcp.ListToolsParams{})
+	if err != nil {
+		t.Fatalf("ListTools: %v", err)
+	}
+	names := map[string]bool{}
+	for _, tool := range listed.Tools {
+		names[tool.Name] = true
+	}
+	for _, word := range strings.FieldsFunc(instructions, func(r rune) bool {
+		return (r < 'a' || r > 'z') && (r < '0' || r > '9') && r != '_'
+	}) {
+		if strings.Count(word, "_") >= 2 && !names[word] {
+			t.Errorf("instructions name %s, which is not a tool", word)
+		}
+	}
+	if !strings.Contains(session.InitializeResult().Instructions, "uapi_service_recover") {
+		t.Error("the host does not get the instructions")
 	}
 }

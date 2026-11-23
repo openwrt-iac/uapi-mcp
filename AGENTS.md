@@ -20,13 +20,13 @@ This file is the founding document and the every-turn meta document: project ide
 
 ## Tool design
 
-- One tool per curated endpoint, named after it: `network_interfaces_list`, `network_rule_replace`, `firewall_rule_delete`. Action words map to verbs: list/read (GET), create (POST), adopt (POST on the adopt sub-resource), replace (PUT), merge (PATCH, RFC 7396 only: the tool never sends RFC 6902 JSON Patch), delete (DELETE).
-- Collection tools keep the plural resource name, item tools take the singular (`network_interfaces_list` against `network_interface_replace`). The 3.5.0 spec yields 266 tools; the count lives in the generator tests and moves only with the vendored spec.
+- One tool per curated endpoint, named after it: `network_interfaces_list`, `network_rule_replace`, `firewall_rule_delete`. Action words map to verbs: list/read (GET), create (POST), an action (POST on a literal segment after the item id: `firewall_rule_adopt`, `uapi_service_recover`), replace (PUT), merge (PATCH, RFC 7396 only: the tool never sends RFC 6902 JSON Patch), delete (DELETE).
+- Collection tools keep the plural resource name, item tools take the singular (`network_interfaces_list` against `network_interface_replace`). The 4.0.0 spec yields 258 tools; the count lives in the generator tests and moves only with the vendored spec.
 - Full read and write surface from the first release, same parity as the provider. `/raw` is excluded: the provider forbids it, and an agent gains nothing from uci field names that no release promises to keep. The catalog is the spec, minus `/raw`.
 - Tool inputs: path parameters and user-facing query parameters (`managed`, `validate`) are top-level arguments; a request body is the whole input when the endpoint has no path parameters, and a `body` object beside the id otherwise. ETag preconditions (`if_match`, `if_none_match`) are deliberately not exposed: reads do not surface ETags, so an agent has nothing to guard with, and an interactive agent re-reads anyway. `limit` and `cursor` are not exposed either: the client walks every page, and an agent cursor would answer a partial list that reads as the whole collection.
 - Annotations tell the truth: `readOnlyHint` on reads, `destructiveHint` on delete and replace, `idempotentHint` where the verb is. PUT with `id` is replace; the response says what uci holds now. `openWorldHint` is false: the domain of every tool is this one router.
 - Errors carry the endpoint, the HTTP status, and uapi's error envelope (`code` + `message`, `docs/errors.md`) verbatim. Retry 423 locked and 429 within a wall-clock budget as the provider does, then surface the last status. An agent that reads the error must learn what to do next, not that something failed.
-- Reads return the JSON payload as received. The host and the agent format; the server does not render markdown. Writes return the payload as their own content block, so it stays valid JSON for hosts, and append the transaction headers uapi sent (`X-Mgmt-Path-Warning`, `X-Reload-Status`, `X-Reload-Services`, `X-Kernel-Status`, `X-Kernel-Applied`) as a second block, because they say what the transaction did beyond committing uci. The WireGuard kernel peer reads carry `X-Kernel-Unread` in the same second block, merged over every page: the payload holds no peer for the interfaces it names, so an empty list beside it is not a kernel without drift. A DELETE that answers 404 is success: the section is already absent, and the result says so.
+- Reads return the JSON payload as received. The host and the agent format; the server does not render markdown. Writes return the payload as their own content block, so it stays valid JSON for hosts, and append the advisory headers uapi sent (every `X-Reload-*` and `X-Kernel-*` header and `X-Mgmt-Path-Warning`, sorted by name, so a header that a uapi minor adds needs no release here) as a second block, a bodiless 204 included, because they say what the transaction did beyond committing uci. The WireGuard kernel peer reads carry `X-Kernel-Unread` in the same second block, merged over every page: the payload holds no peer for the interfaces it names, so an empty list beside it is not a kernel without drift. A DELETE that answers 404 is success: the section is already absent, and the result says so.
 
 ### Generation
 
@@ -39,7 +39,7 @@ Input schemas are the spec's request schemas, then softened, so the client never
 - `allOf` conditionals are dropped; the field descriptions carry what they taught
 - every object accepts unknown properties, at every depth
 - types, descriptions, `required` and `deprecated` stay
-- `<Name>Patch` bodies take their field descriptions from `<Name>Request`, which the spec leaves out to save bytes on the router
+- `<Name>Patch` bodies take their field descriptions from `<Name>Request`, which the spec leaves out to save bytes on the router; the borrow happens before softening, so the Patch enum, `null` included, folds after the borrowed text
 
 A uapi minor can add enum values, fields and query parameters, and loosen bounds: all of that passes through the softened schemas without a uapi-mcp release. The generator tests hold the line: no forbidden keyword survives anywhere in any input schema.
 
@@ -50,7 +50,7 @@ Mirrors uapi the way the provider does: `x.y` tracks the uapi `x.y` wire surface
 ## Family pointers
 
 - `~/repo/uapi`: the server, in ucode. `docs/resources.md` is the endpoint catalog, `docs/versioning.md` the stability contract, `docs/errors.md` the error shapes, `docs/tokens.md` the auth model. Its CLAUDE.md carries the org-wide workflow rules.
-- `~/repo/terraform-provider-uapi`: the reference Go client. `internal/client` owns bearer auth, 423/429 retry, idempotency keys, cursor pagination and error decoding; uapi's served spec (`/api/v3/openapi.json`, vendored in the repo at `build/openapi.json`) drives its generated schemas. Reuse the patterns, ignore the tfsdk layer.
+- `~/repo/terraform-provider-uapi`: the reference Go client. `internal/client` owns bearer auth, 423/429 retry, idempotency keys, cursor pagination and error decoding; uapi's served spec (`/api/v4/openapi.json`, vendored in the repo at `build/openapi.json`) drives its generated schemas. Reuse the patterns, ignore the tfsdk layer.
 - SDK: `github.com/modelcontextprotocol/go-sdk`, the official Tier 1 Go SDK, package `mcp`.
 
 ## House style (openwrt-iac, org-wide)
@@ -65,5 +65,5 @@ Mirrors uapi the way the provider does: `x.y` tracks the uapi `x.y` wire surface
 Three layers, each one watching a different thing:
 
 - Unit tests against `httptest` stubs, for the client and the tool layer: they assert handler and client behavior in isolation.
-- Host-eye tests in `internal/server`: an SDK client over the in-memory transport asserts what a host receives on the wire. Both defects of the first live run (an empty collection answering `null`, the transaction footer glued to the payload) were invisible from the inside and obvious from the host side, so result shapes live here, not in the handler tests: a result that carries a payload keeps its first content block valid JSON, a write with transaction headers carries the footer as a second block, so does a list with `X-Kernel-Unread`, and every list path has its empty-collection case.
+- Host-eye tests in `internal/server`: an SDK client over the in-memory transport asserts what a host receives on the wire. Both defects of the first live run (an empty collection answering `null`, the transaction footer glued to the payload) were invisible from the inside and obvious from the host side, so result shapes live here, not in the handler tests: a result that carries a payload keeps its first content block valid JSON, a write with transaction headers carries the footer as a second block, so do a DELETE 204 and a list with `X-Kernel-Unread`, and every list path has its empty-collection case.
 - `make smoke` (scripts/smoke.py) drives the built binary over stdio against a real box running a real uapi; it is the gate before every tag. Anything that asserts what the router actually did needs this run, and the PR says so plainly.

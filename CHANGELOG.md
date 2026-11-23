@@ -6,6 +6,47 @@ follows Keep a Changelog.
 
 ## [Unreleased]
 
+### Changed
+- **BREAKING: uapi-mcp tracks uapi 4.0.0, which needs OpenWrt main.** The catalog comes
+  from the uapi 4.0.0 spec and holds 258 tools. `UAPI_ENDPOINT` ends in `/api/v4`. The
+  tools of `/tokens`, `/auth/whoami`, `/diagnostics`, `/metrics` and `/batch` move under
+  `/uapi/`, such as `uapi_tokens_list` and `uapi_whoami_read`. `dhcp_leases6_list` and
+  `dhcp_leases6_read` go: call `dhcp_leases_list` and `dhcp_lease_read` with
+  `family: "v6"`. The 7 `openvpn_instance*` tools go: an openvpn tunnel is a
+  `network_interface*` section with `proto: "openvpn"`. A router on OpenWrt 25.12 stays
+  on uapi 3.5 and uapi-mcp 3.5. The openvpn fields add about 11 KB to each
+  `network_interface` write tool, and the inputs of all tools total 334 KB. uapi-mcp
+  takes no action for it. (#10)
+- **The footer passes every advisory header.** It holds each `X-Reload-*` and
+  `X-Kernel-*` header and `X-Mgmt-Path-Warning`, sorted by name, so `X-Reload-Stopped`
+  and `X-Kernel-Blocked` of uapi 4.0.0 reach the agent. A header that a uapi 4.x minor
+  adds under these prefixes needs no release of uapi-mcp. The instructions tell the
+  agent to call `uapi_service_recover` for each service in `X-Reload-Stopped`, and to
+  ask the user before it changes a WireGuard peer that `X-Kernel-Blocked` names and the
+  task does not. (#10)
+- The `Idempotency-Key` of a POST goes only in the header, which uapi 4.x reads. (#10)
+
+### Added
+- `uapi_service_recover`, for `POST /uapi/services/{name}/recover`. In the generator, a
+  POST on a literal segment after an item parameter takes that segment as its verb, as
+  `adopt` does. (#10)
+- A list walk reads the list again from the first page when uapi answers 400 to a
+  cursor after the first page, because the list changed under it. It does this at most
+  3 times, then returns the 400. (#10)
+
+### Fixed
+- A DELETE that answers 204 lost its footer, so the reload headers of a delete did not
+  reach the agent. (#10)
+- A merge field with an enum lost the description of its replace field since 3.3.0,
+  such as `network_interface_merge.ovpnproto` and `firewall_rule_merge.target` (26
+  fields on uapi 4.0.0). The generator now takes the description of the Request field
+  before it folds the enum of the Patch field, `null` included. (#10)
+- A query argument that the agent sent as a bool or a number, such as
+  `"managed": true`, was dropped, and the list answered every section. It is now sent as
+  its text. (#10)
+- The generator resolves `$ref` parameters, and hides `request_id` by name. Before, it
+  ignored every `$ref` parameter. (#10)
+
 ## [3.5.0] - 2026-11-22
 
 Tracks uapi 3.5.0. There is no uapi-mcp 3.4: uapi 3.4 published only the v4

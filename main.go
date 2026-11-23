@@ -31,7 +31,7 @@ func run() error {
 	endpoint := strings.TrimSpace(os.Getenv("UAPI_ENDPOINT"))
 	token := strings.TrimSpace(os.Getenv("UAPI_TOKEN"))
 	if endpoint == "" {
-		return errors.New("UAPI_ENDPOINT is not set: it must hold the router's uapi base URL, for example https://192.168.1.1/api/v3")
+		return errors.New("UAPI_ENDPOINT is not set: it must hold the router's uapi base URL, for example https://192.168.1.1/api/v4")
 	}
 	if token == "" {
 		return errors.New("UAPI_TOKEN is not set: mint one on the router with uapi-token create")

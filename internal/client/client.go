@@ -18,6 +18,7 @@ import (
 	"net/http"
 	"net/url"
 	"runtime"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -33,10 +34,12 @@ const (
 )
 
 // Pagination bounds: uapi answers collections page by page through the
-// X-Next-Cursor header.
+// X-Next-Cursor header. maxRestarts bounds how often one walk starts again
+// from the first page after a stale cursor.
 const (
-	pageLimit = 500
-	maxPages  = 1000
+	pageLimit   = 500
+	maxPages    = 1000
+	maxRestarts = 3
 )
 
 func newIdempotencyKey() string {
@@ -55,7 +58,7 @@ type Client struct {
 }
 
 // New builds a client for one router. endpoint carries the API version in
-// its path, for example https://192.168.1.1/api/v3. insecure skips TLS
+// its path, for example https://192.168.1.1/api/v4. insecure skips TLS
 // verification, needed against uapi's default self-signed certificate.
 func New(endpoint, token, userAgent string, insecure bool) *Client {
 	transport := http.DefaultTransport.(*http.Transport).Clone()
@@ -82,15 +85,24 @@ func UserAgent(version string) string {
 // payload plus the advisory headers uapi attaches to curated writes and to
 // the wireguard kernel peer reads.
 type Response struct {
-	Status          int
-	Body            []byte
-	NextCursor      string
-	MgmtPathWarning string
-	ReloadStatus    string
-	ReloadServices  string
-	KernelStatus    string
-	KernelApplied   string
-	KernelUnread    string
+	Status     int
+	Body       []byte
+	NextCursor string
+	Advisory   http.Header
+}
+
+// advisory keeps every X-Reload-* and X-Kernel-* header and
+// X-Mgmt-Path-Warning. They say what a transaction did beyond its commit, and
+// a uapi 4.x minor can add one, which then reaches the agent with no release
+// of uapi-mcp.
+func advisory(h http.Header) http.Header {
+	out := http.Header{}
+	for name, values := range h {
+		if strings.HasPrefix(name, "X-Reload-") || strings.HasPrefix(name, "X-Kernel-") || name == "X-Mgmt-Path-Warning" {
+			out[name] = values
+		}
+	}
+	return out
 }
 
 type FieldError struct {
@@ -99,27 +111,29 @@ type FieldError struct {
 	Message string `json:"message"`
 }
 
-// Footer renders the advisory headers uapi attaches to a write, which say
-// what the transaction did beyond committing uci: whether the init scripts
-// reloaded, whether the kernel applied, and whether the caller's own
-// management path moved. On a wireguard kernel peer read, X-Kernel-Unread
-// names the interfaces the payload does not cover, so an empty list next to
-// it is not a kernel without drift.
+// Footer renders the advisory headers uapi attaches to a write, sorted by
+// name, which say what the transaction did beyond committing uci: whether the
+// init scripts reloaded and their daemons run, whether the kernel applied,
+// and whether the caller's own management path moved. On a wireguard kernel
+// peer read, X-Kernel-Unread names the interfaces the payload does not cover,
+// so an empty list next to it is not a kernel without drift.
 func (r *Response) Footer() string {
-	var lines []string
-	for _, kv := range [][2]string{
-		{"X-Mgmt-Path-Warning", r.MgmtPathWarning},
-		{"X-Reload-Status", r.ReloadStatus},
-		{"X-Reload-Services", r.ReloadServices},
-		{"X-Kernel-Status", r.KernelStatus},
-		{"X-Kernel-Applied", r.KernelApplied},
-		{"X-Kernel-Unread", r.KernelUnread},
-	} {
-		if kv[1] != "" {
-			lines = append(lines, kv[0]+": "+kv[1])
+	lines := []string{}
+	for _, name := range sortedNames(r.Advisory) {
+		if value := strings.Join(r.Advisory.Values(name), ", "); value != "" {
+			lines = append(lines, name+": "+value)
 		}
 	}
 	return strings.Join(lines, "\n")
+}
+
+func sortedNames(h http.Header) []string {
+	names := make([]string, 0, len(h))
+	for name := range h {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	return names
 }
 
 // APIError is uapi's error envelope, plus the endpoint that produced it. The
@@ -158,27 +172,15 @@ func statusIs(err error, code int) bool {
 }
 
 // Do performs one request. body is the exact JSON to send, or nil. query
-// carries user-facing filter parameters; transport mechanics (idempotency
-// keys, pagination cursors) are added here.
+// carries the query parameters; Do adds the Idempotency-Key header of a POST.
 func (c *Client) Do(ctx context.Context, method, path string, query url.Values, body []byte) (*Response, error) {
 	idemKey := ""
 	if method == http.MethodPost {
 		idemKey = newIdempotencyKey()
 	}
-	q := query.Clone()
-	if q == nil {
-		q = url.Values{}
-	}
-	if idemKey != "" {
-		// Sent as a query parameter because uhttpd's CGI layer forwards a
-		// fixed header allowlist the Idempotency-Key header is not on, so
-		// the header form alone never reaches uapi. The header rides along
-		// for deployments that do not front uapi with uhttpd.
-		q.Set("idempotency_key", idemKey)
-	}
 	target := c.baseURL + path
-	if len(q) > 0 {
-		target += "?" + q.Encode()
+	if len(query) > 0 {
+		target += "?" + query.Encode()
 	}
 
 	var retryDeadline time.Time
@@ -236,15 +238,10 @@ func (c *Client) Do(ctx context.Context, method, path string, query url.Values, 
 		}
 
 		out := &Response{
-			Status:          resp.StatusCode,
-			Body:            raw,
-			NextCursor:      resp.Header.Get("X-Next-Cursor"),
-			MgmtPathWarning: resp.Header.Get("X-Mgmt-Path-Warning"),
-			ReloadStatus:    resp.Header.Get("X-Reload-Status"),
-			ReloadServices:  resp.Header.Get("X-Reload-Services"),
-			KernelStatus:    resp.Header.Get("X-Kernel-Status"),
-			KernelApplied:   resp.Header.Get("X-Kernel-Applied"),
-			KernelUnread:    resp.Header.Get("X-Kernel-Unread"),
+			Status:     resp.StatusCode,
+			Body:       raw,
+			NextCursor: resp.Header.Get("X-Next-Cursor"),
+			Advisory:   advisory(resp.Header),
 		}
 		if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 			return out, nil
@@ -263,6 +260,7 @@ func (c *Client) List(ctx context.Context, path string, query url.Values) (*Resp
 	var unread []string
 	seen := map[string]bool{}
 	next := ""
+	restarts := 0
 	for page := 0; page < maxPages; page++ {
 		q := query.Clone()
 		if q == nil {
@@ -274,6 +272,13 @@ func (c *Client) List(ctx context.Context, path string, query url.Values) (*Resp
 		}
 		resp, err := c.Do(ctx, http.MethodGet, path, q, nil)
 		if err != nil {
+			// uapi answers 400 to a cursor when the list changed under it, and
+			// the items already read may then miss one or hold it twice.
+			if next != "" && statusIs(err, http.StatusBadRequest) && restarts < maxRestarts {
+				restarts++
+				all, unread, seen, next = []json.RawMessage{}, nil, map[string]bool{}, ""
+				continue
+			}
 			return nil, err
 		}
 		var items []json.RawMessage
@@ -281,7 +286,7 @@ func (c *Client) List(ctx context.Context, path string, query url.Values) (*Resp
 			return nil, fmt.Errorf("GET %s: decoding page: %w", path, err)
 		}
 		all = append(all, items...)
-		for _, name := range strings.Split(resp.KernelUnread, ",") {
+		for _, name := range strings.Split(strings.Join(resp.Advisory.Values("X-Kernel-Unread"), ","), ",") {
 			if name = strings.TrimSpace(name); name != "" && !seen[name] {
 				seen[name] = true
 				unread = append(unread, name)
@@ -292,7 +297,11 @@ func (c *Client) List(ctx context.Context, path string, query url.Values) (*Resp
 			if err != nil {
 				return nil, err
 			}
-			return &Response{Status: resp.Status, Body: body, KernelUnread: strings.Join(unread, ",")}, nil
+			merged := http.Header{}
+			if len(unread) > 0 {
+				merged.Set("X-Kernel-Unread", strings.Join(unread, ","))
+			}
+			return &Response{Status: resp.Status, Body: body, Advisory: merged}, nil
 		}
 		next = resp.NextCursor
 	}

@@ -4,7 +4,7 @@
 The pre-tag gate from AGENTS.md, as one command: this drives the built binary
 over stdio the way an MCP host does and asserts what the wire carries.
 
-    UAPI_ENDPOINT=https://192.168.10.123/api/v3 \
+    UAPI_ENDPOINT=https://192.168.10.234/api/v4 \
     UAPI_TOKEN_FILE=/path/to/token.txt \
     make smoke
 
@@ -28,7 +28,7 @@ ENDPOINT = os.environ.get("UAPI_ENDPOINT", "")
 TOKEN_FILE = os.environ.get("UAPI_TOKEN_FILE", "")
 INSECURE = os.environ.get("UAPI_INSECURE", "1") not in ("0", "false")
 BINARY = os.environ.get("UAPI_MCP_BINARY", "uapi-mcp")
-EXPECTED_TOOLS = 266
+EXPECTED_TOOLS = 258
 
 checks = []
 
@@ -140,22 +140,21 @@ ok(7, "422 envelope ok: field errors surfaced")
 err, blocks = tool("firewall_rule_delete", {"id": created["id"]})
 if err or "204" not in blocks[0]:
     fail(f"firewall_rule_delete: {blocks[:1]}")
+if len(blocks) != 2 or "X-Reload-Status" not in blocks[1]:
+    fail(f"delete result carries {len(blocks)} blocks, want status then footer")
 err, blocks = tool("firewall_rule_delete", {"id": created["id"]})
 if err or "already absent" not in blocks[0]:
     fail(f"second delete must be a 404 success: {blocks[:1]}")
 err, blocks = tool("firewall_rule_read", {"id": created["id"]})
 if not err or "404" not in blocks[0]:
     fail(f"read after delete must surface the 404: {blocks[:1]}")
-ok(8, "delete cycle ok: 204, already-absent 404, 404 error result")
+ok(8, "delete cycle ok: 204 + footer block, already-absent 404, 404 error result")
 
-# 9. the empty collection answers [] (kernel peers need uapi >= 3.3.0)
+# 9. a collection answers a JSON array, [] when it is empty, never null
 err, blocks = tool("network_wireguard_kernel_peers_list", {})
-if err and "404" in blocks[0]:
-    print("9. wireguard kernel peers: endpoint absent on this uapi, skipped")
-elif not err and blocks and blocks[0] == "[]":
-    ok(9, "empty collection ok: []")
-else:
+if err or not blocks or not isinstance(json.loads(blocks[0]), list):
     fail(f"network_wireguard_kernel_peers_list: {blocks[:1]}")
+ok(9, f"collection ok: a JSON array of {len(json.loads(blocks[0]))} peers")
 
 proc.stdin.close()
 proc.wait(timeout=10)

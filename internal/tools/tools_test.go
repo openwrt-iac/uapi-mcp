@@ -202,7 +202,7 @@ func TestHandlerReplaceSendsWrappedBody(t *testing.T) {
 	if !ok {
 		t.Fatalf("expected TextContent footer, got %T", res.Content[1])
 	}
-	want := "X-Reload-Status: ok\nX-Reload-Services: firewall"
+	want := "X-Reload-Services: firewall\nX-Reload-Status: ok"
 	if footer.Text != want {
 		t.Errorf("footer = %q, want %q", footer.Text, want)
 	}
@@ -278,6 +278,32 @@ func TestHandlerWrappedBodyRequired(t *testing.T) {
 	}
 	if text := resultText(t, res); !strings.Contains(text, "missing required argument body") {
 		t.Errorf("text = %q", text)
+	}
+}
+
+// The spec types every query parameter as a string, but an agent can send a
+// bool or a number. Dropping it would list every section for "managed": true.
+func TestHandlerQueryTakesBoolsAndNumbers(t *testing.T) {
+	var got string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		got = r.URL.Query().Encode()
+		_, _ = io.WriteString(w, `{}`)
+	}))
+	defer srv.Close()
+
+	ep := Endpoint{
+		Tool:        "uapi_diagnostics_read",
+		Method:      http.MethodGet,
+		Path:        "/uapi/diagnostics",
+		QueryParams: []string{"managed", "validate", "family"},
+		BodyKind:    bodyNone,
+	}
+	c := client.New(srv.URL, "tok", "uapi-mcp/test", false)
+	if res := call(t, c, ep, `{"managed":true,"validate":1,"family":""}`); res.IsError {
+		t.Fatal("unexpected error result")
+	}
+	if got != "managed=true&validate=1" {
+		t.Errorf("query = %q, want managed=true&validate=1", got)
 	}
 }
 
@@ -387,11 +413,11 @@ func TestEmbeddedCatalog(t *testing.T) {
 	if err := json.Unmarshal(catalogJSON, &catalog); err != nil {
 		t.Fatal(err)
 	}
-	if catalog.UAPIVersion != "3.5.0" {
+	if catalog.UAPIVersion != "3.4.1" {
 		t.Errorf("uapi_version = %q", catalog.UAPIVersion)
 	}
-	if len(catalog.Endpoints) != 266 {
-		t.Errorf("endpoints = %d, want 266", len(catalog.Endpoints))
+	if len(catalog.Endpoints) != 258 {
+		t.Errorf("endpoints = %d, want 258", len(catalog.Endpoints))
 	}
 	seen := map[string]bool{}
 	for _, ep := range catalog.Endpoints {
