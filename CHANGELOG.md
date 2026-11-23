@@ -31,6 +31,10 @@ follows Keep a Changelog.
   queue removed the 7 advanced options that LuCI writes on it. (#10)
 
 ### Added
+- The sqm queue tools take the 20 options that LuCI's sqm form writes, such as
+  `ingress_ecn`, `use_mq` and `iqdisc_opts` (uapi #481). A replace of the read keeps
+  them. An absent option of a queue reads the default of sqm-scripts, and the field
+  descriptions give it. (#11)
 - `uapi_service_recover`, for `POST /uapi/services/{name}/recover`. In the generator, a
   POST on a literal segment after an item parameter takes that segment as its verb, as
   `adopt` does. (#10)
