@@ -6,6 +6,14 @@ follows Keep a Changelog.
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-11-24
+
+Tracks uapi 4.0.0, from the spec of the uapi v4.0.0 tag. uapi 4.0.0 needs OpenWrt main,
+so a router on OpenWrt 25.12 stays on uapi 3.5 and uapi-mcp 3.5. Set `UAPI_ENDPOINT` to
+the `/api/v4` path of the router. Before you upgrade a router from uapi 3.x, read the
+uapi guide
+[`docs/migration-v3-to-v4.md`](https://github.com/openwrt-iac/uapi/blob/v4.0.0/docs/migration-v3-to-v4.md).
+
 ### Changed
 - **BREAKING: uapi-mcp tracks uapi 4.0.0, which needs OpenWrt main.** The catalog comes
   from the uapi 4.0.0 spec and holds 258 tools. `UAPI_ENDPOINT` ends in `/api/v4`. The
@@ -20,10 +28,9 @@ follows Keep a Changelog.
   `X-Kernel-*` header and `X-Mgmt-Path-Warning`, sorted by name, so `X-Reload-Stopped`
   and `X-Kernel-Blocked` of uapi 4.0.0 reach the agent. A header that a uapi 4.x minor
   adds under these prefixes needs no release of uapi-mcp, as uapi `docs/versioning.md`
-  promises. The instructions tell the
-  agent to call `uapi_service_recover` for each service in `X-Reload-Stopped`, and to
-  ask the user before it changes a WireGuard peer that `X-Kernel-Blocked` names and the
-  task does not. (#10)
+  promises. The instructions tell the agent to call `uapi_service_recover` for each
+  service in `X-Reload-Stopped`, and to ask the user before it changes a WireGuard peer
+  that `X-Kernel-Blocked` names and the task does not. (#10)
 - The `Idempotency-Key` of a POST goes only in the header, which uapi 4.x reads. (#10)
 - The instructions send the agent to the merge tool to change some fields of a section.
   Before, they told it to read, edit and send the object back with the replace tool. A
@@ -41,7 +48,6 @@ follows Keep a Changelog.
 - A list walk reads the list again from the first page when uapi answers 400 to a
   cursor after the first page, because the list changed under it. It does this at most
   3 times, then returns the 400. (#10)
-
 - Schema defaults fold into the field descriptions, as `Reads <value> when unset.`,
   on the create, replace and merge tools. The softening drops the `default` keyword, so
   the agent did not see what an absent field means. uapi defines a default as the value
