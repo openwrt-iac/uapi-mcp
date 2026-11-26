@@ -146,6 +146,9 @@ type APIError struct {
 	Message   string       `json:"message"`
 	RequestID string       `json:"request_id"`
 	Errors    []FieldError `json:"errors"`
+	// Extra holds the other top-level fields, such as reload_error, the only
+	// cause of a failed reload. uapi adds such fields within a major.
+	Extra map[string]json.RawMessage `json:"-"`
 }
 
 func (e *APIError) Error() string {
@@ -154,9 +157,28 @@ func (e *APIError) Error() string {
 	for _, fe := range e.Errors {
 		fmt.Fprintf(&b, "\n  - %s: %s (%s)", fe.Field, fe.Message, fe.Code)
 	}
+	names := make([]string, 0, len(e.Extra))
+	for name := range e.Extra {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		fmt.Fprintf(&b, "\n%s: %s", name, strings.ReplaceAll(extraText(e.Extra[name]), "\n", "\n  "))
+	}
 	if e.RequestID != "" {
 		fmt.Fprintf(&b, "\nrequest_id: %s", e.RequestID)
 	}
+	return b.String()
+}
+
+// extraText renders a string as its text and any other value as compact JSON.
+func extraText(raw json.RawMessage) string {
+	var s string
+	if json.Unmarshal(raw, &s) == nil {
+		return s
+	}
+	var b bytes.Buffer
+	_ = json.Compact(&b, raw)
 	return b.String()
 }
 
@@ -360,6 +382,17 @@ func retryWait(header string, attempt int) time.Duration {
 func decodeError(method, path string, status int, body []byte) error {
 	apiErr := &APIError{Method: method, Path: path, Status: status}
 	if len(body) > 0 && json.Unmarshal(body, apiErr) == nil && apiErr.Code != "" {
+		_ = json.Unmarshal(body, &apiErr.Extra)
+		for name, raw := range apiErr.Extra {
+			switch name {
+			case "code", "message", "request_id", "errors":
+				delete(apiErr.Extra, name)
+			default:
+				if string(raw) == "null" {
+					delete(apiErr.Extra, name)
+				}
+			}
+		}
 		return apiErr
 	}
 	apiErr.Code = "unknown"

@@ -6,6 +6,15 @@ follows Keep a Changelog.
 
 ## [Unreleased]
 
+### Fixed
+- An error result dropped every field of uapi's error envelope other than `code`,
+  `message`, the field errors and `request_id`. The lost fields include `reload_error`,
+  the only cause that uapi gives for a failed reload, and `restore_error`, which names
+  the package that a failed restore left in an unknown state. Each other top-level
+  field now follows as one `name: value` line, sorted by name, so a field that a uapi
+  4.x minor adds needs no release of uapi-mcp. The instructions tell the agent not to
+  retry a write whose error holds `restore_error`, and to tell the user. (#14)
+
 ## [4.0.0] - 2026-11-24
 
 Tracks uapi 4.0.0, from the spec of the uapi v4.0.0 tag. uapi 4.0.0 needs OpenWrt main,

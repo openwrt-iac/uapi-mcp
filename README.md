@@ -94,7 +94,8 @@ footer. A WireGuard kernel peer read carries `X-Kernel-Unread` in the same foote
 interfaces whose kernel uapi could not read, so an empty list beside it does not mean
 that the kernel holds no drift. Errors
 carry the endpoint, the HTTP status and uapi's error envelope verbatim, field by field
-for 422, so the agent can fix everything in one round trip.
+for 422, so the agent can fix everything in one round trip. Every other field of the
+envelope follows, one line each, such as `reload_error`, the cause of a failed reload.
 
 ### Forward compatibility
 
