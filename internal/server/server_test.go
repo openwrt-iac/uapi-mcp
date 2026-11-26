@@ -39,6 +39,9 @@ func stubRouter(t *testing.T) *httptest.Server {
 		case r.Method == http.MethodPost && r.URL.Path == "/firewall/rules":
 			w.WriteHeader(http.StatusUnprocessableEntity)
 			_, _ = io.WriteString(w, `{"code":"validation_failed","message":"bad","request_id":"01HXT","errors":[{"field":"target","code":"required","message":"is required"}]}`)
+		case r.Method == http.MethodPost && r.URL.Path == "/dhcp/hosts/cfg01/adopt":
+			w.WriteHeader(http.StatusInternalServerError)
+			_, _ = io.WriteString(w, `{"code":"reload_failed_restored","message":"Service reload failed; prior configuration has been restored","request_id":"01HXR","reload_error":"dnsmasq stopped after the reload"}`)
 		case r.Method == http.MethodGet && r.URL.Path == "/network/wireguard_kernel_peers":
 			_, _ = io.WriteString(w, `[]`)
 		case r.Method == http.MethodDelete && r.URL.Path == "/dhcp/hosts/h_1":
@@ -197,6 +200,29 @@ func TestHostSeesTheErrorEnvelope(t *testing.T) {
 	} {
 		if !strings.Contains(text, want) {
 			t.Errorf("error text %q does not contain %q", text, want)
+		}
+	}
+}
+
+// For a failed reload the message is a fixed sentence: the host must get
+// reload_error, the only cause that uapi gives.
+func TestHostSeesTheCauseOfAFailedReload(t *testing.T) {
+	session := hostSession(t)
+	res := call(t, session, "dhcp_host_adopt", map[string]any{"id": "cfg01"})
+	if !res.IsError {
+		t.Fatal("expected an error result")
+	}
+	blocks := textBlocks(t, res)
+	if len(blocks) != 1 {
+		t.Fatalf("error carries %d blocks, want 1", len(blocks))
+	}
+	for _, want := range []string{
+		"uapi 500 reload_failed_restored",
+		"\nreload_error: dnsmasq stopped after the reload\n",
+		"request_id: 01HXR",
+	} {
+		if !strings.Contains(blocks[0], want) {
+			t.Errorf("error text %q does not contain %q", blocks[0], want)
 		}
 	}
 }

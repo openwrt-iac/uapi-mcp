@@ -170,6 +170,60 @@ func TestValidationErrorEnvelope(t *testing.T) {
 	}
 }
 
+// The other top-level fields of the envelope pass through by name: for a failed
+// reload, the message is a fixed sentence and reload_error is the only cause.
+func TestErrorEnvelopeExtensionFields(t *testing.T) {
+	for _, tc := range []struct {
+		name, path, body, want string
+		status                 int
+	}{
+		{
+			name:   "failed reload",
+			path:   "/dhcp/hosts/cfg01/adopt",
+			status: http.StatusInternalServerError,
+			body: `{
+  "code": "reload_failed_unrecovered",
+  "message": "Service reload failed AND restore failed; configuration is in an unknown state",
+  "request_id": "01HXEXT",
+  "reload_error": "dnsmasq exited with code 1:\ndnsmasq: duplicate dhcp-host IP address",
+  "restore_error": "another writer committed to the package dhcp after the commit of the request",
+  "hint": null
+}`,
+			want: "POST /dhcp/hosts/cfg01/adopt: uapi 500 reload_failed_unrecovered: Service reload failed AND restore failed; configuration is in an unknown state" +
+				"\nreload_error: dnsmasq exited with code 1:\n  dnsmasq: duplicate dhcp-host IP address" +
+				"\nrestore_error: another writer committed to the package dhcp after the commit of the request" +
+				"\nrequest_id: 01HXEXT",
+		},
+		{
+			name:   "aborted batch",
+			path:   "/uapi/batch",
+			status: http.StatusNotFound,
+			body:   `{"code":"batch_partial_failure","message":"an operation failed","request_id":"01HXBAT","aborted_at_index":2,"reverted":true,"error":{ "code": "not_found", "message": "gone" }}`,
+			want: "POST /uapi/batch: uapi 404 batch_partial_failure: an operation failed" +
+				"\naborted_at_index: 2" +
+				"\nerror: {\"code\":\"not_found\",\"message\":\"gone\"}" +
+				"\nreverted: true" +
+				"\nrequest_id: 01HXBAT",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				w.WriteHeader(tc.status)
+				_, _ = w.Write([]byte(tc.body))
+			}))
+			defer srv.Close()
+
+			_, err := testClient(srv.URL).Do(context.Background(), http.MethodPost, tc.path, nil, nil)
+			if err == nil {
+				t.Fatal("expected error")
+			}
+			if err.Error() != tc.want {
+				t.Errorf("Error() =\n%q\nwant\n%q", err.Error(), tc.want)
+			}
+		})
+	}
+}
+
 func TestErrorFallbackOnNonJSONBody(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadGateway)
